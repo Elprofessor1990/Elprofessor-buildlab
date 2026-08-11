@@ -3,6 +3,7 @@ import { ui, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = ui[locale];
+const assetBase = import.meta.env.BASE_URL;
 ---
 
 <section class="about-page">
@@ -12,7 +13,7 @@ const copy = ui[locale];
       <h1>{copy.about.title}</h1>
       <p>{copy.about.intro}</p>
     </div>
-    <img src="/assets/ali-kadum-hassan.png" alt="Ali Kadum Hassan" width="460" height="460" />
+    <img src={`${assetBase}assets/ali-kadum-hassan.png`} alt="Ali Kadum Hassan" width="460" height="460" />
   </div>
 
   <div class="about-grid">

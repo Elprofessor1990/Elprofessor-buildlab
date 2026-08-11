@@ -40,3 +40,18 @@ Connect this GitHub repository to Cloudflare Pages with:
 - Node version: use the current Cloudflare Pages default, or set `NODE_VERSION` to `20` or newer.
 
 The project is static-first and does not require a server adapter for the initial version.
+
+## GitHub Pages
+
+This repository includes a GitHub Actions workflow for GitHub Pages.
+
+Live URL after deployment:
+
+```text
+https://elprofessor1990.github.io/Elprofessor-buildlab/
+```
+
+If GitHub Pages still shows 404 after the workflow has run, open repository settings and choose:
+
+- Settings -> Pages
+- Source: `GitHub Actions`

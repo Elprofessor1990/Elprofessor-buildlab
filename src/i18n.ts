@@ -33,16 +33,24 @@ export const locales: Record<
 
 export type PageKey = "home" | "videos" | "video" | "about" | "lesson";
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function withBase(path: string) {
+  if (!basePath) return path;
+  if (path === "/") return `${basePath}/`;
+  return `${basePath}${path}`;
+}
+
 export function getLocalePath(locale: Locale, page: PageKey, slug?: string) {
   const prefix = locales[locale].prefix;
 
-  if (page === "home") return `${prefix || "/"}`;
-  if (page === "videos") return `${prefix}/videos`;
-  if (page === "video" && slug) return `${prefix}/videos/${slug}`;
-  if (page === "about") return `${prefix}/about`;
-  if (page === "lesson" && slug) return `${prefix}/lessons/${slug}`;
+  if (page === "home") return withBase(`${prefix || "/"}`);
+  if (page === "videos") return withBase(`${prefix}/videos`);
+  if (page === "video" && slug) return withBase(`${prefix}/videos/${slug}`);
+  if (page === "about") return withBase(`${prefix}/about`);
+  if (page === "lesson" && slug) return withBase(`${prefix}/lessons/${slug}`);
 
-  return prefix || "/";
+  return withBase(prefix || "/");
 }
 
 export const ui = {
