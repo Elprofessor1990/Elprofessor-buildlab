@@ -12,6 +12,7 @@ dist/
 # Local system files
 .DS_Store
 Thumbs.db
+astro-preview*.log
 
 # Original local brand exports; committed copies live in public/assets.
 /Ali Kadum Hassan.png

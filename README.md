@@ -37,7 +37,7 @@ Connect this GitHub repository to Cloudflare Pages with:
 - Framework preset: `Astro`
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Node version: use the current Cloudflare Pages default, or set `NODE_VERSION` to `20` or newer.
+- Node version: set `NODE_VERSION` to `22.12.0` or newer.
 
 The project is static-first and does not require a server adapter for the initial version.
 
