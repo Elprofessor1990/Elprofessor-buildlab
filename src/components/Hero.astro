@@ -1,0 +1,44 @@
+---
+import { learningTracks } from "../data/learningTracks";
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<section class="hero">
+  <div class="hero__media" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <div class="hero__content">
+      <p class="eyebrow">{copy.home.eyebrow}</p>
+      <h1>{copy.home.title}</h1>
+      <p class="hero__intro">{copy.home.intro}</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href={getLocalePath(locale, "videos")}>{copy.actions.viewVideos}</a>
+        <a class="button button--quiet" href="#subjects">{copy.actions.exploreSubjects}</a>
+      </div>
+    </div>
+
+    <div class="hero-topic-board" aria-label={copy.home.heroTracksLabel}>
+      {learningTracks.map((track) => (
+        <a href={`#track-panel-${track.slug}`} data-jump-track={track.slug}>
+          <span>{track.title[locale]}</span>
+          <small>{track.label[locale]}</small>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll("[data-jump-track]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const slug = link.getAttribute("data-jump-track");
+      const tab = document.querySelector(`[data-track-tab="${slug}"]`);
+
+      if (tab instanceof HTMLButtonElement) {
+        tab.click();
+      }
+    });
+  });
+</script>

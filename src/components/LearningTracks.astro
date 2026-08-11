@@ -1,0 +1,93 @@
+---
+import { learningTracks } from "../data/learningTracks";
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<section class="section section--tracks" id="subjects" aria-labelledby="tracks-title" data-track-browser>
+  <div class="section__header section__header--split">
+    <p class="eyebrow">{copy.home.tracksEyebrow}</p>
+    <h2 id="tracks-title">{copy.home.subjectsTitle}</h2>
+    <p>{copy.home.subjectsText}</p>
+  </div>
+
+  <div class="track-browser">
+    <div class="track-tabs" role="tablist" aria-label={copy.home.subjectsTitle}>
+      {learningTracks.map((track, index) => (
+        <button
+          class="track-tab"
+          type="button"
+          role="tab"
+          id={`track-tab-${track.slug}`}
+          aria-controls={`track-panel-${track.slug}`}
+          aria-selected={index === 0 ? "true" : "false"}
+          data-track-tab={track.slug}
+        >
+          <span>{track.title[locale]}</span>
+          <small>{track.label[locale]}</small>
+        </button>
+      ))}
+    </div>
+
+    <div class="track-panels">
+      {learningTracks.map((track, index) => (
+        <article
+          class="track-panel"
+          id={`track-panel-${track.slug}`}
+          role="tabpanel"
+          aria-labelledby={`track-tab-${track.slug}`}
+          data-track-panel={track.slug}
+          hidden={index !== 0}
+        >
+          <div class="track-panel__intro">
+            <p class="track-kicker">{track.label[locale]}</p>
+            <h3>{track.title[locale]}</h3>
+            <p>{track.description[locale]}</p>
+          </div>
+
+          <div class="track-category-list">
+            {track.categories.map((category) => (
+              <a class="track-category" href={`${getLocalePath(locale, "videos")}?subject=${category.subject}`}>
+                <span>{category.title[locale]}</span>
+                <small>{category.description[locale]}</small>
+              </a>
+            ))}
+          </div>
+
+          <footer class="track-panel__footer">
+            <p>{track.note[locale]}</p>
+            <a class="button button--primary" href={`${getLocalePath(locale, "videos")}?subject=${track.primarySubject}`}>
+              {copy.actions.viewVideos}
+            </a>
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll("[data-track-browser]").forEach((browser) => {
+    const tabs = Array.from(browser.querySelectorAll("[data-track-tab]"));
+    const panels = Array.from(browser.querySelectorAll("[data-track-panel]"));
+
+    function activate(slug: string | null) {
+      tabs.forEach((tab) => {
+        const selected = tab.getAttribute("data-track-tab") === slug;
+        tab.setAttribute("aria-selected", String(selected));
+      });
+
+      panels.forEach((panel) => {
+        panel.toggleAttribute("hidden", panel.getAttribute("data-track-panel") !== slug);
+      });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activate(tab.getAttribute("data-track-tab"));
+      });
+    });
+  });
+</script>

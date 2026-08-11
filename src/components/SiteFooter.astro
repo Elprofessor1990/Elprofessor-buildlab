@@ -1,0 +1,21 @@
+---
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<footer class="site-footer">
+  <div>
+    <img src="/assets/logo-ldb.png" alt="" width="40" height="40" />
+    <p>
+      <strong>{copy.brand}</strong>
+      <span>{copy.footer.note}</span>
+    </p>
+  </div>
+  <nav aria-label="Footer navigation">
+    <a href={getLocalePath(locale, "videos")}>{copy.nav.videos}</a>
+    <a href={getLocalePath(locale, "about")}>{copy.nav.about}</a>
+  </nav>
+  <p>{copy.footer.placeholder}</p>
+</footer>

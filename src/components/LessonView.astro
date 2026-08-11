@@ -1,0 +1,85 @@
+---
+import { getSubject } from "../data/subjects";
+import type { Lesson } from "../data/lessons";
+import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+
+type Props = {
+  lesson: Lesson;
+  locale: Locale;
+};
+
+const { lesson, locale } = Astro.props;
+const copy = ui[locale];
+const subject = getSubject(lesson.subject);
+const nextHref = locale === "da" ? lesson.nextLesson.href : `${getLocalePath(locale, "videos")}?subject=ai-in-construction`;
+---
+
+<article class="lesson-shell">
+  <header class="lesson-hero">
+    <p class="eyebrow">{subject?.title[locale]} · {languageNames[locale][lesson.language]}</p>
+    <h1>{lesson.title[locale]}</h1>
+    <p>{lesson.summary[locale]}</p>
+    <a class="text-link" href={getLocalePath(locale, "videos")}>{copy.actions.backToVideos}</a>
+  </header>
+
+  <div class="lesson-layout">
+    <section class="lesson-main" aria-label={lesson.title[locale]}>
+      <div class="video-frame">
+        {lesson.embedUrl ? (
+          <iframe src={lesson.embedUrl} title={lesson.title[locale]} allowfullscreen></iframe>
+        ) : (
+          <div>
+            <span>{lesson.provider}</span>
+            <p>{copy.lesson.videoPlaceholder}</p>
+          </div>
+        )}
+      </div>
+
+      <section class="lesson-block">
+        <h2>{copy.lesson.objectives}</h2>
+        <ul class="check-list">
+          {lesson.objectives[locale].map((objective) => <li>{objective}</li>)}
+        </ul>
+      </section>
+
+      <section class="lesson-block">
+        <h2>{copy.lesson.resources}</h2>
+        <div class="resource-list">
+          {lesson.resources.map((resource) => (
+            <a class="resource-item" href={resource.url || "#"} aria-disabled={!resource.url}>
+              <span>{resource.title[locale]}</span>
+              <small>{resource.url ? resource.type : copy.lesson.placeholderResource}</small>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="lesson-block">
+        <h2>{copy.lesson.exercise}</h2>
+        <p>{lesson.exercise[locale]}</p>
+      </section>
+    </section>
+
+    <aside class="lesson-aside" aria-label="Lesson metadata">
+      <dl>
+        <div>
+          <dt>{copy.lesson.provider}</dt>
+          <dd>{lesson.provider}</dd>
+        </div>
+        <div>
+          <dt>{copy.lesson.access}</dt>
+          <dd>{lesson.access === "public" ? copy.library.publicAccess : copy.library.studentAccess}</dd>
+        </div>
+        <div>
+          <dt>{copy.lesson.language}</dt>
+          <dd>{languageNames[locale][lesson.language]}</dd>
+        </div>
+      </dl>
+
+      <div class="next-lesson">
+        <span>{copy.lesson.nextLesson}</span>
+        <a href={nextHref}>{lesson.nextLesson.title[locale]}</a>
+      </div>
+    </aside>
+  </div>
+</article>

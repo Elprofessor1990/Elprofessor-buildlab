@@ -1,0 +1,115 @@
+---
+import { getSubject } from "../data/subjects";
+import { videos, type VideoItem } from "../data/videos";
+import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+
+type Props = {
+  video: VideoItem;
+  locale: Locale;
+};
+
+const { video, locale } = Astro.props;
+const copy = ui[locale];
+const subject = getSubject(video.subject);
+const description = video.description?.[locale] ?? video.summary[locale];
+const resources = video.resources ?? [];
+const related = videos
+  .filter((item) => item.subject === video.subject && item.id !== video.id)
+  .slice(0, 3);
+const embedUrl = video.youtubeId ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}` : undefined;
+---
+
+<article class="video-detail">
+  <header class="video-detail__header">
+    <div>
+      <p class="eyebrow">{subject?.title[locale]} · {languageNames[locale][video.language]}</p>
+      <h1>{video.title[locale]}</h1>
+      <p>{video.summary[locale]}</p>
+    </div>
+    <a class="text-link" href={`${getLocalePath(locale, "videos")}?subject=${video.subject}`}>
+      {copy.actions.backToVideos}
+    </a>
+  </header>
+
+  <div class="video-detail__layout">
+    <section class="video-detail__main" aria-label={video.title[locale]}>
+      <div class="video-frame video-frame--detail">
+        {embedUrl ? (
+          <iframe
+            src={embedUrl}
+            title={video.title[locale]}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        ) : (
+          <div>
+            <span>{video.provider}</span>
+            <p>{copy.lesson.videoPlaceholder}</p>
+          </div>
+        )}
+      </div>
+
+      <section class="lesson-block">
+        <h2>{copy.videoDetail.description}</h2>
+        <p>{description}</p>
+      </section>
+
+      <section class="lesson-block">
+        <h2>{copy.videoDetail.files}</h2>
+        {resources.length > 0 ? (
+          <div class="resource-list">
+            {resources.map((resource) => (
+              <a
+                class="resource-item"
+                href={resource.url || "#"}
+                aria-disabled={!resource.url}
+                download={resource.url ? true : undefined}
+              >
+                <span>{resource.title[locale]}</span>
+                <small>{resource.url ? copy.videoDetail.download : resource.note?.[locale] ?? copy.lesson.placeholderResource}</small>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p>{copy.videoDetail.noFiles}</p>
+        )}
+      </section>
+    </section>
+
+    <aside class="lesson-aside video-detail__aside" aria-label="Video metadata">
+      <dl>
+        <div>
+          <dt>{copy.lesson.provider}</dt>
+          <dd>{video.provider}</dd>
+        </div>
+        <div>
+          <dt>{copy.lesson.access}</dt>
+          <dd>{video.access === "public" ? copy.library.publicAccess : copy.library.studentAccess}</dd>
+        </div>
+        <div>
+          <dt>{copy.lesson.language}</dt>
+          <dd>{languageNames[locale][video.language]}</dd>
+        </div>
+        <div>
+          <dt>{copy.videoDetail.duration}</dt>
+          <dd>{video.duration}</dd>
+        </div>
+      </dl>
+
+      {video.externalUrl && (
+        <a class="button button--primary video-detail__youtube" href={video.externalUrl} target="_blank" rel="noreferrer">
+          {copy.videoDetail.openYoutube}
+        </a>
+      )}
+
+      {related.length > 0 && (
+        <div class="related-videos">
+          <span>{copy.videoDetail.related}</span>
+          {related.map((item) => (
+            <a href={getLocalePath(locale, "video", item.id)}>{item.title[locale]}</a>
+          ))}
+        </div>
+      )}
+    </aside>
+  </div>
+</article>

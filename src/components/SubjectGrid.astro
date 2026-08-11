@@ -1,0 +1,29 @@
+---
+import { subjects } from "../data/subjects";
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<section class="section section--subjects" id="subjects" aria-labelledby="subjects-title">
+  <div class="section__header">
+    <p class="eyebrow">{copy.tagline}</p>
+    <h2 id="subjects-title">{copy.home.subjectsTitle}</h2>
+    <p>{copy.home.subjectsText}</p>
+  </div>
+
+  <div class="subject-grid">
+    {subjects.map((subject, index) => (
+      <article class="subject-card">
+        <span class="subject-card__number">{String(index + 1).padStart(2, "0")}</span>
+        <h3>{subject.title[locale]}</h3>
+        <p>{subject.description[locale]}</p>
+        <ul>
+          {subject.objectives[locale].slice(0, 2).map((objective) => <li>{objective}</li>)}
+        </ul>
+        <a href={`${getLocalePath(locale, "videos")}?subject=${subject.slug}`}>{copy.actions.viewVideos}</a>
+      </article>
+    ))}
+  </div>
+</section>

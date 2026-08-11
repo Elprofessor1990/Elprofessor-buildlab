@@ -1,0 +1,38 @@
+---
+import { getLocalePath, ui, type Locale, type PageKey } from "../i18n";
+
+type Props = {
+  locale: Locale;
+  currentPage: PageKey;
+};
+
+const { locale, currentPage } = Astro.props;
+const copy = ui[locale];
+
+const navItems = [
+  { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "home" },
+  { label: copy.nav.videos, href: getLocalePath(locale, "videos"), key: "videos" },
+  { label: copy.nav.about, href: getLocalePath(locale, "about"), key: "about" },
+];
+---
+
+<header class="site-header">
+  <a class="brand-link" href={getLocalePath(locale, "home")} aria-label={copy.brand}>
+    <img src="/assets/logo-ldb.png" alt="" width="44" height="44" />
+    <span>
+      <strong>{copy.brand}</strong>
+      <small>{copy.tagline}</small>
+    </span>
+  </a>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        aria-current={(currentPage === item.key || (currentPage === "video" && item.key === "videos")) ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>

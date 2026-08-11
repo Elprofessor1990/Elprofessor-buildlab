@@ -1,0 +1,25 @@
+---
+import Hero from "./Hero.astro";
+import LearningTracks from "./LearningTracks.astro";
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<Hero locale={locale} />
+<LearningTracks locale={locale} />
+
+<section class="section section--workflow" aria-labelledby="workflow-title">
+  <div class="workflow-panel">
+    <div>
+      <p class="eyebrow">{copy.nav.videos}</p>
+      <h2 id="workflow-title">{copy.home.workflowTitle}</h2>
+      <p>{copy.home.workflowText}</p>
+    </div>
+    <ol>
+      {copy.home.workflowItems.map((item) => <li>{item}</li>)}
+    </ol>
+    <a class="button button--primary" href={getLocalePath(locale, "videos")}>{copy.actions.viewVideos}</a>
+  </div>
+</section>

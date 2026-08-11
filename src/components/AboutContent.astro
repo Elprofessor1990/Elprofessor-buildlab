@@ -1,0 +1,28 @@
+---
+import { ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+---
+
+<section class="about-page">
+  <div class="about-hero">
+    <div>
+      <p class="eyebrow">{copy.tagline}</p>
+      <h1>{copy.about.title}</h1>
+      <p>{copy.about.intro}</p>
+    </div>
+    <img src="/assets/ali-kadum-hassan.png" alt="Ali Kadum Hassan" width="460" height="460" />
+  </div>
+
+  <div class="about-grid">
+    <article>
+      <h2>{copy.about.aliTitle}</h2>
+      <p>{copy.about.aliText}</p>
+    </article>
+    <article>
+      <h2>{copy.about.aklcaTitle}</h2>
+      <p>{copy.about.aklcaText}</p>
+    </article>
+  </div>
+</section>

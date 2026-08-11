@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Astro
+.astro/
+dist/
+
+# Environment files
+.env
+.env.*
+
+# Local system files
+.DS_Store
+Thumbs.db
+
+# Keep source video files out of Git.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.wav
+*.mp3

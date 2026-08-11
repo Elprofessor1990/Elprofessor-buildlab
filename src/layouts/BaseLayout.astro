@@ -1,0 +1,46 @@
+---
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { locales, ui, type Locale, type PageKey } from "../i18n";
+import "../styles/global.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  locale?: Locale;
+  currentPage?: PageKey;
+};
+
+const {
+  title,
+  description = "Elprofessor BuildLab - multilingual learning platform for BIM, sustainable construction and digital workflows.",
+  locale = "da",
+  currentPage = "home",
+} = Astro.props;
+
+const copy = ui[locale];
+const pageTitle = title ? `${title} | ${copy.brand}` : copy.brand;
+---
+
+<!doctype html>
+<html lang={locale} dir={locales[locale].dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/assets/banner.png" />
+    <link rel="icon" type="image/png" href="/assets/logo-ldb.png" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{copy.skipToContent}</a>
+    <SiteHeader locale={locale} currentPage={currentPage} />
+    <main id="content">
+      <slot />
+    </main>
+    <SiteFooter locale={locale} />
+  </body>
+</html>

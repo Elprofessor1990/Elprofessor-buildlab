@@ -1,0 +1,19 @@
+---
+import LessonView from "../../components/LessonView.astro";
+import { lessons } from "../../data/lessons";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return lessons.map((lesson) => ({
+    params: { slug: lesson.slug },
+    props: { lesson },
+  }));
+}
+
+const { lesson } = Astro.props;
+const locale = "da";
+---
+
+<BaseLayout locale={locale} currentPage="lesson" title={lesson.title[locale]}>
+  <LessonView lesson={lesson} locale={locale} />
+</BaseLayout>

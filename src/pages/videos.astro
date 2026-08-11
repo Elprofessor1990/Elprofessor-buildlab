@@ -1,0 +1,11 @@
+---
+import VideoLibrary from "../components/VideoLibrary.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ui } from "../i18n";
+
+const locale = "da";
+---
+
+<BaseLayout locale={locale} currentPage="videos" title={ui[locale].library.title}>
+  <VideoLibrary locale={locale} />
+</BaseLayout>

@@ -1,0 +1,11 @@
+---
+import AboutContent from "../components/AboutContent.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ui } from "../i18n";
+
+const locale = "da";
+---
+
+<BaseLayout locale={locale} currentPage="about" title={ui[locale].about.title}>
+  <AboutContent locale={locale} />
+</BaseLayout>

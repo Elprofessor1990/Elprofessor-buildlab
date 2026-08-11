@@ -1,0 +1,122 @@
+---
+import { subjects } from "../data/subjects";
+import { videos } from "../data/videos";
+import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = ui[locale];
+const languages: Locale[] = ["da", "en", "ar"];
+---
+
+<section class="section section--library" aria-labelledby="video-library-title" data-video-library>
+  <div class="section__header">
+    <p class="eyebrow">{copy.tagline}</p>
+    <h1 id="video-library-title">{copy.library.title}</h1>
+    <p>{copy.library.text}</p>
+  </div>
+
+  <form class="filter-bar" aria-label={copy.library.title}>
+    <label>
+      <span>{copy.library.subjectLabel}</span>
+      <select name="subject" data-filter-subject>
+        <option value="all">{copy.library.allSubjects}</option>
+        {subjects.map((subject) => <option value={subject.slug}>{subject.title[locale]}</option>)}
+      </select>
+    </label>
+
+    <label>
+      <span>{copy.library.languageLabel}</span>
+      <select name="language" data-filter-language>
+        <option value="all">{copy.library.allLanguages}</option>
+        {languages.map((language) => <option value={language}>{languageNames[locale][language]}</option>)}
+      </select>
+    </label>
+
+    <output data-result-count>{videos.length} {copy.library.resultLabel}</output>
+  </form>
+
+  <div class="video-grid">
+    {videos.map((video) => {
+      const subject = subjects.find((item) => item.slug === video.subject);
+      const href = getLocalePath(locale, "video", video.id);
+
+      return (
+        <article
+          class="video-card"
+          data-video-card
+          data-subject={video.subject}
+          data-language={video.language}
+        >
+          <div class={`video-card__thumb ${video.youtubeId ? "video-card__thumb--image" : ""}`}>
+            {video.youtubeId && (
+              <img
+                src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                alt=""
+                loading="lazy"
+              />
+            )}
+            <span>{video.provider}</span>
+          </div>
+          <div class="video-card__body">
+            <div class="video-card__meta">
+              <span>{subject?.title[locale]}</span>
+              <span>{languageNames[locale][video.language]}</span>
+              <span>{video.duration}</span>
+            </div>
+            <h2>{video.title[locale]}</h2>
+            <p>{video.summary[locale]}</p>
+            <div class="video-card__footer">
+              <span class={`access-pill access-pill--${video.access}`}>
+                {video.access === "public" ? copy.library.publicAccess : copy.library.studentAccess}
+              </span>
+              <a href={href}>{copy.actions.openLesson}</a>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <p class="empty-state" data-empty-state hidden>{copy.library.noResults}</p>
+</section>
+
+<script>
+  document.querySelectorAll("[data-video-library]").forEach((library) => {
+    const subjectSelect = library.querySelector("[data-filter-subject]");
+    const languageSelect = library.querySelector("[data-filter-language]");
+    const cards = Array.from(library.querySelectorAll("[data-video-card]"));
+    const count = library.querySelector("[data-result-count]");
+    const empty = library.querySelector("[data-empty-state]");
+    const resultLabel = count?.textContent?.replace(/^\d+\s*/, "") || "";
+    const params = new URLSearchParams(window.location.search);
+
+    if (subjectSelect instanceof HTMLSelectElement && params.get("subject")) {
+      subjectSelect.value = params.get("subject") || "all";
+    }
+
+    if (languageSelect instanceof HTMLSelectElement && params.get("language")) {
+      languageSelect.value = params.get("language") || "all";
+    }
+
+    function update() {
+      const subject = subjectSelect instanceof HTMLSelectElement ? subjectSelect.value : "all";
+      const language = languageSelect instanceof HTMLSelectElement ? languageSelect.value : "all";
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const subjectMatch = subject === "all" || card.getAttribute("data-subject") === subject;
+        const languageMatch = language === "all" || card.getAttribute("data-language") === language;
+        const show = subjectMatch && languageMatch;
+        card.toggleAttribute("hidden", !show);
+        if (show) visible += 1;
+      });
+
+      if (count) count.textContent = `${visible} ${resultLabel}`;
+      if (empty) empty.toggleAttribute("hidden", visible !== 0);
+    }
+
+    subjectSelect?.addEventListener("change", update);
+    languageSelect?.addEventListener("change", update);
+    update();
+  });
+</script>
