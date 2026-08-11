@@ -13,6 +13,11 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Original local brand exports; committed copies live in public/assets.
+/Ali Kadum Hassan.png
+/banner.png
+/logo_LDB.png
+
 # Keep source video files out of Git.
 *.mp4
 *.mov
