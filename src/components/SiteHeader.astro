@@ -1,5 +1,5 @@
 ---
-import { getLocalePath, ui, type Locale, type PageKey } from "../i18n";
+import { getAssetPath, getLocalePath, ui, type Locale, type PageKey } from "../i18n";
 
 type Props = {
   locale: Locale;
@@ -8,7 +8,7 @@ type Props = {
 
 const { locale, currentPage } = Astro.props;
 const copy = ui[locale];
-const assetBase = import.meta.env.BASE_URL;
+const logoUrl = getAssetPath("assets/logo-ldb.png");
 
 const navItems = [
   { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "home" },
@@ -19,7 +19,7 @@ const navItems = [
 
 <header class="site-header">
   <a class="brand-link" href={getLocalePath(locale, "home")} aria-label={copy.brand}>
-    <img src={`${assetBase}assets/logo-ldb.png`} alt="" width="44" height="44" />
+    <img src={logoUrl} alt="" width="44" height="44" />
     <span>
       <strong>{copy.brand}</strong>
       <small>{copy.tagline}</small>

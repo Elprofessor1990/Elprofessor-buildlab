@@ -35,10 +35,14 @@ export type PageKey = "home" | "videos" | "video" | "about" | "lesson";
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-function withBase(path: string) {
+export function withBase(path: string) {
   if (!basePath) return path;
   if (path === "/") return `${basePath}/`;
   return `${basePath}${path}`;
+}
+
+export function getAssetPath(path: string) {
+  return withBase(path.startsWith("/") ? path : `/${path}`);
 }
 
 export function getLocalePath(locale: Locale, page: PageKey, slug?: string) {

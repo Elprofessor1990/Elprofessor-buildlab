@@ -1,7 +1,7 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
-import { locales, ui, type Locale, type PageKey } from "../i18n";
+import { getAssetPath, locales, ui, type Locale, type PageKey } from "../i18n";
 import "../styles/global.css";
 
 type Props = {
@@ -20,9 +20,8 @@ const {
 
 const copy = ui[locale];
 const pageTitle = title ? `${title} | ${copy.brand}` : copy.brand;
-const assetBase = import.meta.env.BASE_URL;
-const logoUrl = `${assetBase}assets/logo-ldb.png`;
-const bannerUrl = `${assetBase}assets/banner.png`;
+const logoUrl = getAssetPath("assets/logo-ldb.png");
+const bannerUrl = getAssetPath("assets/banner.png");
 ---
 
 <!doctype html>
