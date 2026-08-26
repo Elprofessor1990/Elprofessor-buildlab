@@ -40,6 +40,7 @@ Current public YouTube content includes:
 
 - Dalux playlist with 2 videos.
 - NBS Nordic playlist with 7 videos.
+- FEM Design 101 playlist with 15 videos.
 - LCAByg videos and placeholders.
 
 Do not commit video files to this repository. Store public videos on YouTube and student-only videos on Panopto, unlisted YouTube, or another access-controlled provider. Keep only metadata, lesson descriptions, ordering, and resource links in the repo.
