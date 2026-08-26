@@ -16,6 +16,7 @@ export type VideoItem = {
   access: "public" | "student";
   provider: "YouTube" | "Panopto" | "Remotion" | "Placeholder";
   youtubeId?: string;
+  playlistId?: string;
   externalUrl?: string;
   duration: string;
   level: "Intro" | "Practice" | "Advanced";
@@ -64,6 +65,67 @@ const lcabygResourcePlaceholders: VideoResource[] = [
       da: "Her kan LCAByg-filer, regneark eller ZIP-pakker linkes.",
       en: "LCAByg files, spreadsheets, or ZIP packages can be linked here.",
       ar: "يمكن ربط ملفات LCAByg أو الجداول أو حزم ZIP هنا.",
+    },
+  },
+];
+
+const nbsNordicPlaylistId = "PLQe1c9gMRl9liTUkVAq0WQY_F5xX6egTN";
+const daluxPlaylistId = "PLQe1c9gMRl9mC0XTvVZqGSBRaSxRq_zLM";
+
+const nbsNordicResources: VideoResource[] = [
+  {
+    kind: "worksheet",
+    title: {
+      da: "Øvelse til NBS Nordic",
+      en: "NBS Nordic exercise",
+      ar: "تمرين NBS Nordic",
+    },
+    note: {
+      da: "Kan tilføjes som opgaveark, når materialet er klar.",
+      en: "Can be added as a worksheet when the material is ready.",
+      ar: "يمكن إضافته كورقة عمل عندما تكون المادة جاهزة.",
+    },
+  },
+  {
+    kind: "project-file",
+    title: {
+      da: "Eksempelfiler",
+      en: "Example files",
+      ar: "ملفات أمثلة",
+    },
+    note: {
+      da: "Her kan Revit-, Sigma- eller NBS Nordic-eksempelfiler linkes.",
+      en: "Revit, Sigma, or NBS Nordic example files can be linked here.",
+      ar: "يمكن ربط ملفات أمثلة من Revit أو Sigma أو NBS Nordic هنا.",
+    },
+  },
+];
+
+const daluxResources: VideoResource[] = [
+  {
+    kind: "worksheet",
+    title: {
+      da: "Øvelse til Dalux",
+      en: "Dalux exercise",
+      ar: "تمرين Dalux",
+    },
+    note: {
+      da: "Kan tilføjes som opgaveark, når materialet er klar.",
+      en: "Can be added as a worksheet when the material is ready.",
+      ar: "يمكن إضافته كورقة عمل عندما تكون المادة جاهزة.",
+    },
+  },
+  {
+    kind: "project-file",
+    title: {
+      da: "Eksempelfiler",
+      en: "Example files",
+      ar: "ملفات أمثلة",
+    },
+    note: {
+      da: "Her kan projektfiler, registreringsskemaer eller eksporteksempler linkes.",
+      en: "Project files, registration forms, or export examples can be linked here.",
+      ar: "يمكن ربط ملفات المشروع أو نماذج التسجيل أو أمثلة التصدير هنا.",
     },
   },
 ];
@@ -145,6 +207,258 @@ export const videos: VideoItem[] = [
       en: "Placeholder for calculation steps, explanatory graphics, and a supporting exercise.",
       ar: "عنصر مؤقت لخطوات حساب ورسوم توضيحية وتمرين داعم.",
     },
+  },
+  {
+    id: "dalux-01-introduktion-byggeprocessen",
+    subject: "dalux",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "CzqzmT_L870",
+    playlistId: daluxPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=CzqzmT_L870&list=${daluxPlaylistId}`,
+    duration: "11:19",
+    level: "Intro",
+    title: {
+      da: "(Del 1) Dalux - Introduktion og anvendelse i byggeprocessen",
+      en: "(Part 1) Dalux - Introduction and Use in the Construction Process",
+      ar: "(الجزء 1) Dalux - مقدمة والاستخدام في عملية البناء",
+    },
+    summary: {
+      da: "Introduktion til Dalux og hvordan værktøjet kan anvendes i byggeprocessen.",
+      en: "Introduction to Dalux and how the tool can be used in the construction process.",
+      ar: "مقدمة إلى Dalux وكيف يمكن استخدام الأداة في عملية البناء.",
+    },
+    description: {
+      da: "Videoen er første del af Dalux-forløbet og giver et praktisk overblik over anvendelse i byggeprocessen.",
+      en: "This is the first part of the Dalux sequence and gives a practical overview of use in the construction process.",
+      ar: "هذا هو الجزء الأول من مسار Dalux ويقدم نظرة عملية على الاستخدام في عملية البناء.",
+    },
+    resources: daluxResources,
+  },
+  {
+    id: "dalux-02-mobil-registrering-dokumentation",
+    subject: "dalux",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "GRwh1ioqdKI",
+    playlistId: daluxPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=GRwh1ioqdKI&list=${daluxPlaylistId}`,
+    duration: "3:27",
+    level: "Practice",
+    title: {
+      da: "(Del 2) Dalux i mobil - Registrering og dokumentation",
+      en: "(Part 2) Dalux on Mobile - Registration and Documentation",
+      ar: "(الجزء 2) Dalux على الهاتف - التسجيل والتوثيق",
+    },
+    summary: {
+      da: "Mobil registrering og dokumentation i Dalux som del af byggepladsens praktiske workflow.",
+      en: "Mobile registration and documentation in Dalux as part of the practical site workflow.",
+      ar: "التسجيل والتوثيق عبر الهاتف في Dalux كجزء من سير العمل العملي في الموقع.",
+    },
+    description: {
+      da: "Videoen viser brugen af Dalux på mobil til registrering og dokumentation i byggeprocessen.",
+      en: "The video shows the use of Dalux on mobile for registration and documentation in the construction process.",
+      ar: "يوضح الفيديو استخدام Dalux على الهاتف للتسجيل والتوثيق في عملية البناء.",
+    },
+    resources: daluxResources,
+  },
+  {
+    id: "nbs-nordic-01-account-plugin",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "RZnQvsHu23U",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=RZnQvsHu23U&list=${nbsNordicPlaylistId}`,
+    duration: "3:17",
+    level: "Intro",
+    title: {
+      da: "NBS Nordic #1: opret konto + plug in",
+      en: "NBS Nordic #1: Create Account + Plug-in",
+      ar: "NBS Nordic #1: إنشاء حساب وإضافة Plug-in",
+    },
+    summary: {
+      da: "Oprettelse af konto og opsætning af plug-in som første trin i NBS Nordic-forløbet.",
+      en: "Account creation and plug-in setup as the first step in the NBS Nordic course sequence.",
+      ar: "إنشاء الحساب وإعداد الإضافة كخطوة أولى في مسار NBS Nordic.",
+    },
+    description: {
+      da: "Videoen er en del af den offentlige NBS Nordic-playliste og introducerer de første praktiske trin: konto, adgang og plug-in.",
+      en: "This public NBS Nordic playlist video introduces the first practical steps: account, access, and plug-in setup.",
+      ar: "هذا الفيديو من قائمة تشغيل NBS Nordic العامة ويقدم الخطوات العملية الأولى: الحساب والوصول وإعداد الإضافة.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-02-project-building-elements",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "_iE7C5XPp3U",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=_iE7C5XPp3U&list=${nbsNordicPlaylistId}`,
+    duration: "4:17",
+    level: "Intro",
+    title: {
+      da: "NBS Nordic #2: Opret et Projekt samt opret bygningsdele",
+      en: "NBS Nordic #2: Create a Project and Building Elements",
+      ar: "NBS Nordic #2: إنشاء مشروع وعناصر مبنى",
+    },
+    summary: {
+      da: "Oprettelse af projekt og bygningsdele som grundstruktur i NBS Nordic.",
+      en: "Project and building element setup as the basic structure in NBS Nordic.",
+      ar: "إعداد المشروع وعناصر المبنى كبنية أساسية في NBS Nordic.",
+    },
+    description: {
+      da: "Videoen viser, hvordan et projekt og de første bygningsdele oprettes, så arbejdet i NBS Nordic får en tydelig struktur.",
+      en: "The video shows how to create a project and the first building elements, giving the NBS Nordic workflow a clear structure.",
+      ar: "يوضح الفيديو كيفية إنشاء مشروع وأول عناصر المبنى، مما يعطي سير العمل في NBS Nordic بنية واضحة.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-03-revit-quantities-classification",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "RwZVrmygZ2k",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=RwZVrmygZ2k&list=${nbsNordicPlaylistId}`,
+    duration: "22:59",
+    level: "Practice",
+    title: {
+      da: "NBS Nordic #3: Hvordan tilknyttes bygningsdel m. Revit samt udtræk mængder og klassifikation",
+      en: "NBS Nordic #3: Link Building Elements with Revit, Quantities, and Classification",
+      ar: "NBS Nordic #3: ربط عناصر المبنى مع Revit والكميات والتصنيف",
+    },
+    summary: {
+      da: "Kobling mellem bygningsdele og Revit med mængdeudtræk og klassifikation.",
+      en: "Linking building elements and Revit with quantity extraction and classification.",
+      ar: "ربط عناصر المبنى وRevit مع استخراج الكميات والتصنيف.",
+    },
+    description: {
+      da: "Videoen gennemgår koblingen mellem bygningsdele og Revit, herunder udtræk af mængder og brug af klassifikation.",
+      en: "The video walks through linking building elements with Revit, including quantity extraction and classification.",
+      ar: "يشرح الفيديو ربط عناصر المبنى مع Revit، بما في ذلك استخراج الكميات واستخدام التصنيف.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-04-description-print",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "HXe5Z6qWvs0",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=HXe5Z6qWvs0&list=${nbsNordicPlaylistId}`,
+    duration: "13:03",
+    level: "Practice",
+    title: {
+      da: "NBS Nordic #4: Tilknytte af bygningsdelsbeskrivelse til oprettet bygningsdele og print dokumentet",
+      en: "NBS Nordic #4: Link Building Element Description and Print the Document",
+      ar: "NBS Nordic #4: ربط وصف عنصر المبنى وطباعة المستند",
+    },
+    summary: {
+      da: "Tilknytning af bygningsdelsbeskrivelse til oprettede bygningsdele samt print af dokument.",
+      en: "Linking building element descriptions to created elements and printing the document.",
+      ar: "ربط أوصاف عناصر المبنى بالعناصر المنشأة وطباعة المستند.",
+    },
+    description: {
+      da: "Videoen viser, hvordan en bygningsdelsbeskrivelse knyttes til oprettede bygningsdele, og hvordan dokumentet kan printes.",
+      en: "The video shows how a building element description is linked to created elements and how the document can be printed.",
+      ar: "يوضح الفيديو كيفية ربط وصف عنصر المبنى بالعناصر المنشأة وكيفية طباعة المستند.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-05-tender-list",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "-UNS9MRXEps",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=-UNS9MRXEps&list=${nbsNordicPlaylistId}`,
+    duration: "6:05",
+    level: "Practice",
+    title: {
+      da: "NBS Nordic #5: Udarbejd en tilbudsliste i NBS Nordic",
+      en: "NBS Nordic #5: Create a Tender List in NBS Nordic",
+      ar: "NBS Nordic #5: إعداد قائمة عروض في NBS Nordic",
+    },
+    summary: {
+      da: "Udarbejdelse af en tilbudsliste i NBS Nordic.",
+      en: "Creating a tender list in NBS Nordic.",
+      ar: "إعداد قائمة عروض في NBS Nordic.",
+    },
+    description: {
+      da: "Videoen viser den praktiske opbygning af en tilbudsliste i NBS Nordic.",
+      en: "The video shows the practical setup of a tender list in NBS Nordic.",
+      ar: "يوضح الفيديو الإعداد العملي لقائمة عروض في NBS Nordic.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-06-lca-export-lcabyg",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "LBEbQOw_3Cs",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=LBEbQOw_3Cs&list=${nbsNordicPlaylistId}`,
+    duration: "14:53",
+    level: "Practice",
+    title: {
+      da: "NBS Nordic #6: Beregning af LCA med NBS Nordic samt eksporter fil til LCABYG til videre arbejde",
+      en: "NBS Nordic #6: Calculate LCA and Export to LCAbyg",
+      ar: "NBS Nordic #6: حساب LCA والتصدير إلى LCAbyg",
+    },
+    summary: {
+      da: "Beregning af LCA i NBS Nordic og eksport til LCAbyg til videre arbejde.",
+      en: "LCA calculation in NBS Nordic and export to LCAbyg for further work.",
+      ar: "حساب LCA في NBS Nordic والتصدير إلى LCAbyg لمتابعة العمل.",
+    },
+    description: {
+      da: "Videoen viser beregning af LCA i NBS Nordic og eksport af fil til LCAbyg, så resultaterne kan bruges videre.",
+      en: "The video shows LCA calculation in NBS Nordic and file export to LCAbyg so the results can be used further.",
+      ar: "يوضح الفيديو حساب LCA في NBS Nordic وتصدير الملف إلى LCAbyg لاستخدام النتائج لاحقا.",
+    },
+    resources: nbsNordicResources,
+  },
+  {
+    id: "nbs-nordic-07-sigma-prices",
+    subject: "nbs-nordic",
+    language: "da",
+    access: "public",
+    provider: "YouTube",
+    youtubeId: "ujWLkWnJIzw",
+    playlistId: nbsNordicPlaylistId,
+    externalUrl: `https://www.youtube.com/watch?v=ujWLkWnJIzw&list=${nbsNordicPlaylistId}`,
+    duration: "16:11",
+    level: "Practice",
+    title: {
+      da: "NBS Nordic #7: kobling NBS Nordic med Sigma for beregning af priser",
+      en: "NBS Nordic #7: Connect NBS Nordic with Sigma for Price Calculation",
+      ar: "NBS Nordic #7: ربط NBS Nordic مع Sigma لحساب الأسعار",
+    },
+    summary: {
+      da: "Kobling mellem NBS Nordic og Sigma til beregning af priser.",
+      en: "Connecting NBS Nordic and Sigma for price calculation.",
+      ar: "ربط NBS Nordic وSigma لحساب الأسعار.",
+    },
+    description: {
+      da: "Videoen gennemgår koblingen mellem NBS Nordic og Sigma, så priser kan beregnes som en del af arbejdsflowet.",
+      en: "The video walks through the connection between NBS Nordic and Sigma so prices can be calculated as part of the workflow.",
+      ar: "يشرح الفيديو الربط بين NBS Nordic وSigma بحيث يمكن حساب الأسعار كجزء من سير العمل.",
+    },
+    resources: nbsNordicResources,
   },
   {
     id: "lcabyg-early-design",
@@ -371,25 +685,6 @@ export const videos: VideoItem[] = [
       da: "Placeholder til en detaljeret gennemgang med modelkontrol og resultatlæsning.",
       en: "Placeholder for a detailed walkthrough with model checks and result reading.",
       ar: "عنصر مؤقت لشرح تفصيلي مع فحص النموذج وقراءة النتائج.",
-    },
-  },
-  {
-    id: "nbs-nordic-specifications",
-    subject: "nbs-nordic",
-    language: "en",
-    access: "public",
-    provider: "YouTube",
-    duration: "07:00",
-    level: "Intro",
-    title: {
-      da: "NBS Nordic - beskrivelser og krav",
-      en: "NBS Nordic - Specifications and Requirements",
-      ar: "NBS Nordic - المواصفات والمتطلبات",
-    },
-    summary: {
-      da: "Placeholder til at vise sammenhæng mellem bygningsdele, krav og beskrivelser.",
-      en: "Placeholder to show links between elements, requirements, and specifications.",
-      ar: "عنصر مؤقت لإظهار الروابط بين العناصر والمتطلبات والمواصفات.",
     },
   },
   {

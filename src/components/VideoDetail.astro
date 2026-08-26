@@ -1,7 +1,7 @@
 ---
 import { getSubject } from "../data/subjects";
 import { videos, type VideoItem } from "../data/videos";
-import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+import { getLocalePath, ui, type Locale } from "../i18n";
 
 type Props = {
   video: VideoItem;
@@ -16,13 +16,16 @@ const resources = video.resources ?? [];
 const related = videos
   .filter((item) => item.subject === video.subject && item.id !== video.id)
   .slice(0, 3);
-const embedUrl = video.youtubeId ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}` : undefined;
+const playlistQuery = video.playlistId ? `?list=${encodeURIComponent(video.playlistId)}` : "";
+const embedUrl = video.youtubeId
+  ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}${playlistQuery}`
+  : undefined;
 ---
 
 <article class="video-detail">
   <header class="video-detail__header">
     <div>
-      <p class="eyebrow">{subject?.title[locale]} · {languageNames[locale][video.language]}</p>
+      <p class="eyebrow">{subject?.title[locale]}</p>
       <h1>{video.title[locale]}</h1>
       <p>{video.summary[locale]}</p>
     </div>
@@ -85,10 +88,6 @@ const embedUrl = video.youtubeId ? `https://www.youtube-nocookie.com/embed/${vid
         <div>
           <dt>{copy.lesson.access}</dt>
           <dd>{video.access === "public" ? copy.library.publicAccess : copy.library.studentAccess}</dd>
-        </div>
-        <div>
-          <dt>{copy.lesson.language}</dt>
-          <dd>{languageNames[locale][video.language]}</dd>
         </div>
         <div>
           <dt>{copy.videoDetail.duration}</dt>

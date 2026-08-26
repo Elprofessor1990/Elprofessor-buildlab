@@ -1,11 +1,10 @@
 ---
 import { subjects } from "../data/subjects";
 import { videos } from "../data/videos";
-import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+import { getLocalePath, ui, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = ui[locale];
-const languages: Locale[] = ["da", "en", "ar"];
 ---
 
 <section class="section section--library" aria-labelledby="video-library-title" data-video-library>
@@ -24,14 +23,6 @@ const languages: Locale[] = ["da", "en", "ar"];
       </select>
     </label>
 
-    <label>
-      <span>{copy.library.languageLabel}</span>
-      <select name="language" data-filter-language>
-        <option value="all">{copy.library.allLanguages}</option>
-        {languages.map((language) => <option value={language}>{languageNames[locale][language]}</option>)}
-      </select>
-    </label>
-
     <output data-result-count>{videos.length} {copy.library.resultLabel}</output>
   </form>
 
@@ -45,7 +36,6 @@ const languages: Locale[] = ["da", "en", "ar"];
           class="video-card"
           data-video-card
           data-subject={video.subject}
-          data-language={video.language}
         >
           <div class={`video-card__thumb ${video.youtubeId ? "video-card__thumb--image" : ""}`}>
             {video.youtubeId && (
@@ -60,7 +50,6 @@ const languages: Locale[] = ["da", "en", "ar"];
           <div class="video-card__body">
             <div class="video-card__meta">
               <span>{subject?.title[locale]}</span>
-              <span>{languageNames[locale][video.language]}</span>
               <span>{video.duration}</span>
             </div>
             <h2>{video.title[locale]}</h2>
@@ -83,7 +72,6 @@ const languages: Locale[] = ["da", "en", "ar"];
 <script>
   document.querySelectorAll("[data-video-library]").forEach((library) => {
     const subjectSelect = library.querySelector("[data-filter-subject]");
-    const languageSelect = library.querySelector("[data-filter-language]");
     const cards = Array.from(library.querySelectorAll("[data-video-card]"));
     const count = library.querySelector("[data-result-count]");
     const empty = library.querySelector("[data-empty-state]");
@@ -94,19 +82,13 @@ const languages: Locale[] = ["da", "en", "ar"];
       subjectSelect.value = params.get("subject") || "all";
     }
 
-    if (languageSelect instanceof HTMLSelectElement && params.get("language")) {
-      languageSelect.value = params.get("language") || "all";
-    }
-
     function update() {
       const subject = subjectSelect instanceof HTMLSelectElement ? subjectSelect.value : "all";
-      const language = languageSelect instanceof HTMLSelectElement ? languageSelect.value : "all";
       let visible = 0;
 
       cards.forEach((card) => {
         const subjectMatch = subject === "all" || card.getAttribute("data-subject") === subject;
-        const languageMatch = language === "all" || card.getAttribute("data-language") === language;
-        const show = subjectMatch && languageMatch;
+        const show = subjectMatch;
         card.toggleAttribute("hidden", !show);
         if (show) visible += 1;
       });
@@ -116,7 +98,6 @@ const languages: Locale[] = ["da", "en", "ar"];
     }
 
     subjectSelect?.addEventListener("change", update);
-    languageSelect?.addEventListener("change", update);
     update();
   });
 </script>

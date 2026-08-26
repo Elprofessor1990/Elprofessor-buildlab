@@ -21,7 +21,7 @@ const copy = ui[locale];
 
     <div class="hero-topic-board" aria-label={copy.home.heroTracksLabel}>
       {learningTracks.map((track) => (
-        <a href={`#track-panel-${track.slug}`} data-jump-track={track.slug}>
+        <a href={getLocalePath(locale, "subject", track.primarySubject)}>
           <span>{track.title[locale]}</span>
           <small>{track.label[locale]}</small>
         </a>
@@ -29,16 +29,3 @@ const copy = ui[locale];
     </div>
   </div>
 </section>
-
-<script>
-  document.querySelectorAll("[data-jump-track]").forEach((link) => {
-    link.addEventListener("click", () => {
-      const slug = link.getAttribute("data-jump-track");
-      const tab = document.querySelector(`[data-track-tab="${slug}"]`);
-
-      if (tab instanceof HTMLButtonElement) {
-        tab.click();
-      }
-    });
-  });
-</script>

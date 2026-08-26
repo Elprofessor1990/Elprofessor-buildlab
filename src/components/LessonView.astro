@@ -1,7 +1,7 @@
 ---
 import { getSubject } from "../data/subjects";
 import type { Lesson } from "../data/lessons";
-import { getLocalePath, languageNames, ui, type Locale } from "../i18n";
+import { getLocalePath, ui, type Locale } from "../i18n";
 
 type Props = {
   lesson: Lesson;
@@ -16,7 +16,7 @@ const nextHref = locale === "da" ? lesson.nextLesson.href : `${getLocalePath(loc
 
 <article class="lesson-shell">
   <header class="lesson-hero">
-    <p class="eyebrow">{subject?.title[locale]} · {languageNames[locale][lesson.language]}</p>
+    <p class="eyebrow">{subject?.title[locale]}</p>
     <h1>{lesson.title[locale]}</h1>
     <p>{lesson.summary[locale]}</p>
     <a class="text-link" href={getLocalePath(locale, "videos")}>{copy.actions.backToVideos}</a>
@@ -69,10 +69,6 @@ const nextHref = locale === "da" ? lesson.nextLesson.href : `${getLocalePath(loc
         <div>
           <dt>{copy.lesson.access}</dt>
           <dd>{lesson.access === "public" ? copy.library.publicAccess : copy.library.studentAccess}</dd>
-        </div>
-        <div>
-          <dt>{copy.lesson.language}</dt>
-          <dd>{languageNames[locale][lesson.language]}</dd>
         </div>
       </dl>
 

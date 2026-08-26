@@ -11,7 +11,7 @@ const copy = ui[locale];
 const logoUrl = getAssetPath("assets/logo-ldb.png");
 
 const navItems = [
-  { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "home" },
+  { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "subjects" },
   { label: copy.nav.videos, href: getLocalePath(locale, "videos"), key: "videos" },
   { label: copy.nav.about, href: getLocalePath(locale, "about"), key: "about" },
 ];
@@ -30,7 +30,12 @@ const navItems = [
     {navItems.map((item) => (
       <a
         href={item.href}
-        aria-current={(currentPage === item.key || (currentPage === "video" && item.key === "videos")) ? "page" : undefined}
+        aria-current={(
+          currentPage === item.key ||
+          (currentPage === "home" && item.key === "subjects") ||
+          (currentPage === "subject" && item.key === "subjects") ||
+          (currentPage === "video" && item.key === "videos")
+        ) ? "page" : undefined}
       >
         {item.label}
       </a>

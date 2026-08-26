@@ -63,6 +63,42 @@ export const learningTracks: LearningTrack[] = [
     ],
   },
   {
+    slug: "dalux",
+    title: { da: "Dalux", en: "Dalux", ar: "Dalux" },
+    label: { da: "Digital byggeplads", en: "Digital construction site", ar: "موقع بناء رقمي" },
+    description: {
+      da: "Emnet til Dalux, mobil registrering, dokumentation og praktisk anvendelse i byggeprocessen.",
+      en: "The subject for Dalux, mobile registration, documentation, and practical use in the construction process.",
+      ar: "موضوع Dalux والتسجيل عبر الهاتف والتوثيق والاستخدام العملي في عملية البناء.",
+    },
+    note: {
+      da: "Dalux kan senere udvides med korte mobilguides, øvelser og dokumentationseksempler.",
+      en: "Dalux can later be expanded with short mobile guides, exercises, and documentation examples.",
+      ar: "يمكن توسيع Dalux لاحقا بإرشادات هاتفية قصيرة وتمارين وأمثلة توثيق.",
+    },
+    primarySubject: "dalux",
+    categories: [
+      {
+        title: { da: "Introduktion", en: "Introduction", ar: "مقدمة" },
+        description: {
+          da: "Overblik over Dalux og anvendelse i byggeprocessen.",
+          en: "Overview of Dalux and use in the construction process.",
+          ar: "نظرة عامة على Dalux واستخدامه في عملية البناء.",
+        },
+        subject: "dalux",
+      },
+      {
+        title: { da: "Mobil dokumentation", en: "Mobile documentation", ar: "التوثيق عبر الهاتف" },
+        description: {
+          da: "Registrering og dokumentation fra byggepladsen.",
+          en: "Registration and documentation from the construction site.",
+          ar: "التسجيل والتوثيق من موقع البناء.",
+        },
+        subject: "dalux",
+      },
+    ],
+  },
+  {
     slug: "nbs-nordic",
     title: { da: "NBS Nordic", en: "NBS Nordic", ar: "NBS Nordic" },
     label: { da: "Beskrivelser", en: "Specifications", ar: "المواصفات" },
@@ -144,9 +180,9 @@ export const learningTracks: LearningTrack[] = [
       ar: "موضوع LCAbyg وبيانات المواد والكميات وعناصر البناء والنتائج والتوثيق.",
     },
     note: {
-      da: "Her kan du samle både grundkursus, semesterøvelser og korte videoer om metode og dokumentation.",
-      en: "This can hold a basic course, semester exercises, and short videos about method and documentation.",
-      ar: "يمكن هنا جمع الدورة الأساسية وتمارين الفصل وفيديوهات قصيرة عن المنهجية والتوثيق.",
+      da: "Her kan du samle både grundkursus, øvelser og korte videoer om metode og dokumentation.",
+      en: "This can hold a basic course, exercises, and short videos about method and documentation.",
+      ar: "يمكن هنا جمع الدورة الأساسية والتمارين وفيديوهات قصيرة عن المنهجية والتوثيق.",
     },
     primarySubject: "lcabyg",
     categories: [

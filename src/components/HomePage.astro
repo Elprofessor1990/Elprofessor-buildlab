@@ -1,6 +1,6 @@
 ---
 import Hero from "./Hero.astro";
-import LearningTracks from "./LearningTracks.astro";
+import SubjectGrid from "./SubjectGrid.astro";
 import { getLocalePath, ui, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
@@ -8,7 +8,7 @@ const copy = ui[locale];
 ---
 
 <Hero locale={locale} />
-<LearningTracks locale={locale} />
+<SubjectGrid locale={locale} />
 
 <section class="section section--workflow" aria-labelledby="workflow-title">
   <div class="workflow-panel">

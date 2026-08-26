@@ -1,0 +1,24 @@
+---
+import SubjectDetail from "../../components/SubjectDetail.astro";
+import { subjects } from "../../data/subjects";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return subjects.map((subject) => ({
+    params: { slug: subject.slug },
+    props: { subject },
+  }));
+}
+
+const { subject } = Astro.props;
+const locale = "da";
+---
+
+<BaseLayout
+  locale={locale}
+  currentPage="subject"
+  title={subject.title[locale]}
+  description={subject.description[locale]}
+>
+  <SubjectDetail subject={subject} locale={locale} />
+</BaseLayout>

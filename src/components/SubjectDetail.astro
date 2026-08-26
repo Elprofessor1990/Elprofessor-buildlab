@@ -1,0 +1,154 @@
+---
+import { getSubject, type Subject } from "../data/subjects";
+import { getSubjectHub } from "../data/subjectHubs";
+import { videos, type VideoItem } from "../data/videos";
+import { getLocalePath, ui, type Locale } from "../i18n";
+
+type Props = {
+  subject: Subject;
+  locale: Locale;
+};
+
+const { subject, locale } = Astro.props;
+const copy = ui[locale];
+const hub = getSubjectHub(subject.slug);
+const subjectVideos = videos.filter((video) => video.subject === subject.slug);
+const videoTypes = hub?.videoTypes ?? [];
+const connectedSubjects = (hub?.connections ?? [])
+  .map((slug) => getSubject(slug))
+  .filter((item): item is Subject => Boolean(item));
+const levelLabels: Record<VideoItem["level"], string> = {
+  Intro: copy.subjectPage.levels.Intro,
+  Practice: copy.subjectPage.levels.Practice,
+  Advanced: copy.subjectPage.levels.Advanced,
+};
+---
+
+<article class="subject-page">
+  <header class="subject-hero">
+    <div class="subject-hero__intro">
+      <p class="eyebrow">{copy.subjectPage.eyebrow}</p>
+      <h1>{subject.title[locale]}</h1>
+      <p>{hub?.intro[locale] ?? subject.description[locale]}</p>
+      <div class="subject-hero__actions">
+        <a class="button button--primary" href={`${getLocalePath(locale, "videos")}?subject=${subject.slug}`}>
+          {copy.subjectPage.openLibraryFilter}
+        </a>
+        <a class="button button--quiet" href={getLocalePath(locale, "home") + "#subjects"}>
+          {copy.actions.exploreSubjects}
+        </a>
+      </div>
+    </div>
+
+    <aside class="subject-snapshot" aria-label={copy.subjectPage.startHere}>
+      <span>{copy.subjectPage.startHere}</span>
+      <strong>{subjectVideos.length}</strong>
+      <small>{copy.subjectPage.videoCount}</small>
+      <dl>
+        {(["Intro", "Practice", "Advanced"] as VideoItem["level"][]).map((level) => (
+          <div>
+            <dt>{levelLabels[level]}</dt>
+            <dd>{subjectVideos.filter((video) => video.level === level).length}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  </header>
+
+  <div class="subject-layout">
+    <main class="subject-main">
+      <section class="subject-section" aria-labelledby="subject-video-types">
+        <div class="subject-section__heading">
+          <p class="eyebrow">{copy.subjectPage.videoTypes}</p>
+          <h2 id="subject-video-types">{copy.subjectPage.videoTypes}</h2>
+        </div>
+        <div class="subject-type-grid">
+          {videoTypes.map((type) => (
+            <article class="subject-type">
+              <h3>{type.title[locale]}</h3>
+              <p>{type.description[locale]}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="subject-section" aria-labelledby="subject-videos">
+        <div class="subject-section__heading subject-section__heading--row">
+          <div>
+            <p class="eyebrow">{copy.nav.videos}</p>
+            <h2 id="subject-videos">{copy.subjectPage.videos}</h2>
+          </div>
+          <a class="text-link" href={`${getLocalePath(locale, "videos")}?subject=${subject.slug}`}>
+            {copy.actions.viewVideos}
+          </a>
+        </div>
+
+        {subjectVideos.length > 0 ? (
+          <div class="subject-video-grid">
+            {subjectVideos.map((video) => (
+              <a class="subject-video-card" href={getLocalePath(locale, "video", video.id)}>
+                <span class={`subject-video-card__thumb ${video.youtubeId ? "subject-video-card__thumb--image" : ""}`}>
+                  {video.youtubeId && (
+                    <img
+                      src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                      alt=""
+                      loading="lazy"
+                    />
+                  )}
+                  <small>{video.provider}</small>
+                </span>
+                <span class="subject-video-card__body">
+                  <span class="subject-video-card__meta">
+                    {levelLabels[video.level]} · {video.duration}
+                  </span>
+                  <strong>{video.title[locale]}</strong>
+                  <span>{video.summary[locale]}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="empty-state">{copy.subjectPage.noVideos}</p>
+        )}
+      </section>
+    </main>
+
+    <aside class="subject-side">
+      <section class="subject-side__block" aria-labelledby="subject-objectives">
+        <h2 id="subject-objectives">{copy.subjectPage.objectives}</h2>
+        <ul class="check-list">
+          {subject.objectives[locale].map((objective) => <li>{objective}</li>)}
+        </ul>
+      </section>
+
+      <section class="subject-side__block" aria-labelledby="subject-connections">
+        <h2 id="subject-connections">{copy.subjectPage.connections}</h2>
+        <p>{hub?.connectionNote[locale] ?? subject.description[locale]}</p>
+        <div class="subject-connection-list">
+          {connectedSubjects.map((item) => (
+            <a href={getLocalePath(locale, "subject", item.slug)}>
+              <span>{item.title[locale]}</span>
+              <small>{item.description[locale]}</small>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="subject-side__block" aria-labelledby="subject-materials">
+        <h2 id="subject-materials">{copy.subjectPage.materials}</h2>
+        {subject.resources.length > 0 ? (
+          <div class="resource-list">
+            {subject.resources.map((resource) => (
+              <a class="resource-item" href={resource.url || "#"} aria-disabled={!resource.url}>
+                <span>{resource.title[locale]}</span>
+                <small>{resource.type}</small>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p>{copy.subjectPage.materialsPlaceholder}</p>
+        )}
+      </section>
+    </aside>
+  </div>
+</article>
