@@ -95,11 +95,11 @@ const levelLabels: Record<VideoItem["level"], string> = {
                       loading="lazy"
                     />
                   )}
-                  <small>{video.provider}</small>
                 </span>
                 <span class="subject-video-card__body">
                   <span class="subject-video-card__meta">
-                    {levelLabels[video.level]} · {video.duration}
+                    <small>{video.provider}</small>
+                    <span>{levelLabels[video.level]} · {video.duration}</span>
                   </span>
                   <strong>{video.title[locale]}</strong>
                   <span>{video.summary[locale]}</span>
