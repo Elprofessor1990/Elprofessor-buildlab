@@ -38,10 +38,11 @@ The repository stores video metadata and links, not video files.
 
 Current public YouTube content includes:
 
+- Revit 2026 - Elementprojektering playlist with 3 videos.
 - Dalux playlist with 2 videos.
 - NBS Nordic playlist with 7 videos.
 - FEM Design 101 playlist with 15 videos.
-- LCAByg videos and placeholders.
+- LCAByg videos.
 
 Do not commit video files to this repository. Store public videos on YouTube and student-only videos on Panopto, unlisted YouTube, or another access-controlled provider. Keep only metadata, lesson descriptions, ordering, and resource links in the repo.
 
@@ -50,12 +51,32 @@ Do not commit video files to this repository. Store public videos on YouTube and
 - Subjects live in `src/data/subjects.ts`.
 - Subject-page overview text lives in `src/data/subjectHubs.ts`.
 - Video metadata and embeds live in `src/data/videos.ts`.
-- Lesson templates live in `src/data/lessons.ts`.
+- Full lesson pages can be added later in `src/data/lessons.ts`.
 - Shared interface text lives in `src/i18n.ts`.
 - Subject pages are generated from `src/pages/subjects/[slug].astro`.
 - Video pages are generated from `src/pages/videos/[id].astro`.
 
 The visible site is currently Danish-first. The data model keeps room for English and Arabic content later.
+
+## Low-Token Video Updates
+
+For future video additions, paste only the playlist or video links and the target subject, for example:
+
+```text
+Add this playlist to BIM:
+https://www.youtube.com/playlist?list=...
+```
+
+Public YouTube playlist imports should be added in `src/data/youtubePlaylists.ts`, then connected once through `src/data/videos.ts`. This keeps updates small because Codex only needs to edit the compact playlist data instead of rewriting page components or the full website.
+
+Recommended process:
+
+1. Put videos on YouTube, Panopto, or another video host.
+2. Send Codex the playlist link and subject slug, such as `bim`, `lcabyg`, or `fem-design`.
+3. Codex extracts title, video id, duration, and playlist id.
+4. Codex updates only the data file and runs `npm run check` and `npm run build`.
+
+You do not need to upload video files to the repository, and you do not need to rewrite the website when new videos are added.
 
 ## Local Development
 

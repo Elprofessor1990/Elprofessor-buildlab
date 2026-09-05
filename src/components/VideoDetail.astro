@@ -12,7 +12,7 @@ const { video, locale } = Astro.props;
 const copy = ui[locale];
 const subject = getSubject(video.subject);
 const description = video.description?.[locale] ?? video.summary[locale];
-const resources = video.resources ?? [];
+const resources = (video.resources ?? []).filter((resource) => resource.url);
 const related = videos
   .filter((item) => item.subject === video.subject && item.id !== video.id)
   .slice(0, 3);

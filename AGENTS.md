@@ -77,6 +77,7 @@ Build a first version with:
 - Do not invent factual course material, legal guidance, citations, or video links.
 - Keep all visible text easy to translate.
 - Before deployment, run the available checks and fix errors.
+- For completed website updates that should be visible to students or public visitors, commit the verified changes and push them to GitHub `main` so GitHub Pages can deploy the live site.
 - Do not change hosting, privacy, or licensing settings without explicit approval.
 
 ## First task

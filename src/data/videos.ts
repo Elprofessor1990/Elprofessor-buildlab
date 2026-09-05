@@ -1,4 +1,5 @@
 import type { Locale } from "../i18n";
+import { revitElementProjectVideos } from "./youtubePlaylists";
 
 type LocalizedText = Record<Locale, string>;
 
@@ -386,83 +387,7 @@ const femDesignVideos: VideoItem[] = [
 ];
 
 export const videos: VideoItem[] = [
-  {
-    id: "bim-introduction-placeholder",
-    subject: "bim",
-    language: "da",
-    access: "public",
-    provider: "YouTube",
-    duration: "08:00",
-    level: "Intro",
-    lessonSlug: "bim-introduction-placeholder",
-    title: {
-      da: "BIM - introduktion og arbejdsflow",
-      en: "BIM - Introduction and Workflow",
-      ar: "BIM - مقدمة وسير العمل",
-    },
-    summary: {
-      da: "Første placeholder til en kort introduktion, der senere får et rigtigt videoembed.",
-      en: "First placeholder for a short introduction that will later receive a real video embed.",
-      ar: "عنصر مؤقت أول لمقدمة قصيرة سيضاف إليها تضمين فيديو حقيقي لاحقا.",
-    },
-  },
-  {
-    id: "ai-construction-overview",
-    subject: "ai-in-construction",
-    language: "da",
-    access: "public",
-    provider: "Remotion",
-    duration: "06:30",
-    level: "Intro",
-    title: {
-      da: "AI - visuelt overblik",
-      en: "AI in Construction - Visual Overview",
-      ar: "الذكاء الاصطناعي في البناء - نظرة مرئية",
-    },
-    summary: {
-      da: "Placeholder til en Remotion-forklaring med diagrammer, procestrin og eksempler.",
-      en: "Placeholder for a Remotion explanation with diagrams, process steps, and examples.",
-      ar: "عنصر مؤقت لشرح Remotion يتضمن مخططات وخطوات عملية وأمثلة.",
-    },
-  },
-  {
-    id: "pyrevit-first-tool",
-    subject: "pyrevit",
-    language: "da",
-    access: "student",
-    provider: "Panopto",
-    duration: "12:00",
-    level: "Practice",
-    title: {
-      da: "pyRevit - første værktøj",
-      en: "pyRevit - First Tool",
-      ar: "pyRevit - الأداة الأولى",
-    },
-    summary: {
-      da: "Placeholder til en adgangsstyret lektion om et lille automatiseringsværktøj.",
-      en: "Placeholder for an access-controlled lesson about a small automation tool.",
-      ar: "عنصر مؤقت لدرس بصلاحيات وصول حول أداة أتمتة صغيرة.",
-    },
-  },
-  {
-    id: "building-physics-thermal",
-    subject: "building-physics",
-    language: "da",
-    access: "public",
-    provider: "YouTube",
-    duration: "10:00",
-    level: "Practice",
-    title: {
-      da: "Bygfys - varme og lag",
-      en: "Building Physics - Heat and Layers",
-      ar: "فيزياء المباني - الحرارة والطبقات",
-    },
-    summary: {
-      da: "Placeholder til beregningstrin, forklarende grafik og supplerende øvelse.",
-      en: "Placeholder for calculation steps, explanatory graphics, and a supporting exercise.",
-      ar: "عنصر مؤقت لخطوات حساب ورسوم توضيحية وتمرين داعم.",
-    },
-  },
+  ...revitElementProjectVideos,
   {
     id: "dalux-01-introduktion-byggeprocessen",
     subject: "dalux",
@@ -904,45 +829,7 @@ export const videos: VideoItem[] = [
     },
     resources: lcabygResourcePlaceholders,
   },
-  {
-    id: "lccbyg-alternatives",
-    subject: "lccbyg",
-    language: "da",
-    access: "student",
-    provider: "Panopto",
-    duration: "11:00",
-    level: "Practice",
-    title: {
-      da: "LCCByg - sammenligning af alternativer",
-      en: "LCCByg - Comparing Alternatives",
-      ar: "LCCByg - مقارنة البدائل",
-    },
-    summary: {
-      da: "Placeholder til en studenterlektion om scenarier og beslutningsgrundlag.",
-      en: "Placeholder for a student lesson about scenarios and decision support.",
-      ar: "عنصر مؤقت لدرس طلابي حول السيناريوهات ودعم القرار.",
-    },
-  },
   ...femDesignVideos,
-  {
-    id: "arabic-bim-overview",
-    subject: "bim",
-    language: "ar",
-    access: "public",
-    provider: "YouTube",
-    duration: "08:30",
-    level: "Intro",
-    title: {
-      da: "BIM - arabisk introduktion",
-      en: "BIM - Arabic Introduction",
-      ar: "BIM - مقدمة باللغة العربية",
-    },
-    summary: {
-      da: "Placeholder til arabisk introduktionsmateriale med samme faglige struktur.",
-      en: "Placeholder for Arabic introductory material with the same learning structure.",
-      ar: "عنصر مؤقت لمادة تمهيدية عربية بنفس البنية التعليمية.",
-    },
-  },
 ];
 
 export function getVideo(id: string) {
