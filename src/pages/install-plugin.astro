@@ -6,7 +6,7 @@ const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe"
 const mcpConfig = `"revit-mcp-nbs": {
   "command": "node",
   "args": [
-    "C:\\\\Users\\\\alkh\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"
+    "C:\\\\Users\\\\elprofessor\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"
   ]
 }`;
 
@@ -139,10 +139,13 @@ const images = {
 
         <section class="install-config" aria-labelledby="mcp-config-title">
           <p class="eyebrow">MCP-konfiguration</p>
-          <h2 id="mcp-config-title">Tilføj Revit MCP-serveren manuelt</h2>
-          <p>Indsæt dette inde i <code>mcpServers</code>-objektet i din AI-klients konfigurationsfil. Genstart derefter klienten.</p>
+          <h2 id="mcp-config-title">Manuel opsætning er normalt ikke nødvendig</h2>
+          <p>
+            Når du installerer <code>.exe</code>-filen, kan programmet selv koble Revit MCP på i Codex eller Claude Code.
+            Eksemplet her er kun en fallback, hvis du vil kontrollere eller lave opsætningen manuelt.
+          </p>
           <pre><code>{mcpConfig}</code></pre>
-          <p class="install-config__note"><strong>Bemærk:</strong> Stien er til denne computer. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
+          <p class="install-config__note"><strong>Bemærk:</strong> Stien er et eksempel. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
         </section>
 
         <section class="plugin-diagram" aria-labelledby="diagram-title">
