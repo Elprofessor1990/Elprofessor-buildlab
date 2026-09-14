@@ -97,23 +97,29 @@ const images = {
           </figure>
         </section>
 
-        <section class="plugin-section" aria-labelledby="nbs-title">
+        <section class="plugin-section plugin-section--nbs" aria-labelledby="nbs-title">
           <div class="plugin-section__copy">
             <p class="eyebrow">NBS Nordic</p>
-            <h2 id="nbs-title">Kontroller at NBS-projektet er valgt</h2>
+            <h2 id="nbs-title">Forbind Revit til NBS Nordic via API</h2>
             <p>
-              I indstillingerne skal der være en NBS-nøgle, og modellen skal være koblet til det rigtige NBS-projekt.
-              Ellers kan AI-assistenten ikke læse eller skrive de rigtige NBS-felter.
+              NBS API-nøglen giver pluginet adgang til dine egne NBS Nordic-projekter. Når nøglen er indsat, henter
+              pluginet projektlisten fra NBS Nordic, og du vælger hvilket NBS-projekt der hører til den åbne Revit-model.
             </p>
-            <ul class="check-list">
-              <li>Åbn <strong>Settings</strong> i Revit-pluginet.</li>
+            <ol class="api-steps">
+              <li>Åbn <strong>Add-Ins</strong> i Revit og klik på <strong>Settings</strong>.</li>
               <li>Vælg fanen <strong>NBS Nordic</strong>.</li>
-              <li>Indsæt NBS-nøgle, hent projekter og vælg projektet til modellen.</li>
-            </ul>
+              <li>Indsæt din NBS API-nøgle, og klik på <strong>Forbind NBS og hent projekter</strong>.</li>
+              <li>Vælg det NBS-projekt, der passer til den aktuelle Revit-model.</li>
+              <li>Klik på <strong>Forbind projekt og klargør NBS-felter</strong>, så felterne oprettes i modellen.</li>
+            </ol>
+            <p class="api-note">
+              Projektkoblingen gemmes i Revit-modellen. Derefter kan AI-assistenten læse, foreslå og opdatere NBS-felter
+              ud fra den model og det NBS-projekt, du har valgt.
+            </p>
           </div>
-          <figure class="plugin-shot">
+          <figure class="plugin-shot plugin-shot--wide">
             <img src={images.settings} alt="NBS Nordic-indstillinger med API-nøgle og projektvalg" loading="lazy" />
-            <figcaption>NBS-koblingen gemmes i modellen, så samme projekt bruges næste gang filen åbnes.</figcaption>
+            <figcaption>De røde markeringer viser rækkefølgen: Add-Ins, Settings, NBS Nordic, API-nøgle, projektvalg og forbind-knappen.</figcaption>
           </figure>
         </section>
 

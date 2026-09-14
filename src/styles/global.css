@@ -1432,9 +1432,9 @@ p {
 
 .plugin-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
   gap: 1.25rem;
-  width: min(1180px, 100%);
+  width: min(1540px, 100%);
   margin-inline: auto;
   align-items: start;
 }
@@ -1499,9 +1499,18 @@ p {
 
 .plugin-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.78fr);
   gap: 1rem;
   padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.plugin-section__copy {
+  max-width: 920px;
+}
+
+.plugin-section--nbs {
+  background:
+    linear-gradient(135deg, rgba(70, 194, 168, 0.14), transparent 48%),
+    rgba(255, 255, 255, 0.92);
 }
 
 .plugin-section--warning {
@@ -1526,6 +1535,7 @@ p {
 
 .plugin-shot img,
 .plugin-architecture img {
+  display: block;
   width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1533,7 +1543,7 @@ p {
 }
 
 .plugin-shot img {
-  max-height: 360px;
+  max-height: none;
   object-fit: contain;
 }
 
@@ -1542,6 +1552,48 @@ p {
   color: var(--muted);
   font-size: 0.86rem;
   font-weight: 700;
+}
+
+.api-steps {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: api-step;
+}
+
+.api-steps li {
+  position: relative;
+  counter-increment: api-step;
+  padding: 0.1rem 0 0.1rem 2.35rem;
+  color: var(--ink);
+  font-weight: 750;
+}
+
+.api-steps li::before {
+  content: counter(api-step);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(70, 194, 168, 0.22);
+  color: var(--navy);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.api-note {
+  border-inline-start: 4px solid var(--mint);
+  border-radius: calc(var(--radius) - 0.2rem);
+  background: rgba(70, 194, 168, 0.1);
+  color: var(--navy);
+  padding: 0.8rem 0.95rem;
+  font-weight: 750;
 }
 
 .plugin-diagram {
