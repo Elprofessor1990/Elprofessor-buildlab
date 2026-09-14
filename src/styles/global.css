@@ -1430,6 +1430,75 @@ p {
   animation-delay: 1.4s;
 }
 
+.client-prerequisite {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1fr);
+  gap: clamp(1rem, 3vw, 1.5rem);
+  width: min(1540px, 100%);
+  margin: 0 auto 1.25rem;
+  align-items: stretch;
+  border-block: 1px solid rgba(17, 42, 70, 0.12);
+  background:
+    linear-gradient(135deg, rgba(242, 140, 40, 0.1), transparent 42%),
+    linear-gradient(135deg, rgba(70, 194, 168, 0.12), transparent 70%);
+  padding: clamp(1rem, 3vw, 1.4rem) 0;
+}
+
+.client-prerequisite__copy {
+  max-width: 720px;
+}
+
+.client-prerequisite__copy p:not(.eyebrow) {
+  color: var(--navy);
+  font-size: 1.02rem;
+}
+
+.client-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.client-options a {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 150px;
+  align-content: space-between;
+  border: 1px solid rgba(17, 42, 70, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(17, 42, 70, 0.08);
+  color: var(--navy);
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.client-options a:hover {
+  translate: 0 -2px;
+  border-color: rgba(242, 140, 40, 0.72);
+  box-shadow: 0 18px 36px rgba(17, 42, 70, 0.14);
+}
+
+.client-options span {
+  color: var(--orange);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.client-options strong {
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.08;
+}
+
+.client-options small {
+  color: var(--muted);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
 .plugin-layout {
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
@@ -1709,6 +1778,7 @@ p {
 
   .hero__inner,
   .plugin-hero,
+  .client-prerequisite,
   .plugin-layout,
   .plugin-section,
   .workflow-panel,
@@ -1770,6 +1840,7 @@ p {
   }
 
   .hero-topic-board,
+  .client-options,
   .plugin-flow,
   .plugin-diagram__heading,
   .section__header--split {

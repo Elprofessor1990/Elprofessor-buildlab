@@ -3,6 +3,8 @@ import { getAssetPath } from "../i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe");
+const codexUrl = "https://openai.com/da-DK/codex/";
+const claudeUrl = "https://claude.com/download";
 const mcpConfig = `"revit-mcp-nbs": {
   "command": "node",
   "args": [
@@ -30,11 +32,11 @@ const images = {
         <p class="eyebrow">Revit MCP + NBS Nordic</p>
         <h1>Installér pluginet og tjek forbindelsen</h1>
         <p>
-          Start med installationsfilen, kontroller derefter at MCP er online i Revit, og forbind til sidst modellen med
-          det rigtige NBS Nordic-projekt.
+          Start med at installere og logge ind i enten Codex eller Claude Code. Derefter kan du hente MCP + API-udvidelsen,
+          kontrollere at MCP er online i Revit og forbinde modellen med det rigtige NBS Nordic-projekt.
         </p>
         <div class="hero__actions">
-          <a class="button button--primary" href={installerUrl} download>Download installationsfilen</a>
+          <a class="button button--primary" href="#ai-client-step">Start med AI-klient</a>
           <a class="button button--quiet" href="#connection-check">Se MCP-status</a>
         </div>
       </div>
@@ -62,13 +64,37 @@ const images = {
       </div>
     </div>
 
+    <section class="client-prerequisite" id="ai-client-step" aria-labelledby="ai-client-title">
+      <div class="client-prerequisite__copy">
+        <p class="eyebrow">Trin 1</p>
+        <h2 id="ai-client-title">Installer og log ind i Codex eller Claude Code først</h2>
+        <p>
+          MCP + API-udvidelsen skal kobles til en AI-klient. Vælg derfor <strong>én</strong> af de to muligheder herunder,
+          installer den færdigt, åbn programmet og log ind, før du downloader Revit MCP + NBS Nordic-installationsfilen.
+        </p>
+      </div>
+      <div class="client-options" aria-label="Vælg AI-klient før installation af MCP og API-udvidelsen">
+        <a href={codexUrl} target="_blank" rel="noopener">
+          <span>Mulighed A</span>
+          <strong>Codex</strong>
+          <small>Download til Windows, installer og log ind med din konto.</small>
+        </a>
+        <a href={claudeUrl} target="_blank" rel="noopener">
+          <span>Mulighed B</span>
+          <strong>Claude Code</strong>
+          <small>Download Claude, installer og log ind før MCP-opsætningen.</small>
+        </a>
+      </div>
+    </section>
+
     <div class="plugin-layout">
       <aside class="plugin-download" aria-labelledby="download-title">
         <p class="eyebrow">Download</p>
-        <h2 id="download-title">Start her</h2>
+        <h2 id="download-title">Trin 2: Hent MCP + API-udvidelsen</h2>
         <ol class="plugin-steps">
-          <li>Download installationsfilen.</li>
-          <li>Luk Revit, Codex og Claude Code før installation.</li>
+          <li>Kontroller at Codex eller Claude Code er installeret og at du er logget ind.</li>
+          <li>Download Revit MCP + NBS Nordic-installationsfilen.</li>
+          <li>Luk Revit og den AI-klient, du lige har sat op, før installationen køres.</li>
           <li>Kør installeringen igen, hvis du tidligere har brugt en ældre version.</li>
           <li>Åbn Revit og kontroller status i MCP-panelet.</li>
         </ol>
