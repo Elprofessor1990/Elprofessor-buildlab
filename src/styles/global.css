@@ -256,8 +256,8 @@ p {
   margin-block-start: 1.2rem;
   border: 1px solid rgba(242, 140, 40, 0.72);
   border-radius: var(--radius);
-  background: linear-gradient(120deg, rgba(242, 140, 40, 0.18), rgba(255, 255, 255, 0.9));
-  box-shadow: 0 14px 28px rgba(17, 42, 70, 0.12);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 16px 36px rgba(17, 42, 70, 0.08);
   color: var(--navy);
   padding: 0.85rem 1rem;
   text-decoration: none;
@@ -285,7 +285,7 @@ p {
 
 .hero-plugin-cta small {
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .hero-topic-board {
@@ -1373,6 +1373,264 @@ p {
   padding: 1.3rem;
 }
 
+.plugin-page {
+  padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 4vw, 3rem);
+}
+
+.plugin-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.78fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  margin-block-end: 1.5rem;
+}
+
+.plugin-hero__content p:not(.eyebrow) {
+  max-width: 720px;
+  color: var(--navy);
+  font-size: 1.08rem;
+}
+
+.plugin-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr 56px 1fr;
+  align-items: center;
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(70, 194, 168, 0.14), transparent 46%),
+    linear-gradient(90deg, rgba(17, 42, 70, 0.04) 1px, transparent 1px),
+    var(--white);
+  background-size: auto, 26px 26px, auto;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.flow-node {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 132px;
+  align-content: center;
+  border: 1px solid rgba(17, 42, 70, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.84);
+  padding: 0.85rem;
+}
+
+.flow-node span {
+  color: var(--orange);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.flow-node strong {
+  color: var(--navy);
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  line-height: 1.12;
+}
+
+.flow-node--mcp {
+  box-shadow: inset 0 0 0 2px rgba(70, 194, 168, 0.34);
+}
+
+.flow-track {
+  position: relative;
+  height: 4px;
+  background: rgba(17, 42, 70, 0.16);
+}
+
+.flow-track::after {
+  content: "";
+  position: absolute;
+  inset-block-start: -5px;
+  inset-inline-end: -2px;
+  width: 0;
+  height: 0;
+  border-block: 7px solid transparent;
+  border-inline-start: 10px solid var(--navy);
+}
+
+.flow-signal {
+  position: absolute;
+  inset-block-start: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--orange);
+  box-shadow: 0 0 0 6px rgba(242, 140, 40, 0.16);
+  translate: -50% -50%;
+  animation: flowPulse 2.8s linear infinite;
+}
+
+.flow-signal--two {
+  background: var(--mint);
+  box-shadow: 0 0 0 6px rgba(70, 194, 168, 0.16);
+  animation-delay: 0.9s;
+}
+
+.flow-signal--three {
+  animation-delay: 1.4s;
+}
+
+.plugin-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 1.25rem;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  align-items: start;
+}
+
+.plugin-download,
+.plugin-section,
+.plugin-diagram {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(17, 42, 70, 0.07);
+}
+
+.plugin-download {
+  position: sticky;
+  inset-block-start: 6rem;
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+}
+
+.plugin-download h2,
+.plugin-section h2,
+.plugin-diagram h2 {
+  margin-block-end: 0.65rem;
+  font-size: clamp(1.45rem, 1.8vw, 2rem);
+}
+
+.plugin-steps {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: plugin-step;
+}
+
+.plugin-steps li {
+  counter-increment: plugin-step;
+  color: var(--navy);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.plugin-steps li::before {
+  content: counter(plugin-step);
+  display: inline-grid;
+  width: 1.55rem;
+  height: 1.55rem;
+  place-items: center;
+  margin-inline-end: 0.45rem;
+  border-radius: 999px;
+  background: rgba(70, 194, 168, 0.2);
+  color: var(--navy);
+  font-size: 0.82rem;
+}
+
+.plugin-main {
+  display: grid;
+  gap: 1rem;
+}
+
+.plugin-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.78fr);
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.plugin-section--warning {
+  background:
+    linear-gradient(135deg, rgba(242, 140, 40, 0.12), transparent 48%),
+    rgba(255, 255, 255, 0.92);
+}
+
+.plugin-section__copy p:not(.eyebrow),
+.plugin-diagram p {
+  color: var(--navy);
+}
+
+.plugin-section strong {
+  color: var(--navy);
+}
+
+.plugin-shot {
+  align-self: start;
+  margin: 0;
+}
+
+.plugin-shot img,
+.plugin-architecture img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.plugin-shot img {
+  max-height: 360px;
+  object-fit: contain;
+}
+
+.plugin-shot figcaption {
+  margin-block-start: 0.5rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.plugin-diagram {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.plugin-diagram__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.plugin-architecture {
+  margin: 0;
+  overflow: auto;
+}
+
+.plugin-architecture img {
+  min-width: 760px;
+}
+
+@keyframes flowPulse {
+  0% {
+    inset-inline-start: 0;
+    opacity: 0;
+  }
+
+  12%,
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-start: 100%;
+    opacity: 0;
+  }
+}
+
 .site-footer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(180px, auto);
@@ -1446,6 +1704,9 @@ p {
   }
 
   .hero__inner,
+  .plugin-hero,
+  .plugin-layout,
+  .plugin-section,
   .workflow-panel,
   .lesson-layout,
   .video-detail__layout,
@@ -1461,6 +1722,10 @@ p {
   }
 
   .subject-side {
+    position: static;
+  }
+
+  .plugin-download {
     position: static;
   }
 
@@ -1501,8 +1766,29 @@ p {
   }
 
   .hero-topic-board,
+  .plugin-flow,
+  .plugin-diagram__heading,
   .section__header--split {
     grid-template-columns: 1fr;
+  }
+
+  .flow-track {
+    width: 4px;
+    height: 44px;
+    justify-self: center;
+  }
+
+  .flow-track::after {
+    inset-block-start: auto;
+    inset-block-end: -2px;
+    inset-inline-start: -5px;
+    border-inline: 7px solid transparent;
+    border-block-start: 10px solid var(--navy);
+  }
+
+  .flow-signal {
+    inset-inline-start: 50%;
+    animation-name: flowPulseVertical;
   }
 
   .filter-bar output {
@@ -1521,5 +1807,22 @@ p {
   .subject-type-grid,
   .subject-video-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@keyframes flowPulseVertical {
+  0% {
+    inset-block-start: 0;
+    opacity: 0;
+  }
+
+  12%,
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    inset-block-start: 100%;
+    opacity: 0;
   }
 }

@@ -1,19 +1,24 @@
 ---
-import { getAssetPath, getLocalePath, ui, type Locale, type PageKey } from "../i18n";
+import { getAssetPath, getLocalePath, ui, withBase, type Locale, type PageKey } from "../i18n";
 
 type Props = {
   locale: Locale;
-  currentPage: PageKey;
+  currentPage: PageKey | "plugin";
 };
 
 const { locale, currentPage } = Astro.props;
 const copy = ui[locale];
 const logoUrl = getAssetPath("assets/logo-ldb.png");
+const pluginLabel = {
+  da: "Revit-plugin",
+  en: "Revit plugin",
+  ar: "إضافة Revit",
+}[locale];
 
 const navItems = [
   { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "subjects" },
   { label: copy.nav.videos, href: getLocalePath(locale, "videos"), key: "videos" },
-  { label: "Revit-plugin", href: getAssetPath("install-plugin"), key: "install" },
+  { label: pluginLabel, href: withBase("/install-plugin"), key: "plugin" },
   { label: copy.nav.about, href: getLocalePath(locale, "about"), key: "about" },
 ];
 ---

@@ -9,70 +9,163 @@ const mcpConfig = `"revit-mcp-nbs": {
     "C:\\\\Users\\\\alkh\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"
   ]
 }`;
+
+const images = {
+  online: getAssetPath("assets/revit-mcp-online-status.png"),
+  settings: getAssetPath("assets/revit-nbs-settings.png"),
+  architecture: getAssetPath("assets/revit-nbs-integration-architecture.png"),
+  installer: getAssetPath("assets/revit-mcp-installer-check.png"),
+};
 ---
 
 <BaseLayout
   locale="da"
-  currentPage="install"
+  currentPage="plugin"
   title="Installér Revit-plugin"
-  description="Kort guide til manuel installation og opsætning af Revit MCP + NBS Nordic."
+  description="Kort guide til installation, MCP-status og opsætning af Revit MCP + NBS Nordic."
 >
-  <section class="install-page" aria-labelledby="install-title">
-    <div class="install-page__intro">
-      <p class="eyebrow">Revit MCP + NBS Nordic</p>
-      <h1 id="install-title">Installér Revit-plugin manuelt</h1>
-      <p>
-        Denne vejledning dækker installation, opsætning i Revit og den nødvendige MCP-konfiguration. Installationsfilen understøtter Revit 2026 og 2027.
-      </p>
-      <div class="installer-download">
-        <a class="button button--primary" href={installerUrl} download>
-          Download installationsfilen (.exe)
-        </a>
-        <small>Windows · ca. 91 MB</small>
+  <section class="plugin-page">
+    <div class="plugin-hero">
+      <div class="plugin-hero__content">
+        <p class="eyebrow">Revit MCP + NBS Nordic</p>
+        <h1>Installér pluginet og tjek forbindelsen</h1>
+        <p>
+          Start med installationsfilen, kontroller derefter at MCP er online i Revit, og forbind til sidst modellen med
+          det rigtige NBS Nordic-projekt.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href={installerUrl} download>Download installationsfilen</a>
+          <a class="button button--quiet" href="#connection-check">Se MCP-status</a>
+        </div>
+      </div>
+
+      <div class="plugin-flow" aria-label="Animeret oversigt over Revit MCP og NBS Nordic flow">
+        <div class="flow-node flow-node--client">
+          <span>AI-klient</span>
+          <strong>Codex / Claude Code</strong>
+        </div>
+        <div class="flow-track" aria-hidden="true">
+          <span class="flow-signal flow-signal--one"></span>
+          <span class="flow-signal flow-signal--two"></span>
+        </div>
+        <div class="flow-node flow-node--mcp">
+          <span>MCP Server</span>
+          <strong>Revit plugin</strong>
+        </div>
+        <div class="flow-track" aria-hidden="true">
+          <span class="flow-signal flow-signal--three"></span>
+        </div>
+        <div class="flow-node flow-node--nbs">
+          <span>NBS Nordic</span>
+          <strong>Projekt + bygningsdele</strong>
+        </div>
       </div>
     </div>
 
-    <ol class="install-steps">
-      <li class="install-step">
-        <span class="install-step__number">01</span>
-        <div>
-          <h2>Hent installationsfilen</h2>
-          <p>Download filen ovenfor, og gem den et sted, du kan finde igen.</p>
-        </div>
-      </li>
-      <li class="install-step">
-        <span class="install-step__number">02</span>
-        <div>
-          <h2>Luk Revit og start filen</h2>
-          <p>Luk Revit helt. Dobbeltklik derefter på <code>ISSANA-Revit-MCP-NBS-Installer.exe</code>, og lad installationen køre færdig.</p>
-        </div>
-      </li>
-      <li class="install-step">
-        <span class="install-step__number">03</span>
-        <div>
-          <h2>Åbn Revit med et projekt</h2>
-          <p>Når installationen er færdig, åbner du Revit 2026 eller 2027 og derefter en projektfil.</p>
-        </div>
-      </li>
-      <li class="install-step">
-        <span class="install-step__number">04</span>
-        <div>
-          <h2>Forbind NBS Nordic</h2>
-          <p>Gå til <strong>Add-Ins → Revit MCP Settings → NBS Nordic</strong>. Indtast din NBS API-nøgle og forbind det NBS-projekt, du vil arbejde med.</p>
-        </div>
-      </li>
-    </ol>
+    <div class="plugin-layout">
+      <aside class="plugin-download" aria-labelledby="download-title">
+        <p class="eyebrow">Download</p>
+        <h2 id="download-title">Start her</h2>
+        <ol class="plugin-steps">
+          <li>Download installationsfilen.</li>
+          <li>Luk Revit, Codex og Claude Code før installation.</li>
+          <li>Kør installeringen igen, hvis du tidligere har brugt en ældre version.</li>
+          <li>Åbn Revit og kontroller status i MCP-panelet.</li>
+        </ol>
+        <a class="button button--primary" href={installerUrl} download>Download .exe</a>
+        <small>Windows · ca. 91 MB · Revit 2026/2027</small>
+      </aside>
 
-    <section class="install-config" aria-labelledby="mcp-config-title">
-      <p class="eyebrow">MCP-konfiguration</p>
-      <h2 id="mcp-config-title">Tilføj Revit MCP-serveren manuelt</h2>
-      <p>Indsæt dette inde i <code>mcpServers</code>-objektet i din AI-klients konfigurationsfil. Genstart derefter klienten.</p>
-      <pre><code>{mcpConfig}</code></pre>
-      <p class="install-config__note"><strong>Bemærk:</strong> Stien er til denne computer. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
-    </section>
+      <div class="plugin-main">
+        <section class="plugin-section" id="connection-check" aria-labelledby="connection-title">
+          <div class="plugin-section__copy">
+            <p class="eyebrow">Forbindelse</p>
+            <h2 id="connection-title">Sådan ser du om MCP er koblet til</h2>
+            <p>
+              Når pluginet virker, kan du åbne MCP-panelet fra Revit-båndet, og øverst i panelet skal status vise en
+              grøn prik med teksten <strong>MCP Online</strong>.
+            </p>
+            <ul class="check-list">
+              <li>Gå til <strong>Add-Ins</strong> i Revit.</li>
+              <li>Åbn <strong>MCP Panel</strong> under Revit MCP Plugin.</li>
+              <li>Kontroller at statuslinjen viser <strong>MCP Online</strong>.</li>
+            </ul>
+          </div>
+          <figure class="plugin-shot">
+            <img src={images.online} alt="Revit MCP-panelet viser grøn status med teksten MCP Online" loading="lazy" />
+            <figcaption>Grøn status betyder, at Revit MCP-serveren er aktiv og klar til en AI-klient.</figcaption>
+          </figure>
+        </section>
 
-    <aside class="install-page__notice">
-      <p><strong>Færdig:</strong> Når Revit viser, at forbindelsen er aktiv, er pluginet klar. Gem API-nøglen kun i Revit-indstillingerne — ikke i et dokument eller på et delt drev.</p>
-    </aside>
+        <section class="plugin-section" aria-labelledby="nbs-title">
+          <div class="plugin-section__copy">
+            <p class="eyebrow">NBS Nordic</p>
+            <h2 id="nbs-title">Kontroller at NBS-projektet er valgt</h2>
+            <p>
+              I indstillingerne skal der være en NBS-nøgle, og modellen skal være koblet til det rigtige NBS-projekt.
+              Ellers kan AI-assistenten ikke læse eller skrive de rigtige NBS-felter.
+            </p>
+            <ul class="check-list">
+              <li>Åbn <strong>Settings</strong> i Revit-pluginet.</li>
+              <li>Vælg fanen <strong>NBS Nordic</strong>.</li>
+              <li>Indsæt NBS-nøgle, hent projekter og vælg projektet til modellen.</li>
+            </ul>
+          </div>
+          <figure class="plugin-shot">
+            <img src={images.settings} alt="NBS Nordic-indstillinger med API-nøgle og projektvalg" loading="lazy" />
+            <figcaption>NBS-koblingen gemmes i modellen, så samme projekt bruges næste gang filen åbnes.</figcaption>
+          </figure>
+        </section>
+
+        <section class="plugin-section plugin-section--warning" aria-labelledby="install-title">
+          <div class="plugin-section__copy">
+            <p class="eyebrow">Fejlfinding</p>
+            <h2 id="install-title">Hvorfor installationen kan stoppe</h2>
+            <p>
+              Hvis installationen ikke gennemføres, skyldes det ofte enten netværk/proxy eller at Codex eller Claude Code
+              er for gammel til den MCP-konfiguration, pluginet forventer.
+            </p>
+            <ul class="check-list">
+              <li>Opdater Codex eller Claude Code til nyeste version og kør installeringen igen.</li>
+              <li>Hvis terminalen ikke kan nå <strong>api.github.com</strong>, kontroller internet, firewall eller proxy.</li>
+              <li>Luk Revit og AI-klienten helt, før du genstarter installationen.</li>
+            </ul>
+          </div>
+          <figure class="plugin-shot">
+            <img src={images.installer} alt="Installationsvindue med system checks og fejl ved api.github.com" loading="lazy" />
+            <figcaption>Her er systemet OK, men GitHub API kan ikke nås. Det peger typisk på forbindelse eller proxy.</figcaption>
+          </figure>
+        </section>
+
+        <section class="install-config" aria-labelledby="mcp-config-title">
+          <p class="eyebrow">MCP-konfiguration</p>
+          <h2 id="mcp-config-title">Tilføj Revit MCP-serveren manuelt</h2>
+          <p>Indsæt dette inde i <code>mcpServers</code>-objektet i din AI-klients konfigurationsfil. Genstart derefter klienten.</p>
+          <pre><code>{mcpConfig}</code></pre>
+          <p class="install-config__note"><strong>Bemærk:</strong> Stien er til denne computer. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
+        </section>
+
+        <section class="plugin-diagram" aria-labelledby="diagram-title">
+          <div class="plugin-diagram__heading">
+            <div>
+              <p class="eyebrow">Teknisk overblik</p>
+              <h2 id="diagram-title">Arkitekturdiagrammet ligger her, ikke på forsiden</h2>
+            </div>
+            <a class="text-link" href={images.architecture}>Åbn diagram i stor størrelse</a>
+          </div>
+          <p>
+            Diagrammet er nyttigt, når man vil forstå hele flowet fra AI-klient til Revit, NBS Nordic og output. Det er
+            derfor placeret sammen med plugin-vejledningen, hvor brugeren allerede er i installationskonteksten.
+          </p>
+          <figure class="plugin-architecture">
+            <img src={images.architecture} alt="Revit og NBS Nordic integrationsarkitektur med MCP, Orchestrator, Revit-model, NBS Nordic og output" loading="lazy" />
+          </figure>
+        </section>
+
+        <aside class="install-page__notice">
+          <p><strong>Færdig:</strong> Når Revit viser, at forbindelsen er aktiv, er pluginet klar. Gem API-nøglen kun i Revit-indstillingerne.</p>
+        </aside>
+      </div>
+    </div>
   </section>
 </BaseLayout>

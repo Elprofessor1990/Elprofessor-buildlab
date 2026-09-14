@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../i18n";
+
+const pluginUrl = withBase("/install-plugin");
+---
+
+<BaseLayout
+  locale="da"
+  currentPage="plugin"
+  title="Revit MCP + NBS Nordic plugin"
+  description="Viderestilling til Revit MCP + NBS Nordic plugin-siden."
+>
+  <section class="section">
+    <div class="empty-state">
+      <p>Du viderestilles til plugin-siden.</p>
+      <a class="button button--primary" href={pluginUrl}>Åbn plugin-siden</a>
+    </div>
+  </section>
+  <script is:inline define:vars={{ pluginUrl }}>
+    window.location.replace(pluginUrl);
+  </script>
+</BaseLayout>

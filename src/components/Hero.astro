@@ -1,6 +1,6 @@
 ---
 import { learningTracks } from "../data/learningTracks";
-import { getAssetPath, getLocalePath, ui, type Locale } from "../i18n";
+import { getLocalePath, ui, withBase, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = ui[locale];
@@ -17,10 +17,10 @@ const copy = ui[locale];
         <a class="button button--primary" href={getLocalePath(locale, "videos")}>{copy.actions.viewVideos}</a>
         <a class="button button--quiet" href="#subjects">{copy.actions.exploreSubjects}</a>
       </div>
-      <a class="hero-plugin-cta" href={getAssetPath("install-plugin")}>
+      <a class="hero-plugin-cta" href={withBase("/install-plugin")}>
         <span class="hero-plugin-cta__eyebrow">Ny Revit-udvidelse</span>
         <strong>Installer Revit MCP + NBS Nordic</strong>
-        <small>Download installationsfil og se den korte opsætning →</small>
+        <small>Download plugin og se opsætning →</small>
       </a>
     </div>
 
