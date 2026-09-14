@@ -112,7 +112,17 @@ export const subjects: Subject[] = [
       en: ["Build specifications", "Link requirements to elements", "Support traceability"],
       ar: ["بناء المواصفات", "ربط المتطلبات بالعناصر", "دعم التتبع"],
     },
-    resources: [],
+    resources: [
+      {
+        title: {
+          da: "Installer Revit MCP + NBS Nordic",
+          en: "Install Revit MCP + NBS Nordic",
+          ar: "تثبيت Revit MCP + NBS Nordic",
+        },
+        type: "download",
+        url: "/install-plugin",
+      },
+    ],
     links: [],
   },
   {

@@ -2,7 +2,7 @@
 import { getSubject, type Subject } from "../data/subjects";
 import { getSubjectHub } from "../data/subjectHubs";
 import { videos, type VideoItem } from "../data/videos";
-import { getLocalePath, ui, type Locale } from "../i18n";
+import { getAssetPath, getLocalePath, ui, type Locale } from "../i18n";
 
 type Props = {
   subject: Subject;
@@ -22,6 +22,7 @@ const levelLabels: Record<VideoItem["level"], string> = {
   Practice: copy.subjectPage.levels.Practice,
   Advanced: copy.subjectPage.levels.Advanced,
 };
+const resourceUrl = (url?: string) => (url?.startsWith("/") ? getAssetPath(url) : url);
 ---
 
 <article class="subject-page">
@@ -139,7 +140,7 @@ const levelLabels: Record<VideoItem["level"], string> = {
         {subject.resources.length > 0 ? (
           <div class="resource-list">
             {subject.resources.map((resource) => (
-              <a class="resource-item" href={resource.url || "#"} aria-disabled={!resource.url}>
+              <a class="resource-item" href={resourceUrl(resource.url) || "#"} aria-disabled={!resource.url}>
                 <span>{resource.title[locale]}</span>
                 <small>{resource.type}</small>
               </a>

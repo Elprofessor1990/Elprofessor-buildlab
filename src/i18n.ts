@@ -31,7 +31,7 @@ export const locales: Record<
   },
 };
 
-export type PageKey = "home" | "subjects" | "subject" | "videos" | "video" | "about" | "lesson";
+export type PageKey = "home" | "subjects" | "subject" | "videos" | "video" | "about" | "lesson" | "install";
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 

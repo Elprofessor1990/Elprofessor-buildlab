@@ -1,0 +1,64 @@
+---
+import { getAssetPath } from "../i18n";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe");
+---
+
+<BaseLayout
+  locale="da"
+  currentPage="install"
+  title="Installér Revit-plugin"
+  description="Kort guide til manuel installation og opsætning af Revit MCP + NBS Nordic."
+>
+  <section class="install-page" aria-labelledby="install-title">
+    <div class="install-page__intro">
+      <p class="eyebrow">Revit MCP + NBS Nordic</p>
+      <h1 id="install-title">Installér Revit-plugin manuelt</h1>
+      <p>
+        Denne vejledning dækker kun installation og opsætning inde i Revit. Installationsfilen understøtter Revit 2026 og 2027.
+      </p>
+      <div class="installer-download">
+        <a class="button button--primary" href={installerUrl} download>
+          Download installationsfilen (.exe)
+        </a>
+        <small>Windows · ca. 91 MB</small>
+      </div>
+    </div>
+
+    <ol class="install-steps">
+      <li class="install-step">
+        <span class="install-step__number">01</span>
+        <div>
+          <h2>Hent installationsfilen</h2>
+          <p>Download filen ovenfor, og gem den et sted, du kan finde igen.</p>
+        </div>
+      </li>
+      <li class="install-step">
+        <span class="install-step__number">02</span>
+        <div>
+          <h2>Luk Revit og start filen</h2>
+          <p>Luk Revit helt. Dobbeltklik derefter på <code>ISSANA-Revit-MCP-NBS-Installer.exe</code>, og lad installationen køre færdig.</p>
+        </div>
+      </li>
+      <li class="install-step">
+        <span class="install-step__number">03</span>
+        <div>
+          <h2>Åbn Revit med et projekt</h2>
+          <p>Når installationen er færdig, åbner du Revit 2026 eller 2027 og derefter en projektfil.</p>
+        </div>
+      </li>
+      <li class="install-step">
+        <span class="install-step__number">04</span>
+        <div>
+          <h2>Forbind NBS Nordic</h2>
+          <p>Gå til <strong>Add-Ins → Revit MCP Settings → NBS Nordic</strong>. Indtast din NBS API-nøgle og forbind det NBS-projekt, du vil arbejde med.</p>
+        </div>
+      </li>
+    </ol>
+
+    <aside class="install-page__notice">
+      <p><strong>Færdig:</strong> Når Revit viser, at forbindelsen er aktiv, er pluginet klar. Gem API-nøglen kun i Revit-indstillingerne — ikke i et dokument eller på et delt drev.</p>
+    </aside>
+  </section>
+</BaseLayout>
