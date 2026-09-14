@@ -249,6 +249,45 @@ p {
   gap: 0.85rem;
 }
 
+.hero-plugin-cta {
+  display: grid;
+  gap: 0.15rem;
+  width: min(460px, 100%);
+  margin-block-start: 1.2rem;
+  border: 1px solid rgba(242, 140, 40, 0.72);
+  border-radius: var(--radius);
+  background: linear-gradient(120deg, rgba(242, 140, 40, 0.18), rgba(255, 255, 255, 0.9));
+  box-shadow: 0 14px 28px rgba(17, 42, 70, 0.12);
+  color: var(--navy);
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+}
+
+.hero-plugin-cta:hover {
+  translate: 0 -2px;
+  border-color: var(--orange);
+  box-shadow: 0 18px 32px rgba(17, 42, 70, 0.16);
+}
+
+.hero-plugin-cta__eyebrow {
+  color: var(--orange);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-plugin-cta strong {
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.hero-plugin-cta small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .hero-topic-board {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
