@@ -3,6 +3,12 @@ import { getAssetPath } from "../i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe");
+const mcpConfig = `"revit-mcp-nbs": {
+  "command": "node",
+  "args": [
+    "C:\\\\Users\\\\alkh\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"
+  ]
+}`;
 ---
 
 <BaseLayout
@@ -16,7 +22,7 @@ const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe"
       <p class="eyebrow">Revit MCP + NBS Nordic</p>
       <h1 id="install-title">Installér Revit-plugin manuelt</h1>
       <p>
-        Denne vejledning dækker kun installation og opsætning inde i Revit. Installationsfilen understøtter Revit 2026 og 2027.
+        Denne vejledning dækker installation, opsætning i Revit og den nødvendige MCP-konfiguration. Installationsfilen understøtter Revit 2026 og 2027.
       </p>
       <div class="installer-download">
         <a class="button button--primary" href={installerUrl} download>
@@ -56,6 +62,14 @@ const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe"
         </div>
       </li>
     </ol>
+
+    <section class="install-config" aria-labelledby="mcp-config-title">
+      <p class="eyebrow">MCP-konfiguration</p>
+      <h2 id="mcp-config-title">Tilføj Revit MCP-serveren manuelt</h2>
+      <p>Indsæt dette inde i <code>mcpServers</code>-objektet i din AI-klients konfigurationsfil. Genstart derefter klienten.</p>
+      <pre><code>{mcpConfig}</code></pre>
+      <p class="install-config__note"><strong>Bemærk:</strong> Stien er til denne computer. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
+    </section>
 
     <aside class="install-page__notice">
       <p><strong>Færdig:</strong> Når Revit viser, at forbindelsen er aktiv, er pluginet klar. Gem API-nøglen kun i Revit-indstillingerne — ikke i et dokument eller på et delt drev.</p>
