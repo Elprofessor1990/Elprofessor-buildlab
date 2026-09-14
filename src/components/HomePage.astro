@@ -1,13 +1,33 @@
 ---
 import Hero from "./Hero.astro";
 import SubjectGrid from "./SubjectGrid.astro";
-import { getLocalePath, ui, type Locale } from "../i18n";
+import { getAssetPath, getLocalePath, ui, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = ui[locale];
+const architectureImage = getAssetPath("assets/revit-nbs-integration-architecture.png");
 ---
 
 <Hero locale={locale} />
+
+<section class="section section--architecture" aria-labelledby="architecture-title">
+  <header class="section__header section__header--split">
+    <p class="eyebrow">Revit MCP + NBS Nordic</p>
+    <h2 id="architecture-title">Se integrationsarkitekturen</h2>
+    <p>En visuel oversigt over forbindelsen mellem AI-klienter, Revit, NBS Nordic og de videre output.</p>
+  </header>
+  <a
+    class="architecture-diagram"
+    href={architectureImage}
+    target="_blank"
+    rel="noopener"
+    aria-label="Åbn integrationsarkitektur for Revit og NBS Nordic i stor størrelse"
+  >
+    <img src={architectureImage} alt="Diagram over Revit og NBS Nordic integrationsarkitektur med AI-klienter, orkestrator, Revit, NBS Nordic og output." loading="lazy" />
+    <span>Åbn diagram i stor størrelse ↗</span>
+  </a>
+</section>
+
 <SubjectGrid locale={locale} />
 
 <section class="section section--workflow" aria-labelledby="workflow-title">
