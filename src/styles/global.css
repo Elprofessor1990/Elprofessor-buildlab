@@ -1747,6 +1747,281 @@ p {
   font-weight: 800;
 }
 
+.suite-page {
+  width: min(1280px, 100%);
+  margin-inline: auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem) clamp(4rem, 7vw, 7rem);
+}
+
+.suite-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  overflow: hidden;
+  border-radius: calc(var(--radius) * 2);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    var(--navy);
+  background-size: 40px 40px;
+  box-shadow: var(--shadow);
+  padding: clamp(2rem, 6vw, 5rem);
+}
+
+.suite-hero::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  width: 42%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--orange) 0 58%, var(--mint) 58%);
+}
+
+.suite-hero__copy {
+  position: relative;
+  z-index: 1;
+}
+
+.suite-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block-end: 1rem;
+  border: 1px solid rgba(70, 194, 168, 0.5);
+  border-radius: 999px;
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.7rem;
+}
+
+.suite-status span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 5px rgba(70, 194, 168, 0.14);
+}
+
+.suite-hero h1 {
+  margin-block-end: 1.25rem;
+  color: var(--white);
+  font-size: clamp(2.8rem, 5.5vw, 5.4rem);
+}
+
+.suite-hero h1 em {
+  display: block;
+  color: var(--orange);
+  font-size: 0.58em;
+  font-style: normal;
+  letter-spacing: 0.03em;
+}
+
+.suite-hero__lead {
+  max-width: 650px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.12rem;
+}
+
+.suite-hero .hero__actions {
+  margin-block-start: 1.6rem;
+}
+
+.suite-download-button {
+  display: grid;
+  justify-items: start;
+  background: var(--orange);
+  color: var(--navy);
+  padding: 0.8rem 1.1rem;
+}
+
+.suite-download-button:hover {
+  background: #ffa447;
+}
+
+.suite-download-button span,
+.suite-download-button small {
+  display: block;
+}
+
+.suite-download-button small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.78;
+}
+
+.suite-version-panel {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  display: grid;
+  aspect-ratio: 1;
+  align-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--mint);
+  box-shadow: 20px 20px 0 rgba(242, 140, 40, 0.96);
+  color: var(--navy);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.suite-version-panel__label {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+.suite-version-panel > strong {
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  font-size: clamp(4.5rem, 9vw, 8rem);
+  line-height: 0.9;
+}
+
+.suite-version-panel__signals {
+  display: flex;
+  gap: 0.45rem;
+  margin-block: 1.25rem 0.75rem;
+}
+
+.suite-version-panel__signals span {
+  border: 1px solid rgba(17, 42, 70, 0.28);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0.25rem 0.55rem;
+}
+
+.suite-version-panel p {
+  margin: 0;
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.suite-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 1.25rem;
+  margin-block-start: 1.25rem;
+}
+
+.suite-steps,
+.suite-file-card,
+.suite-alternative {
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * 1.5);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 45px rgba(17, 42, 70, 0.08);
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+}
+
+.suite-steps h2,
+.suite-file-card h2,
+.suite-alternative h2 {
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+}
+
+.suite-steps ol {
+  display: grid;
+  gap: 0;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.suite-steps li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 1rem;
+  border-block-start: 1px solid var(--line);
+  padding-block: 1rem;
+}
+
+.suite-steps li > span {
+  color: var(--orange);
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.suite-steps li strong {
+  color: var(--navy);
+}
+
+.suite-steps li p {
+  margin: 0.15rem 0 0;
+}
+
+.suite-steps code,
+.suite-checksum code {
+  overflow-wrap: anywhere;
+  color: var(--navy);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+.suite-file-card {
+  border-block-start: 5px solid var(--orange);
+}
+
+.suite-file-card dl {
+  margin: 1.4rem 0;
+}
+
+.suite-file-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block-end: 1px solid var(--line);
+  padding-block: 0.65rem;
+}
+
+.suite-file-card dt {
+  color: var(--muted);
+}
+
+.suite-file-card dd {
+  margin: 0;
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.suite-checksum {
+  display: grid;
+  gap: 0.35rem;
+  margin-block-end: 1.25rem;
+  border-radius: var(--radius);
+  background: rgba(70, 194, 168, 0.12);
+  padding: 0.85rem;
+}
+
+.suite-checksum strong {
+  color: var(--navy);
+  font-size: 0.75rem;
+}
+
+.suite-file-card .button {
+  width: 100%;
+}
+
+.suite-alternative {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  margin-block-start: 1.25rem;
+  border-inline-start: 5px solid var(--mint);
+}
+
+.suite-alternative h2 {
+  margin-block-end: 0.45rem;
+}
+
+.suite-alternative p:last-child {
+  margin: 0;
+}
+
 [dir="rtl"] .hero__content,
 [dir="rtl"] .section__header,
 [dir="rtl"] .lesson-hero,
@@ -1777,6 +2052,9 @@ p {
   }
 
   .hero__inner,
+  .suite-hero,
+  .suite-content,
+  .suite-alternative,
   .plugin-hero,
   .client-prerequisite,
   .plugin-layout,
@@ -1827,6 +2105,7 @@ p {
   .section,
   .lesson-shell,
   .subject-page,
+  .suite-page,
   .about-page {
     padding-inline: 1rem;
   }
@@ -1840,6 +2119,7 @@ p {
   }
 
   .hero-topic-board,
+  .suite-alternative,
   .client-options,
   .plugin-flow,
   .plugin-diagram__heading,

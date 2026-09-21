@@ -1,0 +1,91 @@
+---
+import { getAssetPath, getLocalePath } from "../i18n";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const installerUrl = getAssetPath("downloads/Bygningsfysik-suite-Setup-2.2.0.exe");
+const itslearningUrl = "https://ek.itslearning.com/Resources?FolderID=1549799";
+const checksum = "0D4CA67F2A3EA8BA18AF6E0D8EE51AA271D8B266B28AC68F7BBA528B1E1F45EB";
+---
+
+<BaseLayout
+  locale="da"
+  currentPage="bygfys-suite"
+  title="Bygningsfysik-suite 2.2.0"
+  description="Download den nyeste version af Bygningsfysik-suite direkte fra Elprofessor BuildLab."
+>
+  <article class="suite-page">
+    <header class="suite-hero">
+      <div class="suite-hero__copy">
+        <p class="eyebrow">Bygningsfysik · Windows-værktøj</p>
+        <div class="suite-status"><span aria-hidden="true"></span> Aktuel version</div>
+        <h1>Bygningsfysik-suite <em>2.2.0</em></h1>
+        <p class="suite-hero__lead">
+          Hent installationsfilen direkte fra Elprofessor BuildLab. Du behøver ikke åbne Itslearning for at downloade
+          denne version.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary suite-download-button" href={installerUrl} download>
+            <span>Download til Windows</span>
+            <small>Version 2.2.0 · 49,4 MB · .exe</small>
+          </a>
+          <a class="button button--quiet" href={getLocalePath("da", "subject", "building-physics")}>Tilbage til Bygfys</a>
+        </div>
+      </div>
+
+      <div class="suite-version-panel" aria-label="Versionsoplysninger">
+        <span class="suite-version-panel__label">BYGFYS</span>
+        <strong>2.2</strong>
+        <div class="suite-version-panel__signals" aria-hidden="true">
+          <span>°C</span><span>RH</span><span>dB</span>
+        </div>
+        <p>Varme · Fugt · Lyd</p>
+      </div>
+    </header>
+
+    <div class="suite-content">
+      <section class="suite-steps" aria-labelledby="suite-steps-title">
+        <p class="eyebrow">Sådan gør du</p>
+        <h2 id="suite-steps-title">Fra download til installation</h2>
+        <ol>
+          <li>
+            <span>01</span>
+            <div><strong>Download filen</strong><p>Klik på den orange knap ovenfor, og gem installationsfilen.</p></div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><strong>Kontrollér filnavnet</strong><p>Filen skal hedde <code>Bygningsfysik-suite-Setup-2.2.0.exe</code>.</p></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><strong>Start installationen</strong><p>Åbn filen i Windows, og følg trinnene i installationsvinduet.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <aside class="suite-file-card" aria-labelledby="suite-file-title">
+        <p class="eyebrow">Filoplysninger</p>
+        <h2 id="suite-file-title">Installationsfil</h2>
+        <dl>
+          <div><dt>Version</dt><dd>2.2.0</dd></div>
+          <div><dt>Platform</dt><dd>Windows</dd></div>
+          <div><dt>Størrelse</dt><dd>49,4 MB</dd></div>
+          <div><dt>Format</dt><dd>.exe</dd></div>
+        </dl>
+        <div class="suite-checksum">
+          <strong>SHA-256</strong>
+          <code>{checksum}</code>
+        </div>
+        <a class="button button--primary" href={installerUrl} download>Download version 2.2.0</a>
+      </aside>
+    </div>
+
+    <aside class="suite-alternative">
+      <div>
+        <p class="eyebrow">Alternativ placering</p>
+        <h2>Find filen i Itslearning</h2>
+        <p>Hvis du foretrækker Itslearning, ligger versionerne også i BYGFYS-mappen. Linket kan kræve, at du logger ind.</p>
+      </div>
+      <a class="button button--quiet" href={itslearningUrl} target="_blank" rel="noopener">Åbn Itslearning</a>
+    </aside>
+  </article>
+</BaseLayout>

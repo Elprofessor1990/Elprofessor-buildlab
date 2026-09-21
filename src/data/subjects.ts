@@ -99,12 +99,12 @@ export const subjects: Subject[] = [
     resources: [
       {
         title: {
-          da: "Bygningsfysik-suite 2.2.0 – nyeste version i Itslearning",
-          en: "Building Physics Suite 2.2.0 – latest version in Itslearning",
-          ar: "حزمة فيزياء المباني 2.2.0 – أحدث إصدار على Itslearning",
+          da: "Download Bygningsfysik-suite 2.2.0",
+          en: "Download Building Physics Suite 2.2.0",
+          ar: "تنزيل حزمة فيزياء المباني 2.2.0",
         },
         type: "link",
-        url: "https://ek.itslearning.com/Resources?FolderID=1549799",
+        url: "/bygningsfysik-suite",
       },
     ],
     links: [],
