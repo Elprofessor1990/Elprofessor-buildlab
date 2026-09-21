@@ -96,7 +96,17 @@ export const subjects: Subject[] = [
       en: ["Explain principles", "Build calculations", "Check results"],
       ar: ["شرح المبادئ", "بناء الحسابات", "التحقق من النتائج"],
     },
-    resources: [],
+    resources: [
+      {
+        title: {
+          da: "Bygningsfysik-suite 2.2.0 – nyeste version i Itslearning",
+          en: "Building Physics Suite 2.2.0 – latest version in Itslearning",
+          ar: "حزمة فيزياء المباني 2.2.0 – أحدث إصدار على Itslearning",
+        },
+        type: "link",
+        url: "https://ek.itslearning.com/Resources?FolderID=1549799",
+      },
+    ],
     links: [],
   },
   {
