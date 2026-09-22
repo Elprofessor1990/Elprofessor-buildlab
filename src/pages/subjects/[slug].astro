@@ -1,5 +1,6 @@
 ---
 import SubjectDetail from "../../components/SubjectDetail.astro";
+import BuildingPhysicsSuite from "../../components/BuildingPhysicsSuite.astro";
 import { subjects } from "../../data/subjects";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
@@ -20,5 +21,9 @@ const locale = "da";
   title={subject.title[locale]}
   description={subject.description[locale]}
 >
-  <SubjectDetail subject={subject} locale={locale} />
+  {subject.slug === "building-physics" ? (
+    <BuildingPhysicsSuite />
+  ) : (
+    <SubjectDetail subject={subject} locale={locale} />
+  )}
 </BaseLayout>
