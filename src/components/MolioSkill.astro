@@ -6,9 +6,6 @@ const version = "1.0";
 const pluginGuideUrl = withBase("/install-plugin");
 const aiSubjectUrl = getLocalePath("da", "subject", "ai-in-construction");
 const pythonUrl = "https://www.python.org/downloads/";
-const codexMcpConfig = `[mcp_servers.revit-mcp-nbs]
-command = "node"
-args = ["C:\\\\Users\\\\<bruger>\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"]`;
 ---
 
 <section class="plugin-page skill-page">
@@ -193,17 +190,14 @@ args = ["C:\\\\Users\\\\<bruger>\\\\Desktop\\\\revit-mcp-server\\\\server\\\\bui
         </div>
       </section>
 
-      <section class="install-config" aria-labelledby="codex-mcp-title">
-        <p class="eyebrow">MCP i Codex</p>
-        <h2 id="codex-mcp-title">Manuel MCP-opsætning i Codex</h2>
+      <aside class="install-page__notice">
         <p>
-          Revit-plugin-installeren sætter normalt MCP op automatisk. Skal du gøre det selv i Codex, tilføjer du dette til
-          <code>%USERPROFILE%\.codex\config.toml</code> og genstarter Codex. Til Claude Code står eksemplet i
-          <a class="text-link" href={pluginGuideUrl}>plugin-guiden</a>.
+          <strong>MCP-opsætning:</strong> Revit-plugin-installeren kobler selv MCP på i Claude og Codex. Hvis det ikke
+          lykkes, står den manuelle opsætning til både Claude og Codex i
+          <a class="text-link" href={`${pluginGuideUrl}#manuel`}>plugin-guiden under Manuel opsætning</a>.
         </p>
-        <pre><code>{codexMcpConfig}</code></pre>
-        <p class="install-config__note"><strong>Bemærk:</strong> Ret stien i <code>args</code> til den mappe, hvor Revit MCP ligger på din computer.</p>
-      </section>
+      </aside>
+
 
       <section class="plugin-section plugin-section--warning skill-guide" aria-labelledby="trouble-title">
         <div class="plugin-section__copy">
