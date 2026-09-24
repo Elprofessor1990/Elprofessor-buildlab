@@ -48,7 +48,17 @@ export const subjects: Subject[] = [
       en: ["Evaluate AI output", "Structure prompts", "Use AI responsibly in project work"],
       ar: ["تقييم مخرجات الذكاء الاصطناعي", "تنظيم التعليمات", "استخدام الذكاء الاصطناعي بمسؤولية"],
     },
-    resources: [],
+    resources: [
+      {
+        title: {
+          da: "Molio-skill til Claude og Codex",
+          en: "Molio skill for Claude and Codex",
+          ar: "مهارة Molio لـ Claude وCodex",
+        },
+        type: "download",
+        url: "/molio-skill",
+      },
+    ],
     links: [],
   },
   {

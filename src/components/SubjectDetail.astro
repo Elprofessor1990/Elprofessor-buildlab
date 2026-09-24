@@ -58,6 +58,15 @@ const resourceUrl = (url?: string) => (url?.startsWith("/") ? getAssetPath(url) 
 
   <div class="subject-layout">
     <main class="subject-main">
+      {hub?.featured && (
+        <a class="subject-featured" href={resourceUrl(hub.featured.href)}>
+          <span class="eyebrow">{hub.featured.eyebrow[locale]}</span>
+          <strong>{hub.featured.title[locale]}</strong>
+          <span>{hub.featured.description[locale]}</span>
+          <span class="subject-featured__cta">{hub.featured.cta[locale]} →</span>
+        </a>
+      )}
+
       <section class="subject-section" aria-labelledby="subject-video-types">
         <div class="subject-section__heading">
           <p class="eyebrow">{copy.subjectPage.videoTypes}</p>

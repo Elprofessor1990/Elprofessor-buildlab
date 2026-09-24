@@ -2249,3 +2249,182 @@ p {
     opacity: 0;
   }
 }
+
+/* Molio-skill: side og fremhævet kort på emnesiden */
+.skill-cards > div {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  border: 1px solid rgba(17, 42, 70, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(17, 42, 70, 0.08);
+  color: var(--navy);
+  padding: 1rem;
+}
+
+.skill-cards strong {
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  overflow-wrap: anywhere;
+}
+
+.skill-unlock p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+}
+
+.skill-unlock__form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.skill-unlock__form label {
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.skill-unlock__form input {
+  width: 100%;
+  border: 1px solid rgba(17, 42, 70, 0.3);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--navy);
+  font: 800 1.05rem/1.2 Consolas, "Cascadia Mono", monospace;
+  letter-spacing: 0.06em;
+  padding: 0.75rem 0.8rem;
+  text-transform: uppercase;
+}
+
+.skill-unlock__form input:focus-visible {
+  outline: 3px solid rgba(242, 140, 40, 0.55);
+  outline-offset: 1px;
+}
+
+.skill-unlock__form button[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.skill-unlock__form .skill-unlock__status {
+  min-height: 1.5em;
+  font-weight: 800;
+}
+
+.skill-unlock__status[data-state="ok"] {
+  color: #1f7a64;
+}
+
+.skill-unlock__status[data-state="error"] {
+  color: #b3261e;
+}
+
+.skill-unlock .skill-unlock__legal {
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+  font-size: 0.86rem;
+}
+
+.skill-guide {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.skill-guide code,
+.skill-clients code {
+  overflow-wrap: anywhere;
+}
+
+.skill-clients {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.skill-clients article {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  padding: 1rem;
+}
+
+.skill-clients h3,
+.skill-clients p {
+  margin: 0;
+}
+
+.skill-clients p {
+  color: var(--muted);
+}
+
+.skill-clients ol {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding-inline-start: 1.2rem;
+  color: var(--navy);
+}
+
+.skill-clients__tag {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-weight: 900;
+}
+
+.skill-clients .skill-clients__note {
+  font-size: 0.88rem;
+}
+
+.skill-guide__manual {
+  margin: 0;
+  color: var(--muted);
+}
+
+.subject-featured {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(242, 140, 40, 0.55);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(242, 140, 40, 0.14), transparent 55%),
+    rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 30px rgba(17, 42, 70, 0.08);
+  color: var(--navy);
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+  text-decoration: none;
+}
+
+.subject-featured:hover {
+  translate: 0 -2px;
+  box-shadow: 0 18px 36px rgba(17, 42, 70, 0.14);
+}
+
+.subject-featured strong {
+  font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  line-height: 1.1;
+}
+
+.subject-featured > span:not(.eyebrow):not(.subject-featured__cta) {
+  color: var(--muted);
+}
+
+.subject-featured__cta {
+  color: var(--orange);
+  font-weight: 900;
+}
+
+@media (max-width: 1100px) {
+  .skill-clients {
+    grid-template-columns: 1fr;
+  }
+}

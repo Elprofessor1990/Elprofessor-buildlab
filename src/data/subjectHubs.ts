@@ -11,6 +11,13 @@ export type SubjectHub = {
   }>;
   connectionNote: LocalizedText;
   connections: string[];
+  featured?: {
+    eyebrow: LocalizedText;
+    title: LocalizedText;
+    description: LocalizedText;
+    cta: LocalizedText;
+    href: string;
+  };
 };
 
 export const subjectHubs: SubjectHub[] = [
@@ -93,6 +100,21 @@ export const subjectHubs: SubjectHub[] = [
       ar: "يمكن أن يدعم AI مجالات BIM وpyRevit وفيزياء المباني وإنتاج مواد التعليم.",
     },
     connections: ["bim", "pyrevit", "building-physics"],
+    featured: {
+      eyebrow: { da: "Ny skill-pakke", en: "New skill pack", ar: "حزمة مهارات جديدة" },
+      title: {
+        da: "Molio-skill til Claude og Codex",
+        en: "Molio skill for Claude and Codex",
+        ar: "مهارة Molio لـ Claude وCodex",
+      },
+      description: {
+        da: "Tegningsnumre, tegningsindhold og materialeskraveringer efter Molio A104, C223a og C223b, med tjek og rettelse i Revit via MCP.",
+        en: "Drawing numbers, drawing content, and material hatching according to Molio A104, C223a, and C223b, with checks and fixes in Revit via MCP.",
+        ar: "أرقام الرسومات ومحتواها وتظليل المواد وفق Molio A104 وC223a وC223b، مع الفحص والتصحيح في Revit عبر MCP.",
+      },
+      cta: { da: "Se vejledning og download", en: "Guide and download (Danish)", ar: "الدليل والتنزيل (بالدنماركية)" },
+      href: "/molio-skill",
+    },
   },
   {
     subject: "pyrevit",

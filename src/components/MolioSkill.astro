@@ -1,0 +1,286 @@
+---
+import { getAssetPath, getLocalePath, withBase } from "../i18n";
+
+const packageUrl = getAssetPath("downloads/molio-skills.bin");
+const version = "1.0";
+const pluginGuideUrl = withBase("/install-plugin");
+const aiSubjectUrl = getLocalePath("da", "subject", "ai-in-construction");
+const pythonUrl = "https://www.python.org/downloads/";
+const codexMcpConfig = `[mcp_servers.revit-mcp-nbs]
+command = "node"
+args = ["C:\\\\Users\\\\<bruger>\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"]`;
+---
+
+<section class="plugin-page skill-page">
+  <div class="plugin-hero">
+    <div class="plugin-hero__content">
+      <p class="eyebrow">AI i byggeri · Skill-pakke</p>
+      <h1>Molio-skill til Claude og Codex</h1>
+      <p>
+        Skillen giver din AI-assistent Molios regler for projektopstart, tegningsnumre, tegningsindhold og
+        materialeskraveringer. Assistenten slår op i kilderne i stedet for at gætte, og den kan tjekke og rette
+        skraveringer direkte i Revit via MCP.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="#unlock">Lås pakken op</a>
+        <a class="button button--quiet" href="#guide">Se vejledningen</a>
+      </div>
+    </div>
+
+    <div class="plugin-flow" aria-label="Oversigt: AI-klient bruger Molio-skill og eventuelt Revit MCP">
+      <div class="flow-node flow-node--client">
+        <span>AI-klient</span>
+        <strong>Claude / Codex</strong>
+      </div>
+      <div class="flow-track" aria-hidden="true">
+        <span class="flow-signal flow-signal--one"></span>
+        <span class="flow-signal flow-signal--two"></span>
+      </div>
+      <div class="flow-node flow-node--mcp">
+        <span>Skill</span>
+        <strong>Molio A104 · C223a · C223b</strong>
+      </div>
+      <div class="flow-track" aria-hidden="true">
+        <span class="flow-signal flow-signal--three"></span>
+      </div>
+      <div class="flow-node flow-node--nbs">
+        <span>Valgfrit</span>
+        <strong>Revit via MCP</strong>
+      </div>
+    </div>
+  </div>
+
+  <section class="client-prerequisite" aria-labelledby="skill-content-title">
+    <div class="client-prerequisite__copy">
+      <p class="eyebrow">Indhold</p>
+      <h2 id="skill-content-title">To skills, der arbejder sammen</h2>
+      <p>
+        Pakken installerer begge skills. Assistenten vælger selv den rigtige ud fra dit spørgsmål, så du skal ikke
+        huske kommandoer.
+      </p>
+    </div>
+    <div class="client-options skill-cards">
+      <div>
+        <span>Skill 1</span>
+        <strong>molio-project-startup</strong>
+        <small>Rolle, metode og fase, mappestruktur og filnavngivning efter Molio A104.</small>
+      </div>
+      <div>
+        <span>Skill 2</span>
+        <strong>molio-drawing-information</strong>
+        <small>
+          Tegningsnumre, K/H/J-koder, indhold og målestok pr. tegningstype (C223a) og skraveringer pr. materiale
+          (C223b), inkl. tjek og rettelse i Revit.
+        </small>
+      </div>
+    </div>
+  </section>
+
+  <div class="plugin-layout">
+    <aside class="plugin-download skill-unlock" id="unlock" aria-labelledby="unlock-title">
+      <p class="eyebrow">Download</p>
+      <h2 id="unlock-title">Lås pakken op</h2>
+      <p>
+        Pakken er krypteret, fordi den indeholder uddrag af Molio-materiale. Koden får du af din underviser.
+      </p>
+      <form class="skill-unlock__form" data-package-url={packageUrl} data-version={version}>
+        <label for="skill-code">Adgangskode</label>
+        <input
+          id="skill-code"
+          name="code"
+          type="text"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          placeholder="XXXX-XXXX-XXXX-XXXX"
+          required
+        />
+        <button class="button button--primary" type="submit">Lås op og download</button>
+        <p class="skill-unlock__status" role="status" aria-live="polite"></p>
+      </form>
+      <small>Version {version} · .zip · Windows, Claude og Codex</small>
+      <p class="skill-unlock__legal">
+        Kun til undervisningsbrug på holdet. Del hverken pakken eller koden. Dekrypteringen sker i din browser, og
+        koden sendes ingen steder hen.
+      </p>
+    </aside>
+
+    <div class="plugin-main" id="guide">
+      <section class="plugin-section skill-guide" aria-labelledby="install-title">
+        <div class="plugin-section__copy">
+          <p class="eyebrow">Installation</p>
+          <h2 id="install-title">Vælg din AI-klient</h2>
+          <p>
+            Pak zip-filen ud først (højreklik → <strong>Udpak alle</strong>). Mappen indeholder <code>Installer.cmd</code>,
+            <code>LAES-MIG.md</code>, mappen <code>skills</code> og mappen <code>claude-app</code>.
+          </p>
+        </div>
+        <div class="skill-clients">
+          <article>
+            <span class="skill-clients__tag">A</span>
+            <h3>Claude Code</h3>
+            <p>Terminal, VS Code eller Code-fanen i Claude-appen.</p>
+            <ol>
+              <li>Dobbeltklik på <code>Installer.cmd</code> og vælg <strong>1</strong> (eller <strong>3</strong> for begge klienter).</li>
+              <li>Skills lægges i <code>%USERPROFILE%\.claude\skills\</code>.</li>
+              <li>Genstart Claude Code, og skriv <code>/skills</code>. Begge Molio-skills skal stå på listen.</li>
+            </ol>
+          </article>
+          <article>
+            <span class="skill-clients__tag">B</span>
+            <h3>Claude-appen (chat)</h3>
+            <p>claude.ai eller Claude til Windows.</p>
+            <ol>
+              <li><strong>Settings → Capabilities</strong>: slå <em>Code execution and file creation</em> til.</li>
+              <li><strong>Customize → Skills → + → Create skill → Upload a skill</strong>.</li>
+              <li>Upload <code>claude-app\molio-project-startup.zip</code> og derefter <code>molio-drawing-information.zip</code>. Slå begge til.</li>
+            </ol>
+            <p class="skill-clients__note">Chatten kan slå op og tjekke en eksportfil, men kan ikke styre Revit.</p>
+          </article>
+          <article>
+            <span class="skill-clients__tag">C</span>
+            <h3>Codex</h3>
+            <p>Codex-appen eller Codex CLI.</p>
+            <ol>
+              <li>Dobbeltklik på <code>Installer.cmd</code> og vælg <strong>2</strong> (eller <strong>3</strong>).</li>
+              <li>Skills lægges i <code>%USERPROFILE%\.agents\skills\</code>.</li>
+              <li>Genstart Codex. I CLI kan du skrive <code>$</code> og vælge skillen, eller bare spørge direkte.</li>
+            </ol>
+          </article>
+        </div>
+        <p class="skill-guide__manual">
+          <strong>Manuelt uden installer:</strong> kopiér de to mapper fra <code>skills</code> til
+          <code>%USERPROFILE%\.claude\skills\</code> (Claude Code) eller <code>%USERPROFILE%\.agents\skills\</code> (Codex).
+        </p>
+      </section>
+
+      <section class="plugin-section skill-guide" aria-labelledby="test-title">
+        <div class="plugin-section__copy">
+          <p class="eyebrow">Test</p>
+          <h2 id="test-title">Prøv disse spørgsmål</h2>
+          <ul class="check-list">
+            <li>“Jeg skal lave en etageplan i fase A6 som arkitekt. Hvad skal med, og i hvilken skala?”</li>
+            <li>“Hvilken skravering skal pladsstøbt beton have i snit?”</li>
+            <li>“Projekt-ID er DTU01. Lav et tegningsnummer til en arkitekt-plantegning af stueetagen.”</li>
+            <li>“Jeg starter et nyt projekt som rådgivende ingeniør. Hvilken mappestruktur skal jeg bruge?”</li>
+          </ul>
+          <p>
+            Svarene skal henvise til kilden, fx <em>(A104b §2.6)</em> eller <em>(Molio C223b, visning 3.1.4)</em>. Står
+            noget ikke i Molio-materialet, siger assistenten det i stedet for at gætte.
+          </p>
+        </div>
+      </section>
+
+      <section class="plugin-section skill-guide" aria-labelledby="revit-title">
+        <div class="plugin-section__copy">
+          <p class="eyebrow">Valgfrit · Revit</p>
+          <h2 id="revit-title">Tjek og ret skraveringer i din Revit-model</h2>
+          <p>
+            Det kræver, at Revit MCP-pluginet er installeret og koblet til Claude Code eller Codex. Følg
+            <a class="text-link" href={pluginGuideUrl}>guiden til Revit-pluginet</a> først.
+          </p>
+          <ol class="api-steps">
+            <li>Åbn modellen i Revit, og luk alle dialoger. En åben dialog blokerer MCP.</li>
+            <li>Skriv: “Tjek om materialerne i min Revit-model har de rigtige Molio-skraveringer.”</li>
+            <li>Assistenten eksporterer modellen (kun læsning) og viser en rapport med <strong>OK</strong>, <strong>AFVIGER</strong> og <strong>IKKE GENKENDT</strong>.</li>
+            <li>Svar ja, hvis afvigelserne skal rettes. Først kommer en prøvekørsel, der rulles tilbage, og derefter selve rettelsen.</li>
+            <li>Mangler et mønster i modellen, oprettes det ud fra C223b-geometrien. <strong>Du gemmer selv modellen.</strong></li>
+          </ol>
+          <p class="api-note">
+            Tjekket kræver Python 3 på computeren: <a class="text-link" href={pythonUrl} target="_blank" rel="noopener">python.org</a>
+            (sæt flueben ved <em>Add python.exe to PATH</em>).
+          </p>
+        </div>
+      </section>
+
+      <section class="install-config" aria-labelledby="codex-mcp-title">
+        <p class="eyebrow">MCP i Codex</p>
+        <h2 id="codex-mcp-title">Manuel MCP-opsætning i Codex</h2>
+        <p>
+          Revit-plugin-installeren sætter normalt MCP op automatisk. Skal du gøre det selv i Codex, tilføjer du dette til
+          <code>%USERPROFILE%\.codex\config.toml</code> og genstarter Codex. Til Claude Code står eksemplet i
+          <a class="text-link" href={pluginGuideUrl}>plugin-guiden</a>.
+        </p>
+        <pre><code>{codexMcpConfig}</code></pre>
+        <p class="install-config__note"><strong>Bemærk:</strong> Ret stien i <code>args</code> til den mappe, hvor Revit MCP ligger på din computer.</p>
+      </section>
+
+      <section class="plugin-section plugin-section--warning skill-guide" aria-labelledby="trouble-title">
+        <div class="plugin-section__copy">
+          <p class="eyebrow">Fejlfinding</p>
+          <h2 id="trouble-title">Hvis det ikke virker</h2>
+          <ul class="check-list">
+            <li><strong>“Forkert kode”:</strong> tjek bindestregerne. Store og små bogstaver er ligegyldige.</li>
+            <li><strong>Skillen dukker ikke op:</strong> genstart klienten helt, og tjek, at mappen hedder præcis <code>molio-drawing-information</code> med <code>SKILL.md</code> direkte i mappen.</li>
+            <li><strong>Upload i Claude-appen fejler:</strong> upload zip-filerne fra <code>claude-app</code>, ikke hele pakken.</li>
+            <li><strong>Revit svarer ikke:</strong> luk åbne dialoger i Revit, og kontrollér, at MCP-panelet viser <em>MCP Online</em>.</li>
+            <li><strong>Skraveringstjek fejler:</strong> installér Python 3, og genstart klienten.</li>
+          </ul>
+        </div>
+      </section>
+
+      <aside class="install-page__notice">
+        <p>
+          <strong>Opdatering:</strong> Når en ny version ligger her, downloader du den og kører <code>Installer.cmd</code>
+          igen. Den gamle version bliver erstattet. <a class="text-link" href={aiSubjectUrl}>Tilbage til AI-emnet</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Pakken er krypteret med AES-256-GCM; nøglen udledes af koden med PBKDF2-SHA256 (600.000 iterationer).
+  // Filformat: "EBL1" | salt (16) | iv (12) | ciphertext+tag. Se byg_pakke.py i skill-projektet.
+  const form = document.querySelector<HTMLFormElement>(".skill-unlock__form");
+  const status = form?.querySelector<HTMLElement>(".skill-unlock__status");
+
+  async function decryptPackage(buf: ArrayBuffer, code: string) {
+    const bytes = new Uint8Array(buf);
+    if (new TextDecoder().decode(bytes.slice(0, 4)) !== "EBL1") throw new Error("format");
+    const salt = bytes.slice(4, 20);
+    const iv = bytes.slice(20, 32);
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(code.trim().toUpperCase()), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
+      base,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"],
+    );
+    return crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, bytes.slice(32));
+  }
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!status) return;
+    const code = new FormData(form).get("code")?.toString() ?? "";
+    const button = form.querySelector("button");
+    button?.setAttribute("disabled", "");
+    status.dataset.state = "busy";
+    status.textContent = "Henter og låser op …";
+    try {
+      const response = await fetch(form.dataset.packageUrl ?? "");
+      if (!response.ok) throw new Error("download");
+      const plain = await decryptPackage(await response.arrayBuffer(), code);
+      const url = URL.createObjectURL(new Blob([plain], { type: "application/zip" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Molio-skills-v${form.dataset.version}.zip`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      status.dataset.state = "ok";
+      status.textContent = "Låst op. Downloaden starter nu.";
+    } catch (error) {
+      status.dataset.state = "error";
+      status.textContent =
+        error instanceof Error && error.message === "download"
+          ? "Pakken kunne ikke hentes. Prøv igen om lidt."
+          : "Forkert kode. Tjek den og prøv igen.";
+    } finally {
+      button?.removeAttribute("disabled");
+    }
+  });
+</script>
