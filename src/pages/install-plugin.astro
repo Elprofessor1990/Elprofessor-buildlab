@@ -2,205 +2,2148 @@
 import { getAssetPath } from "../i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const installerUrl = getAssetPath("downloads/ISSANA-Revit-MCP-NBS-Installer.exe");
-const codexUrl = "https://openai.com/da-DK/codex/";
+const pluginVersion = "2.4.0";
+const releaseDate = "24. september 2026";
+const releaseDateIso = "2026-09-24";
+
+const r = String.raw;
+const installerFile = "ISSANA-Revit-MCP-NBS-Installer.exe";
+const installerUrl = getAssetPath(`downloads/${installerFile}`);
+/* Den gemte fil får versionen i navnet (download-attributten; samme domæne). */
+const savedFile = `ISSANA-Revit-MCP-NBS-Installer-${pluginVersion}.exe`;
+const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
-const mcpConfig = `"revit-mcp-nbs": {
-  "command": "node",
+const codexUrl = "https://openai.com/da-DK/codex/";
+const issana = "ISSANA — Rådgivende Ingeniører";
+
+const toc = [
+  { href: "#foer-du-starter", label: "Før du starter" },
+  { href: "#installer", label: "Installér" },
+  { href: "#kontroller", label: "Kontrollér" },
+  { href: "#nbs", label: "Forbind NBS Nordic" },
+  { href: "#fejl", label: "Fejl og løsninger" },
+  { href: "#oevelser", label: "Øvelser" },
+  { href: "#manuel", label: "Manuel opsætning" },
+];
+
+/* ---------- Konsolvinduet (ordret fra installeren, forkortet ved "…") ---------- */
+type TermKind = "plain" | "banner" | "banner2" | "dim" | "prompt" | "head" | "step" | "ok" | "warn" | "err" | "info";
+type TermLine = { k: TermKind; t: string; input?: string };
+
+const terminalTitle = `ISSANA - Revit MCP + NBS Nordic ${pluginVersion}`;
+const rule = "  ================================================================";
+const terminal: TermLine[] = [
+  { k: "plain", t: rule },
+  { k: "plain", t: "    ISSANA - Revit MCP + NBS Nordic" },
+  { k: "plain", t: "    Udviklet af ISSANA - Raadgivende Ingenioerer" },
+  { k: "plain", t: "    Byg og Miljo Raadgiver ApS" },
+  { k: "plain", t: rule },
+  { k: "plain", t: "" },
+  { k: "plain", t: "  Installerer / Installing..." },
+  { k: "plain", t: "" },
+  { k: "plain", t: "" },
+  { k: "banner", t: rule },
+  { k: "banner", t: `      ISSANA  --  Revit MCP + NBS Nordic  v${pluginVersion}` },
+  { k: "banner2", t: "      Udviklet af ISSANA - Rådgivende Ingeniører" },
+  { k: "banner2", t: "      Byg og Miljø Rådgiver ApS" },
+  { k: "dim", t: "      github.com/Elprofessor1990/revit-mcp-server-nbs-nordic" },
+  { k: "banner", t: rule },
+  { k: "plain", t: "" },
+  { k: "prompt", t: "  Sprog / Language:   [D] Dansk (standard)   [E] English" },
+  { k: "prompt", t: "  Vælg / Choose [D/e]: ", input: "d" },
+  { k: "plain", t: "" },
+  { k: "head", t: "  TRIN 1  --  Systemtjek" },
+  { k: "ok", t: "  [+] PowerShell 5.1.26100.9444" },
+  { k: "ok", t: "  [+] Windows 10.0 build 26200" },
+  { k: "step", t: "  [*] Tester internetforbindelsen..." },
+  { k: "ok", t: "  [+] Internetforbindelse OK" },
+  { k: "plain", t: "" },
+  { k: "head", t: "  TRIN 2  --  Finder Revit-installationer" },
+  { k: "ok", t: r`  [+] Revit 2027  ->  C:\Users\studerende\AppData\Roaming\Autodesk\Revit\Addins\2027` },
+  { k: "plain", t: "" },
+  { k: "head", t: "  TRIN 3  --  Tjekker for eksisterende installation" },
+  { k: "ok", t: "  [+] Ingen eksisterende installation fundet  --  ny installation" },
+  { k: "plain", t: "" },
+  { k: "head", t: "  TRIN 4  --  Node.js (kræves af MCP-serveren)" },
+  { k: "ok", t: "  [+] Node.js 24.21.0" },
+  { k: "plain", t: "" },
+  { k: "head", t: "  TRIN 5  --  Lokal NBS-build (ingen download)" },
+  { k: "step", t: "  [*] Bruger færdigbyggede filer. Der kræves ingen compiler på den studerendes computer." },
+  { k: "head", t: "  TRIN 6  --  Installerer lokal build" },
+  { k: "info", t: r`      Gendannelsesmanifest: C:\Users\studerende\AppData\Local\ISSANA\Revit MCP + NBS Nordic\Backups\installer-backup-2027-<guid>/manifest.json` },
+  { k: "ok", t: "  [+] Revit 2027 -- filerne er installeret og kontrolleret; eksisterende kommandovalg og andre filer er bevaret." },
+  { k: "head", t: "  TRIN 7  --  Opsætning af AI-klienter" },
+  { k: "ok", t: r`  [+] Claude Desktop -- sat op: C:\Users\studerende\AppData\Roaming\Claude\claude_desktop_config.json` },
+  { k: "info", t: r`      Backup af konfiguration: C:\Users\studerende\AppData\Roaming\Claude\claude_desktop_config.json.installer-20260924-101532417-<guid>.bak` },
+  { k: "ok", t: r`  [+] Codex -- sat op: C:\Users\studerende\.codex\config.toml` },
+  { k: "head", t: "  TRIN 8  --  Kontrol af forbindelsen" },
+  { k: "step", t: "  [*] Åbn Revit og dit projekt nu, og åbn derefter din AI-klient. Dette vindue tjekker forbindelsen automatisk." },
+  { k: "info", t: "      Venter op til 180 sekunder. Ingen ændringer i modellen og ingen NBS-kald." },
+  { k: "plain", t: "  [+] MCP-serveren svarer. Tjekker forbindelsen til Revit..." },
+  { k: "plain", t: "  [!] Revit er ikke klar. Åbn Revit og dit projekt, og luk eventuelle dialogbokse; prøver igen..." },
+  { k: "plain", t: "  [+] Forbindelsen MCP -> plugin -> Revit er bekræftet (get_project_info)." },
+  { k: "ok", t: "  [+] Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient." },
+  { k: "head", t: "  TRIN 9  --  Status for AI-klienter" },
+  { k: "ok", t: "  [+] Claude Desktop: OK" },
+  { k: "info", t: "      Claude Code: Ikke installeret -- sprunget over" },
+  { k: "ok", t: "  [+] Codex: OK" },
+  { k: "plain", t: "" },
+  { k: "prompt", t: "  Tryk en tast for at lukke / Press any key to close." },
+];
+
+/* ---------- Fejlmeddelelser ---------- */
+type Sev = "fejl" | "advarsel" | "info" | "dialog";
+type Msg = { msg: string; sev: Sev; where?: string; means: string; todo: string };
+type MsgGroup = { id: string; title: string; intro?: string; items: Msg[] };
+
+const sevLabel: Record<Sev, string> = { fejl: "Fejl", advarsel: "Advarsel", info: "Info", dialog: "Dialog" };
+
+const commonMessages: Msg[] = [
+  {
+    msg: "[-] Lokal installation fejlede: Gem og luk Revit før installationen. Ingen Addins-filer er ændret.",
+    sev: "fejl",
+    where: "TRIN 5",
+    means: "Revit kører stadig – måske skjult eller hængt. Installeren rører derfor ingen filer.",
+    todo: "Gem og luk Revit. Tjek i Jobliste, at der ikke kører en Revit.exe, og kør installationsfilen igen.",
+  },
+  {
+    msg: "[!] Node.js ikke fundet (system eller medfølgende)",
+    sev: "advarsel",
+    where: "TRIN 4",
+    means: "Node.js (kræves af MCP-serveren) er ikke installeret, eller kommandoen node findes ikke. Node.js følger ikke med installationsfilen.",
+    todo: "Vælg [1] i menuen, der kommer lige efter. Godkend Windows' administratorspørgsmål (UAC), og gennemfør Node.js-guiden med standardvalg.",
+  },
+  {
+    msg: "[-] Kan ikke nå api.github.com  --  tjek din forbindelse eller proxy.",
+    sev: "fejl",
+    where: "TRIN 1",
+    means: "Installeren tester internetforbindelsen ved at kontakte api.github.com (højst 10 sekunder). Der hentes intet fra GitHub – det er kun en forbindelsestest – men installationen stopper, hvis testen fejler.",
+    todo: "Tjek internet, firewall, proxy og VPN. Prøv evt. et andet net (fx et mobil-hotspot), og kør installationsfilen igen.",
+  },
+  {
+    msg: "[!] Filerne er installeret, men forbindelsen er IKKE bekræftet. Se diagnosen ovenfor; installationen er ikke fuldt bekræftet.",
+    sev: "advarsel",
+    where: "TRIN 8",
+    means: "Kontrollen lykkedes ikke – typisk fordi Revit og en projektfil ikke var åbne og klar inden for 180 sekunder, eller fordi en dialog blokerede. Filerne ER installeret. Linjen over viser årsagen (fx \"Live Revit verification timed out: …\").",
+    todo: "Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". Test derefter fra AI-appen med get_connection_status. Vil du have en ny automatisk kontrol, så luk Revit og kør installationsfilen igen (vælg R).",
+  },
+];
+
+const messageGroups: MsgGroup[] = [
+  {
+    id: "fejl-exe",
+    title: "Installationsvinduet (før konsolvinduet)",
+    intro: "Under den danske tekst står en detalje – som regel på engelsk, men Windows-fejl kan stå på dansk.",
+    items: [
+      {
+        msg: "Installationen kunne ikke startes. Ingen Revit-filer blev ændret af launcheren.",
+        sev: "fejl",
+        where: "Boksen \"ISSANA — installationsfejl\"",
+        means: "Installationsfilen kunne ikke pakke sine filer ud i %TEMP%, kontrollere dem eller starte konsolvinduet. Under teksten står en detalje (se de næste punkter).",
+        todo: "Hent filen igen (downloaden kan være ufuldstændig), sørg for fri diskplads, og tjek at antivirus ikke blokerer %TEMP%. Send et skærmbillede af boksen, hvis fejlen gentager sig.",
+      },
+      {
+        msg: "Installer payload is missing. / Unsafe payload path: <sti> / manifest.sha256 is missing. / Invalid manifest line: <linje> / Unsafe manifest path. / Payload file is missing: <sti> / Payload hash mismatch: <sti> / Payload contains files not covered by the manifest.",
+        sev: "fejl",
+        means: "Installationsfilen er ufuldstændig eller ændret – typisk en afbrudt download eller antivirus.",
+        todo: "Hent filen igen fra denne side, tjek antivirus-karantæne, og kør den igen. Send et skærmbillede til ISSANA, hvis fejlen gentager sig.",
+      },
+      { msg: "Could not start INSTALLA.bat.", sev: "fejl", means: "Windows startede ikke konsolvinduet (sjælden intern fejl). Blokerer IT-regler cmd.exe, står der i stedet en Windows-fejltekst, fx om gruppepolitik.", todo: "Kør installationsfilen igen. Står der en tekst om fx gruppepolitik, så brug en pc, hvor du må køre programmer, eller kontakt IT." },
+      { msg: "ISSANA logo resource is missing.", sev: "fejl", where: "Ingen boks", means: "Installationsfilen lukker uden nogen besked (defekt build). Teksten ses kun i Logbog → Windows-logfiler → Program (kilde .NET Runtime).", todo: "Hent filen igen, og kontakt ISSANA." },
+    ],
+  },
+  {
+    id: "fejl-trin1",
+    title: "TRIN 1 – Systemtjek",
+    items: [
+      { msg: "[-] PowerShell 5.1 eller nyere kræves (fundet <version>).\n    Opdatér: https://aka.ms/wmf5download", sev: "fejl", means: "PowerShell er for gammel. Ses næsten aldrig, fordi Windows 10/11 altid har PowerShell 5.1.", todo: "Opdatér Windows." },
+      { msg: "[-] Windows 10 eller nyere kræves.", sev: "fejl", means: "Pc'en kører Windows 8.1 eller ældre.", todo: "Brug en pc med Windows 10 eller 11." },
+    ],
+  },
+  {
+    id: "fejl-trin2",
+    title: "TRIN 2 – Revit",
+    items: [
+      { msg: "[-] Ingen Revit-installation fundet (tjekket 2023-2027).", sev: "fejl", means: r`Installeren fandt ingen Revit 2023–2027 – hverken i Windows' registreringsdatabase, som Addins-mappe eller som C:\Program Files\Autodesk\Revit <år>\Revit.exe.`, todo: "Installér Revit 2026 eller 2027 (gerne i standardmappen), og kør installationsfilen igen." },
+      { msg: r`Brug -RevitVersion for at vælge selv: .\install.ps1 -RevitVersion 2025`, sev: "info", means: "Et tip til udviklere. Du kan ikke give parametre til installationsfilen, og Revit 2025 er ikke i pakken.", todo: "Ignorér linjen, og følg rådet ved fejlen ovenfor." },
+    ],
+  },
+  {
+    id: "fejl-trin3",
+    title: "TRIN 3 – Eksisterende installation",
+    items: [
+      { msg: "[!] Eksisterende installation fundet for Revit <år>", sev: "advarsel", means: "Pluginet er allerede installeret – en tidligere ISSANA-version eller det oprindelige mcp-servers-for-revit.", todo: "Tryk Enter (= R, Erstat) ved spørgsmålet \"Vælg [R/s/a]:\" for at opdatere." },
+      { msg: "[*] Erstatter eksisterende installation.", sev: "info", means: "Du valgte R (eller trykkede Enter).", todo: "Intet." },
+      { msg: "[*] Springer over: <år>", sev: "info", means: "Du valgte S, så den gamle version beholdes for det Revit-år.", todo: "Intet." },
+      { msg: "[!] Intet nyt at installere.", sev: "advarsel", means: "Du valgte S, og alle fundne Revit-år har allerede pluginet. Installeren stopper uden at opdatere, sætte AI-apps op eller kontrollere forbindelsen.", todo: "Kør installationsfilen igen og vælg R, hvis du vil have den nye version." },
+      { msg: "[!] Installation afbrudt  --  intet er ændret.", sev: "advarsel", means: "Du valgte A (Afbryd).", todo: "Kør installationsfilen igen og vælg R." },
+    ],
+  },
+  {
+    id: "fejl-trin4",
+    title: "TRIN 4 – Node.js",
+    items: [
+      { msg: "[!] Node.js <version> fundet, men v18+ kræves", sev: "advarsel", means: "Node.js er for gammel.", todo: "Vælg [1] i menuen, eller installér Node.js LTS fra nodejs.org og kør installationsfilen igen." },
+      { msg: "Bemærk: installerer du fra den officielle Release-ZIP, medfølger Node.js automatisk.", sev: "info", means: "Forældet tekst: der findes ingen Release-ZIP, og Node.js følger ikke med.", todo: "Ignorér linjen, og vælg [1]." },
+      { msg: "[*] Henter nyeste Node.js LTS-version...\n[*] Downloader Node.js <version>...\n[+] Downloadet", sev: "info", means: "Du valgte [1]. Installeren henter Node.js LTS fra nodejs.org.", todo: "Vent. Derefter starter Node.js-guiden." },
+      { msg: "[*] Starter installer (følg guiden, og tryk derefter Enter her)...", sev: "info", means: "Node.js-guiden starter. Installeren venter selv, til guiden lukker – der kommer intet Enter-spørgsmål.", todo: "Godkend administratorspørgsmålet (UAC), og gennemfør guiden med standardvalg." },
+      { msg: "[+] Node.js v<version> installeret", sev: "info", means: "Node.js er installeret og fundet. Installationen fortsætter.", todo: "Intet." },
+      { msg: "[!] Node.js er installeret, men endnu ikke i PATH  --  genstart PowerShell efter dette script", sev: "advarsel", means: "Node.js-guiden er lukket, men kommandoen node findes ikke. Enten blev guiden annulleret, administratorspørgsmålet (UAC) afvist, du mangler administratorrettigheder – eller Windows har ikke opdateret PATH endnu. Derfor fejler opsætningen af AI-apps, og TRIN 8 kan ikke kontrollere.", todo: "Lad installationen løbe færdig, og luk vinduet. Mangler du administratorrettigheder, så bed IT installere Node.js LTS. Kør derefter installationsfilen igen (vælg R)." },
+      { msg: "[-] Installation af Node.js fejlede: <fejltekst>\n    Installér manuelt: https://nodejs.org", sev: "fejl", means: "Node.js kunne ikke slås op eller hentes fra nodejs.org (netværk, proxy eller firewall). Fejlteksten kommer fra PowerShell.", todo: "Installér Node.js LTS manuelt fra nodejs.org, og kør derefter installationsfilen igen." },
+      { msg: "[!] Springer Node.js over  --  installér senere fra https://nodejs.org", sev: "advarsel", means: "Du valgte 2, trykkede Enter eller svarede andet end 1 og 3. Pluginet installeres, men AI-apps viser \"Fejlede\" i TRIN 9, og TRIN 8 mislykkes.", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
+      { msg: "[+] Node.js <version> (medfølgende runtime -- ingen systeminstallation nødvendig)", sev: "info", means: "Node.js findes ikke på pc'en, men en gammel node.exe fra en ældre version ligger stadig i Addins-mappen.", todo: "Intet, men installér gerne Node.js LTS." },
+    ],
+  },
+  {
+    id: "fejl-trin56",
+    title: "TRIN 5–6 – Kopiering af filer",
+    intro: "Detaljen efter \"Lokal installation fejlede:\" står ofte på engelsk.",
+    items: [
+      { msg: "[!] Revit <år> fundet, men pakken indeholder ikke den version -- springes over.", sev: "advarsel", means: "Der er fundet Revit 2023–2025 (eller en tom Addins-mappe fra et andet plugin). Pakken indeholder kun 2026 og 2027.", todo: "Intet, hvis Revit 2026 eller 2027 også er fundet." },
+      { msg: "[-] Lokal installation fejlede: Ingen fundet Revit-version passer til pakken. Versioner i pakken: 2026, 2027.", sev: "fejl", means: "Kun Revit 2023–2025 er installeret.", todo: "Installér Revit 2026 eller 2027." },
+      { msg: "[-] Lokal installation fejlede: Revit is running; refusing to replace DLLs.", sev: "fejl", means: "Revit blev startet, mens installeren kopierede filer.", todo: "Luk Revit, og kør installationsfilen igen." },
+      { msg: "[-] Lokal installation fejlede: Incomplete local Revit <år> package: <fil>", sev: "fejl", means: "Pakken mangler en plugin-fil (defekt build).", todo: "Hent filen igen, og kontakt ISSANA." },
+      { msg: "[-] Lokal installation fejlede: Missing local artifact: <sti>", sev: "fejl", means: "En fil i pakken mangler.", todo: "Hent filen igen." },
+      { msg: "[-] Lokal installation fejlede: Unsafe target path.", sev: "fejl", means: "En målsti ville havne uden for Addins-mappen.", todo: "Kontakt ISSANA med et skærmbillede." },
+      { msg: "[-] Lokal installation fejlede: Reparse point in target: <sti>", sev: "fejl", means: "Addins-mappen eller en overmappe er et symlink/junction (fx omdirigeret AppData).", todo: "Kontakt underviseren eller IT med et skærmbillede." },
+      { msg: "[-] Lokal installation fejlede: Unexpected local addin manifest assembly.", sev: "fejl", means: ".addin-filen i pakken er forkert (defekt build).", todo: "Hent filen igen, og kontakt ISSANA." },
+      { msg: "[-] Lokal installation fejlede: Backup hash mismatch: <sti>", sev: "fejl", means: "Backuppen af en eksisterende fil kunne ikke bekræftes (disk eller antivirus).", todo: "Kør igen, og tjek diskplads og antivirus." },
+      { msg: "[-] Lokal installation fejlede: Installed hash mismatch: <sti>", sev: "fejl", means: "Den kopierede fil matcher ikke originalen. Allerede kopierede filer rulles tilbage.", todo: "Kør igen, og tjek antivirus." },
+      { msg: "[-] Lokal installation fejlede: <Windows-fejltekst, fx adgang nægtet eller fil i brug>", sev: "fejl", means: "En filsystemfejl fra Windows.", todo: "Luk Revit, og kør igen. Send et skærmbillede, hvis fejlen gentager sig." },
+    ],
+  },
+  {
+    id: "fejl-trin79",
+    title: "TRIN 7 og 9 – AI-apps",
+    intro: "En AI-app, der fejler, stopper ikke installationen. Den står kun med gult i TRIN 9. Årsagen står ofte på engelsk.",
+    items: [
+      { msg: "<Klient>: Ikke installeret -- sprunget over", sev: "info", means: "Appen blev ikke fundet. Claude Code kræver kommandoen claude, Codex kræver kommandoen codex eller Codex-appen, og Claude Desktop kræver Claude-appen.", todo: "Normalt intet. Har du appen, så installér eller genstart den, og kør installationsfilen igen." },
+      { msg: "[!] Codex -- Unrelated service_tier '<værdi>' was left unchanged; Codex may require manual correction.", sev: "advarsel", means: "Codex' config.toml har en service_tier-værdi, som ikke er fast eller flex.", todo: r`Ret eller fjern service_tier i %USERPROFILE%\.codex\config.toml – eller ignorér beskeden, hvis Codex virker.` },
+      { msg: "[!] <Klient>: Sat op, men kræver opmærksomhed -- <engelsk advarsel>", sev: "advarsel", means: "Konfigurationen er skrevet, men med en advarsel (p.t. kun service_tier i Codex).", todo: "Læs advarslen, og se punktet om service_tier ovenfor." },
+      { msg: "[!] <Klient>: Sprunget over (-SkipMcpConfig)", sev: "advarsel", means: "Du valgte [3] i TRIN 4 (\"jeg skal kun bruge Revit-plugin'et\"), så AI-apps blev ikke sat op.", todo: "Kør installationsfilen igen, og vælg [1] i TRIN 4." },
+      { msg: "[!] <Klient>: Fejlede -- Node.js unavailable; client configuration was not changed.", sev: "advarsel", means: "Node.js mangler, så appen blev ikke sat op.", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
+      { msg: "[!] <Klient>: Fejlede -- <PowerShell JSON-fejl>", sev: "advarsel", means: "claude_desktop_config.json eller .claude.json er ugyldig JSON. Originalen røres ikke.", todo: "Tag en kopi af filen, ret eller slet den, og kør installationsfilen igen." },
+      { msg: "[!] <Klient>: Fejlede -- Expected a JSON object; original preserved.", sev: "advarsel", means: "Konfigurationsfilen er ikke et JSON-objekt.", todo: "Ret filen, eller spørg underviseren." },
+      { msg: "[!] <Klient>: Fejlede -- mcpServers must be an object; original preserved.", sev: "advarsel", means: "mcpServers har forkert type i konfigurationsfilen.", todo: "Ret filen." },
+      { msg: "[!] Codex: Fejlede -- Multiple revit-mcp-nbs TOML tables found; original preserved.", sev: "advarsel", means: "config.toml indeholder flere [mcp_servers.revit-mcp-nbs]-afsnit.", todo: r`Slet de dublerede afsnit i %USERPROFILE%\.codex\config.toml, og kør igen.` },
+      { msg: "[!] Codex: Fejlede -- Inline mcp_servers TOML configuration cannot be updated safely; original preserved.", sev: "advarsel", means: "config.toml bruger formen mcp_servers = {...}.", todo: "Omskriv til [mcp_servers.<navn>]-tabeller, eller tilføj revit-mcp-nbs manuelt (se Manuel opsætning nederst)." },
+      { msg: "[!] <Klient>: Fejlede -- Temporary config verification failed. / Config changed concurrently; refusing to overwrite. / Config backup verification failed. / Config changed concurrently after backup; refusing to overwrite. / Installed config verification failed.", sev: "advarsel", means: "Filen blev ændret af en kørende app under skrivningen, eller disk/antivirus forstyrrede. Ændringerne rulles tilbage.", todo: "Luk AI-appen helt, og kør installationsfilen igen." },
+      { msg: "[!] <Klient>: Fejlede -- <Windows-fejltekst, fx adgang nægtet>", sev: "advarsel", means: "En filsystemfejl, da konfigurationen skulle skrives.", todo: "Luk appen, og kør igen. Send et skærmbillede, hvis fejlen gentager sig." },
+    ],
+  },
+  {
+    id: "fejl-trin8",
+    title: "TRIN 8 – Kontrol af forbindelsen",
+    items: [
+      { msg: "[!] Revit er ikke klar. Åbn Revit og dit projekt, og luk eventuelle dialogbokse; prøver igen...", sev: "advarsel", means: "Normalt, mens Revit starter. Linjen gentages ca. hvert 5. sekund, til Revit og projektet er klar.", todo: "Åbn Revit og en .rvt-fil, og luk dialoger – fx \"Security - Unsigned Add-In\": vælg Always Load." },
+      { msg: "[-] Live Revit verification timed out: <sidste fejl, typisk 'Get project info failed: Connect to Revit client failed'>", sev: "fejl", means: "Revit og projektet var ikke klar inden for 180 sekunder, pluginet blev ikke indlæst, forbindelsen er slået fra, eller en dialog blokerede.", todo: "Filerne ER installeret. Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". En ny automatisk kontrol kræver, at du lukker Revit og kører installationsfilen igen (vælg R)." },
+      { msg: "[-] Live Revit connection NOT verified: <sidste fejl>", sev: "fejl", means: "Det samme som ved timeout: tidsgrænsen blev nået.", todo: "Gør som ved timeout ovenfor." },
+      { msg: "[-] Kan ikke kontrollere uden Node.js.", sev: "fejl", means: "Node.js blev ikke fundet (TRIN 4 blev sprunget over, eller Node.js er ikke i PATH endnu).", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
+      { msg: "[-] MCP server exited (<kode>). <diagnose>", sev: "fejl", means: "MCP-serveren stoppede ved start, fx på grund af et Node.js-problem eller en manglende fil.", todo: "Tag et skærmbillede, tjek at Node.js er version 18 eller nyere, og kontakt ISSANA." },
+      { msg: "[-] MCP server does not expose get_project_info.", sev: "fejl", means: "Forkert eller defekt serverbuild.", todo: "Hent filen igen, og kontakt ISSANA." },
+    ],
+  },
+  {
+    id: "fejl-revit",
+    title: "I Revit",
+    items: [
+      { msg: "Security - Unsigned Add-In   [Always Load] [Load Once] [Do Not Load]", sev: "dialog", where: "Første Revit-start efter installationen", means: "Revit advarer, fordi pluginet ikke er digitalt signeret.", todo: "Klik \"Always Load\". Vælger du \"Do Not Load\", indlæses pluginet ikke." },
+      { msg: "MCP Offline", sev: "advarsel", where: "MCP-panelets statuslinje", means: "Forbindelsen kører ikke.", todo: "Klik \"Forbindelse Til/Fra\" én gang. Tjek også \"Start forbindelsen automatisk, når Revit åbner\" under Indstillinger → Forbindelse." },
+      { msg: "Forbindelsen er afbrudt. Klik igen for at forbinde.", sev: "advarsel", where: "Efter klik på \"Forbindelse Til/Fra\"", means: "Forbindelsen kørte allerede (den starter selv), så dit klik slukkede den.", todo: "Klik \"Forbindelse Til/Fra\" én gang til, og tjek at MCP-panelet viser \"MCP Online\"." },
+      { msg: "Revit er forbundet. Vælg dit NBS-projekt under Settings → NBS Nordic.", sev: "info", where: "Efter klik på \"Forbindelse Til/Fra\"", means: "Forbindelsen er startet. \"Settings\" hedder \"Indstillinger\" på knappen.", todo: "Fortsæt til Indstillinger → NBS Nordic." },
+      { msg: "Forbindelsen kunne ikke startes. Se loggen under Settings.", sev: "fejl", means: "Forbindelsen startede ikke, fx på grund af en optaget port eller manglende serverfiler. Loggen vises ikke under Indstillinger.", todo: r`Klik diagnoseikonet "Verify Connection" i MCP-panelet. Loggen ligger i %APPDATA%\Autodesk\Revit\Addins\<år>\revit_mcp_plugin\logs\mcp-<dato>.log.` },
+      { msg: "node.exe not found (bundled or system). Install Node.js or reinstall the plugin.", sev: "fejl", where: "Boksen \"Revit MCP\"", means: "Node.js 18 eller nyere mangler, så forbindelsen kan ikke starte (MCP Offline).", todo: "Installér Node.js LTS fra nodejs.org, eller kør installationsfilen igen og vælg [1] i TRIN 4. Genstart derefter Revit." },
+      { msg: "index.js not found at <sti>", sev: "fejl", means: "Serverfilerne mangler, fordi installationen er ufuldstændig.", todo: "Luk Revit, og kør installationsfilen igen." },
+      { msg: "No available port near 8080. Please close other applications using these ports and try again.", sev: "fejl", where: "Boksen \"MCP Server - Port Error\"", means: "Portene 8080–8089 er optaget, fx af en anden Revit eller en lokal webserver.", todo: "Luk andre Revit-vinduer eller programmer, der bruger portene, og genstart Revit." },
+      { msg: "The MCP server is not running. Click \"Revit MCP Switch\" in the ribbon to start it.", sev: "fejl", where: "MCP-panelets chat", means: "Forbindelsen er slukket. Knapnavnet i teksten er forældet.", todo: "Klik \"Forbindelse Til/Fra\" på fanebladet ISSANA MCP." },
+      { msg: r`API key not configured. Set your Anthropic API key: File: %USERPROFILE%\.claude\api_key.txt or env variable: ANTHROPIC_API_KEY=sk-ant-...`, sev: "info", where: "MCP-panelets chat", means: "Den valgfrie indbyggede chat i MCP-panelet kræver en Anthropic-nøgle.", todo: "Ignorér beskeden, hvis du bruger Claude Desktop, Claude Code eller Codex. Ellers: Indstillinger → Indbygget chat (valgfri)." },
+      { msg: "MCP Panel is not available. Please restart Revit.", sev: "fejl", means: "Panelet blev ikke registreret, da Revit startede.", todo: "Genstart Revit." },
+      { msg: "[FAIL] Claude Desktop Config: Claude Desktop not installed / Config file missing / revit-mcp-nbs entry missing", sev: "advarsel", where: "Diagnoseikonet \"Verify Connection\"", means: "Claude Desktop er ikke installeret eller ikke sat op. Det er normalt, hvis du kun bruger Codex eller Claude Code.", todo: "Ignorér ved Codex/Claude Code. Ved Claude Desktop: genstart Revit, eller kør installationsfilen igen." },
+      { msg: "[FAIL] Port Connectivity: Server not started / Port <port> not responding — click Revit MCP Switch", sev: "fejl", where: "Diagnoseikonet \"Verify Connection\"", means: "Forbindelsen kører ikke. Knapnavnet i teksten er forældet.", todo: "Klik \"Forbindelse Til/Fra\"." },
+      { msg: "[FIXED] DLL Blocked: Unblocked N DLL(s)", sev: "info", where: "Diagnoseikonet eller Revit-start", means: "Windows havde blokeret plugin-filer, og det er rettet automatisk.", todo: "Genstart Revit, hvis en funktion stadig ikke virker." },
+      { msg: "Indtast et gyldigt portnummer (1-65535).", sev: "advarsel", where: "Indstillinger → Forbindelse → Gem", means: "Porten er ugyldig.", todo: "Klik \"Nulstil til standard\" (8080) og derefter \"Gem\"." },
+      { msg: "Indstillingerne er gemt. En ændret port kræver, at Revit genstartes.", sev: "info", where: "Indstillinger → Forbindelse → Gem", means: "Indstillingerne er gemt.", todo: "Genstart Revit, hvis du har ændret porten." },
+    ],
+  },
+  {
+    id: "fejl-nbs",
+    title: "NBS Nordic (i Indstillinger)",
+    items: [
+      { msg: "Åbn en Revit-projektmodel først.", sev: "fejl", means: "Ingen projektfil er aktiv, eller en familie er åben.", todo: "Åbn en .rvt-fil, og åbn Indstillinger igen." },
+      { msg: "Indtast din NBS API-nøgle først.", sev: "advarsel", means: "Nøglefeltet er tomt.", todo: "Indsæt nøglen." },
+      { msg: "NBS afviste nøglen. Kontrollér din personlige NBS API-nøgle.", sev: "fejl", means: "Nøglen er forkert eller udløbet.", todo: "Kopiér nøglen igen via \"Find min NBS-nøgle\". Del den aldrig i en chat." },
+      { msg: "NBS svarede HTTP <kode>. Kontrollér projektadgang og eventuelle Pro-rettigheder.", sev: "fejl", means: "Manglende adgang, manglende Pro-rettighed eller en fejl hos NBS.", todo: "Tjek adgangen i NBS på nettet, eller kontakt underviseren." },
+      { msg: "Den gemte nøgle kunne ikke læses. Indtast din NBS-nøgle igen.", sev: "fejl", means: r`Filen %USERPROFILE%\.mcp-revit\nbs-config.json kan ikke læses.`, todo: "Indsæt nøglen igen, og klik \"Hent projekter\"." },
+      { msg: "Det valgte projekt er ikke aktivt eller tilgængeligt. Hent projektlisten igen.", sev: "fejl", means: "Projektet er arkiveret, eller din adgang er fjernet.", todo: "Luk og åbn Indstillinger igen, og vælg et aktivt projekt." },
+      { msg: "Vælg mindst ét NBS-felt.", sev: "advarsel", means: "Alle NBS-felter er fravalgt.", todo: "Sæt flueben ved mindst ét felt – helst alle fem." },
+      { msg: "NBS' parameterfil mangler. Vælg din lovligt anskaffede NBSNordicSharedParameters.txt under NBS-opsætning. NBS' eget plugin er ikke et krav, men parameterfilen er nødvendig og medfølger ikke.", sev: "fejl", means: "Parameterfilen ligger ikke på NBS' standardsti og er ikke valgt.", todo: "Udvid \"NBS-parameterfil (avanceret)\" → \"Vælg parameterfil…\", og klik \"Gem og forbind\" igen." },
+      { msg: "Vælg en eksisterende NBSNordicSharedParameters.txt med en fuld sti. Filen skal være lovligt anskaffet fra NBS.", sev: "fejl", means: "Stien i parameterfilfeltet er ugyldig.", todo: "Brug \"Vælg parameterfil…\", eller tøm feltet." },
+      { msg: "NBS-parameterfilen indeholder ikke alle de forventede definitioner.", sev: "fejl", means: "Det er en forkert eller ufuldstændig parameterfil.", todo: "Vælg den officielle NBSNordicSharedParameters.txt." },
+      { msg: "Revit-modellen er skrivebeskyttet.", sev: "fejl", means: "Filen er åbnet skrivebeskyttet.", todo: "Gem en lokal kopi, og åbn den." },
+      { msg: "Revit svarede ikke. Luk eventuelle dialoger, kontrollér projektstatus og prøv igen. / En projektoperation kører allerede. Prøv igen om et øjeblik.", sev: "fejl", means: "En Revit-dialog blokerer, eller en anden handling er i gang.", todo: "Luk åbne dialoger i Revit, og vent et øjeblik." },
+      { msg: "NBS-projektet er tilknyttet modellen, men MCP-forbindelsen kunne ikke starte. Gem modellen og kontrollér forbindelsen.", sev: "advarsel", means: "Koblingen til NBS lykkedes, men forbindelsen til AI-appen startede ikke.", todo: "Gem RVT-filen, klik \"Forbindelse Til/Fra\", og tjek \"MCP Online\"." },
+      { msg: "Ikke gemt: Modellen er koblet til NBS-projekt #<gammelt>, men du har valgt #<nyt>. Tryk Gennemgå projektskift for at se konsekvenserne og godkende. Den gamle koblings værdier opbevares særskilt i modellen; dine øvrige valg bevares.", sev: "advarsel", means: "Modellen er allerede koblet til et andet NBS-projekt.", todo: "Klik \"Brug modellens tilknyttede projekt — behold øvrige valg\" – eller \"Gennemgå projektskift…\" og godkend i dialogen." },
+      { msg: "Gem Revit-modellen som en fil først. En ikke-gemt model har ingen entydig identitet, så projektskift kan ikke godkendes sikkert; intet er ændret. / Projektskift kræver en skrivbar, ikke-workshared model. ...", sev: "fejl", means: "Modellen er ikke gemt, eller den er workshared eller skrivebeskyttet.", todo: "Gem modellen som en lokal fil, der ikke er workshared." },
+      { msg: "Preview-godkendelsen er udløbet (gyldig i 10 minutter). Hent nyt preview; intet er ændret.", sev: "fejl", means: "Der gik mere end 10 minutter mellem preview og godkendelse.", todo: "Klik \"Gennemgå projektskift…\" igen." },
+      { msg: "NBS — valgene er ikke gemt   [Bliv i indstillinger — behold mine valg] [Kassér ugemte valg og luk]", sev: "dialog", where: "Når du lukker Indstillinger", means: "Du har NBS-valg, som ikke er gemt. (Kører en NBS-handling stadig, står der: \"Vent til NBS-operationen er færdig, før Settings lukkes.\")", todo: "Klik \"Bliv i indstillinger — behold mine valg\" og derefter \"Gem og forbind\" – eller kassér bevidst." },
+      { msg: "NBS har modtaget oprettelsen. Vælg det nye projekt og tryk Forbind projekt. Kontrollér listen før et nyt forsøg.", sev: "info", where: "Efter \"Opret kopi af valgt projekt\"", means: "Kopien er oprettet. Knapnavnet \"Forbind projekt\" er forældet.", todo: "Vælg projektet, og klik \"Gem og forbind\"." },
+    ],
+  },
+  {
+    id: "fejl-ai",
+    title: "I AI-appen",
+    items: [
+      { msg: "<…> failed: Connect to Revit client failed  (eller: Connection to Revit client timed out)", sev: "fejl", means: "AI-appen kunne ikke få forbindelse til Revit: Revit er lukket, intet projekt er åbent, eller forbindelsen er slukket.", todo: "Åbn Revit og en projektfil, tjek \"MCP Online\" i MCP-panelet, og brug evt. \"Forbindelse Til/Fra\"." },
+      { msg: "NBS_API_KEY is not set. Configure it as an environment variable, or via the NBS Nordic settings page in the Revit plugin.", sev: "fejl", means: "Der er ikke gemt en NBS-nøgle.", todo: "Gå til Indstillinger → NBS Nordic, indsæt nøglen, og klik \"Hent projekter\"." },
+    ],
+  },
+];
+
+/* ---------- Øvelser ---------- */
+type Exercise = { level: "Start" | "Øvet" | "NBS"; title: string; goal: string; prompt: string; expected: string; changesModel: boolean; safety: string };
+
+const exercises: Exercise[] = [
+  {
+    level: "Start",
+    title: "Er der forbindelse til Revit?",
+    goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
+    prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
+    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.4.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at forbindelsen er slået til. Knappen 'Forbindelse Til/Fra' skifter mellem til og fra, så klik ikke på den, hvis forbindelsen allerede kører.",
+    changesModel: false,
+    safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
+  },
+  {
+    level: "Start",
+    title: "Tæl væggene pr. type og se lagopbygningen",
+    goal: "Se, hvilke vægtyper modellen bruger og hvor mange der er af hver. Se derefter, hvordan den mest brugte vægtype er opbygget lag for lag.",
+    prompt: "Brug export_elements_data for kategorien Walls med maxElements 1000 og kun få kolonner. Kolonnen Name er vægtypens navn. Lav en tabel med vægtype og antal, sorteret med flest øverst og med en total nederst. Sig til, hvis resultatet er afkortet (truncated). Hent derefter lagopbygningen for den mest brugte vægtype med get_compound_structure. Vis lagene i rækkefølge med funktion, tykkelse i mm og materiale, og vis den samlede tykkelse. Ændr ingenting.",
+    expected: "Du får en tabel med én linje pr. vægtype, antallet af hver og en total. For den mest brugte type får du en liste over lagene med funktion (fx Structure, Insulation, Finish1), tykkelse i mm og materiale samt den samlede vægtykkelse. Gardinvægge og stablede vægge har ingen lagopbygning, så hvis en af dem er mest brugt, skal du bede om den næstmest brugte type. Tjek selv ét af tallene i Revit ved at markere alle forekomster af typen, for AI'en kan tælle forkert.",
+    changesModel: false,
+    safety: "Øvelsen læser kun. Lagenes funktion vises med Revits engelske navne: Structure er det bærende lag, og Finish1/Finish2 er overflader. På en stor model kan svaret tage lidt tid, så vent i stedet for at sende prompten igen.",
+  },
+  {
+    level: "Start",
+    title: "Rumliste med arealer",
+    goal: "Træk en rumliste ud af modellen, og brug den til en hurtig kontrol af arealerne.",
+    prompt: "Brug export_room_data og vis alle placerede rum i en tabel med nummer, navn, etage, areal og volumen, sorteret efter nummer. Areal og volumen kommer i Revits interne enheder (ft² og ft³). Omregn areal til m² (× 0,092903) og volumen til m³ (× 0,0283168), og vis kun de omregnede værdier. Læg arealerne sammen pr. etage, og fortæl mig, om nogen rum ser mistænkelige ud, fx meget små rum eller rum uden navn. Ændr ingenting.",
+    expected: "Du får en rumtabel med nummer, navn, etage, areal og volumen samt et samlet areal pr. etage. Værktøjet returnerer areal i ft² og volumen i ft³, så AI'en skal omregne til m² og m³. Tjek ét rum mod Revits egen arealværdi. Volumen er 0, medmindre volumenberegning er slået til under Areal- og volumenberegninger i Revit. Som standard kommer kun placerede, lukkede rum med et areal over 0 med, og højst 100 rum pr. kald. AI'en skal sige til, hvis listen er afkortet. Hvis listen er tom, har modellen ingen placerede rum.",
+    changesModel: false,
+    safety: "Øvelsen læser kun. Rum, der ikke er placerede eller ikke er lukkede, er som standard ikke med. Vil du finde dem, kan du bede AI'en tage dem med (sæt både includeUnplacedRooms og includeNotEnclosedRooms til true; de har begge areal 0 og kan ikke skilles ad).",
+  },
+  {
+    level: "Start",
+    title: "Hvad viser visningen, og hvad advarer Revit om?",
+    goal: "Lær at spørge ind til den visning, du står i, og få Revits advarsler forklaret på dansk.",
+    prompt: "Kør get_current_view_info, og fortæl mig navn, type og målestok for den aktive visning. Brug get_current_view_elements til at tælle de synlige vægge, døre og vinduer i visningen. Kør til sidst get_warnings, og gruppér advarslerne efter beskrivelse med antal. Forklar de tre hyppigste på dansk, og hvad man typisk gør ved dem. Ret ikke noget. Jeg vil kun have en forklaring.",
+    expected: "Du får visningens navn, type (fx plan eller 3D) og målestok, en optælling af synlige vægge, døre og vinduer og en liste over advarsler grupperet efter type med antal og ID'er på de berørte elementer. get_current_view_elements returnerer som standard højst 100 elementer, så spørg AI'en, om optællingen ramte grænsen. Det er også et fint resultat, hvis modellen slet ikke har advarsler.",
+    changesModel: false,
+    safety: "Øvelsen læser kun. Svaret kan indeholde forslag til næste skridt, fx at isolere elementer eller køre et sundhedstjek. Dem skal du ikke følge i denne øvelse.",
+  },
+  {
+    level: "Øvet",
+    title: "Isolér dørene midlertidigt",
+    goal: "Brug AI'en til at finde bestemte elementer og vise dem isoleret i visningen uden at ændre selve elementerne.",
+    prompt: "Jeg arbejder i en gemt kopi af modellen og står i en plantegning med døre. Find alle døre, der er synlige i den aktive visning, med ai_element_filter (filterCategory OST_Doors, filterVisibleInCurrentView true). Vis dem i en tabel med element-ID, familie, type og etage, og vent på mit OK. Isolér dem derefter midlertidigt med operate_element og action 'Isolate'. Brug ikke Hide eller Delete. Når jeg skriver 'nulstil', skal du køre operate_element med action 'ResetIsolate' på de samme ID'er.",
+    expected: "Du får først en tabel over dørene. Efter dit OK viser visningen kun dørene, med Revits farvede ramme for midlertidig skjul/isolér. Når du skriver 'nulstil', ser visningen ud som før. ai_element_filter returnerer som standard højst 50 elementer, så AI'en skal sige til, hvis der er flere døre.",
+    changesModel: true,
+    safety: "Gem en kopi af modellen først (Filer → Gem som). Isoleringen er midlertidig og ændrer ikke dørene, men den udføres som en handling i Revit. operate_element kan også skjule elementer permanent (Hide) og slette dem (Delete), så sig nej, hvis AI'en foreslår det. Du kan altid nulstille med Revits egen knap for midlertidig skjul/isolér (brilleikonet).",
+  },
+  {
+    level: "Øvet",
+    title: "Farvelæg væggene efter type i en kopi af visningen",
+    goal: "Lav en farvekodet plan, hvor hver vægtype har sin egen farve, i en duplikeret visning, så den originale plan ikke bliver ændret.",
+    prompt: "Jeg arbejder i en gemt kopi af modellen. Jeg vil farvelægge væggene efter vægtype uden at ændre min originale plan. 1) Find den aktive visnings ID med get_current_view_info, og duplikér den med duplicate_view (duplicateOption 'duplicate', newNameSuffix 'AI-farver'). 2) Aktivér den nye visning med navigate_view. 3) Find én væg med get_current_view_elements, og find det præcise parameternavn for vægtype med get_element_parameters. 4) Kør color_elements med kategorien Walls og det parameternavn. Vis mig trin 1-4 som en plan, og vent på mit OK, før du går i gang. Vis til sidst, hvilken farve (RGB) hver vægtype fik, og hvor mange vægge der er af hver.",
+    expected: "En ny visning med '_AI-farver' sidst i navnet står i projektbrowseren og er aktiv. I den er væggene farvelagt med fuld udfyldning, én farve pr. vægtype, og AI'en viser en liste over typerne med farve og antal. Den originale plan er uændret. Hvis du vil fjerne farverne igen, kan du bede om override_graphics med action 'reset' på væggene i den nye visning.",
+    changesModel: true,
+    safety: "Gem en kopi først. Farverne er grafiske overstyringer i visningen og ændrer ikke væggenes geometri eller data, men den nye visning og farverne gemmes i filen, hvis du gemmer. color_elements virker kun i den aktive visning og ikke i fx tidsplaner eller ark. Bed ikke AI'en om at slette visningen bagefter. Kassér i stedet kopien.",
+  },
+  {
+    level: "Øvet",
+    title: "Opret en vægtidsplan og kontrollér tallene",
+    goal: "Opret en rigtig Revit-tidsplan (schedule) via AI, og kontrollér, at dens tal stemmer med en uafhængig optælling.",
+    prompt: "Jeg arbejder i en gemt kopi af modellen. Opret en ny tidsplan for vægge med navnet 'AI - Vægoversigt'. Kør først list_schedulable_fields for OST_Walls, og brug de præcise feltnavne for familie og type, længde, areal og volumen. Revit kan være på dansk, så navnene skal passe præcist. Vis mig de felter, du vil bruge, og vent på mit OK. Brug derefter create_schedule, sortér og gruppér efter type, og vis en samlet total med antal nederst. Læs tidsplanen tilbage med get_schedule_data, og sammenlign antallet af vægge pr. type med en optælling fra export_elements_data (kategori Walls). Forklar eventuelle forskelle.",
+    expected: "Der er en ny tidsplan, 'AI - Vægoversigt', i projektbrowserens gruppe for tidsplaner (Schedules/Quantities). Den har kolonner for familie og type, længde, areal og volumen, er grupperet pr. type og har en total nederst. AI'en læser rækkerne tilbage og viser en sammenligning med optællingen. Hvis tallene afviger, skal AI'en finde og forklare årsagen.",
+    changesModel: true,
+    safety: "Gem en kopi først. create_schedule opretter en ny tidsplan og ændrer ikke eksisterende elementer. Brug ikke delete_schedule eller modify_schedule i denne øvelse. Vil du af med tidsplanen, så kassér kopien.",
+  },
+  {
+    level: "NBS",
+    title: "Find dine NBS-projekter og klassifikationen",
+    goal: "Kontrollér forbindelsen til NBS Nordic, se hvilke projekter du har adgang til, og find ud af, hvilket klassifikationssystem modellens projekt bruger.",
+    prompt: "Kør get_connection_status og nbs_list_projects. Hvor mange NBS-projekter har jeg adgang til, og er denne Revit-model koblet til et af dem? Mangler der NBS-parametre i modellen? Hvis modellen er koblet, så vis projektets navn og klassifikationssystem med nbs_get_project. Hvis systemet er CCI-baseret, så slå 'skillevæg' op med nbs_lookup_classification, og forklar forskellen på gruppekoden og den fulde kode. Opret, klon eller forbind ingenting.",
+    expected: "Du får antallet af tilgængelige NBS-projekter, det koblede projekt (id, navn og klassifikationssystem) og en liste over eventuelle manglende NBS-parametre, som helst skal være tom. CCI-opslaget giver gruppekoden '[L]%AD' (Vægopbygning) med underkoderne 210, 220 og 230, fx '[L]%AD.230' Skillevæg, Skeletkonstruktion. Opslaget kommer fra en fast reference (Region Syddanmarks liste fra 12. juli 2023), ikke fra NBS. Hvis modellen ikke er koblet, så kobl den selv i Revit: ISSANA MCP → Indstillinger → NBS Nordic → Hent projekter → vælg det aftalte projekt → Gem og forbind. Gem derefter RVT-filen.",
+    changesModel: false,
+    safety: "Øvelsen læser kun. Den kræver en NBS API-nøgle med adgang til projektet, indtastet under ISSANA MCP → Indstillinger → NBS Nordic. Sig nej, hvis AI'en foreslår nbs_connect_project eller nbs_clone_project. Det første værktøj skriver NBS-parametre og projekt-ID ind i modellen, og det andet opretter et nyt NBS-projekt. Kobl i stedet selv modellen til det projekt, din underviser har aftalt. Del aldrig din NBS-nøgle i chatten.",
+  },
+  {
+    level: "NBS",
+    title: "Prøvekørsel: kobl vægtyper til NBS-bygningsdele",
+    goal: "Se, hvordan modellens vægtyper vil blive matchet med bygningsdelene i NBS, som en ren prøvekørsel (dry run), hvor intet skrives.",
+    prompt: "List bygningsdelene i det NBS-projekt, modellen er koblet til, med nbs_list_components (navn, id og klassifikationskode). Kør derefter sync_revit_types_to_nbs for kategorien OST_Walls med dryRun: true. Forklar på dansk: Hvilken link-mode og hvilke felter bruges, og hvor kommer valget fra? Hvor mange vægtyper er allerede koblet? Hvilke har et sikkert match, og hvilke er tvetydige eller uden match? Hvor mange parametre ville blive ændret? Kør IKKE med dryRun: false.",
+    expected: "Du får en liste over NBS-bygningsdele og et resumé af prøvekørslen. Resuméet viser dryRun true, retningen NBS → Revit og link-mode (fx Type and Instance) med kilde. Det viser også antallet af allerede koblede typer, sikre match, navneforslag, tvetydige og umatchede typer samt hvor mange parametre der ville blive opdateret. I en ny model er det normalt, at mange typer står som umatchede, og at 0 parametre ville blive ændret, fordi en kobling til projektet ikke selv vælger en bygningsdel.",
+    changesModel: false,
+    safety: "Øvelsen ændrer intet, så længe dryRun er true, hvilket er standardværdien. Med dryRun: false skriver værktøjet NBS-id, klassifikation, navn, dato og dokumentlink ind i Revit-parametre. Gør det kun i en kopi og efter aftale med underviseren. Værktøjet uploader aldrig noget til NBS og opretter ingen bygningsdele. Modellen skal være koblet til et NBS-projekt (se øvelsen 'Find dine NBS-projekter og klassifikationen').",
+  },
+  {
+    level: "NBS",
+    title: "Metadataforslag til NBS (kun preview)",
+    goal: "Lad AI'en foreslå NBS-metadata (navn, opbygning, klassifikation, fag m.m.) ud fra Revit-data, og øv dig i at vurdere kilde og sikkerhed kritisk.",
+    prompt: "Kør nbs_metadata_workflow med action 'preview' og request { category: 'OST_Walls', target: 'types' }. Vis resultatet i en tabel pr. vægtype med felt, nuværende værdi, foreslået værdi, kilde, sikkerhed og manglende oplysninger. Fremhæv, hvilke forslag der bygger på direkte Revit-data, og hvilke der er udledt eller mangler. Godkend ingenting.",
+    expected: "Du får en tabel med forslag til de ti NBS-felter pr. vægtype: navn, opbygning, klassifikation, løbenummer, fag, entreprise, opmålingsenhed, manuel mængde, noter og aktiv. Hvert forslag har en kilde (direct, mapped, inferred, user eller missing), en sikkerhed og eventuelle manglende oplysninger. Svaret har et previewId, der udløber efter 10 minutter, og viser written: 0. Diskutér bagefter, hvilke forslag du selv ville godkende, og hvilke der kræver en ingeniørs vurdering.",
+    changesModel: false,
+    safety: "Øvelsen ændrer hverken modellen eller NBS, fordi alle ti metadatafelter kun er preview. Selv en godkendelse ('approve') validerer og logger kun forslaget og skriver aldrig til NBS, og 'write' bliver altid afvist. Stol ikke blindt på forslag med kilden 'inferred' eller lav sikkerhed, og lad aldrig AI'en finde på klassifikationskoder eller løbenumre. Modellen skal være koblet til et NBS-projekt.",
+  },
+];
+
+const generalSafety = [
+  "Arbejd i en kopi. Gem modellen under et nyt navn (Filer → Gem som), før du laver øvelser, der ændrer modellen – AI'en ændrer direkte i den åbne model.",
+  "Bed AI'en vise en plan først, og læs, hvilket værktøj den vil kalde. Værktøjer, der starter med get_ eller list_, læser kun. Værktøjer, der starter med create_, set_, modify_, duplicate_, delete_ eller purge_, ændrer modellen.",
+  "Upload kun til NBS efter aftale med underviseren. Brug ikke nbs_run_native_sync, nbs_push_*, nbs_create_component eller nbs_clone_project i øvelserne – de sender data til eller opretter noget i NBS.",
+  "Sig nej til delete_*, purge_unused og send_code_to_revit (kører vilkårlig C#-kode i Revit) – også når et værktøjssvar selv foreslår dem.",
+  "Del aldrig API-nøgler i chatten, og kontrollér selv AI'ens tal, klassifikationer og forslag i Revit og NBS, før du bruger dem – AI'en kan tage fejl.",
+];
+
+const levelClass: Record<Exercise["level"], string> = { Start: "ip-level--start", Øvet: "ip-level--oevet", NBS: "ip-level--nbs" };
+
+/* Start-øvelserne vises direkte; Øvet/NBS ligger i en udfoldning. Nummereringen (prompt-N) følger listen ovenfor. */
+const numberedExercises = exercises.map((ex, i) => ({ ...ex, n: i + 1 }));
+const exerciseSets = [
+  { more: false, items: numberedExercises.filter((ex) => ex.level === "Start") },
+  { more: true, items: numberedExercises.filter((ex) => ex.level !== "Start") },
+];
+
+/* ---------- Kontrol og manuel opsætning ---------- */
+const connectionTestPrompt = "Kør get_connection_status. Vis den aktive Revit-model, NBS-forbindelsen og eventuelle manglende felter. Ændr ingenting.";
+
+const paths = {
+  nbsConfig: r`%USERPROFILE%\.mcp-revit\nbs-config.json`,
+  node: r`C:\Program Files\nodejs\node.exe`,
+  claudeDesktop: r`%APPDATA%\Claude\claude_desktop_config.json`,
+  claudeStore: r`%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\ `.trimEnd(),
+  claudeCode: r`%USERPROFILE%\.claude.json`,
+  codex: r`%USERPROFILE%\.codex\config.toml`,
+};
+const backslash = "\\";
+const serverPathExample = r`%APPDATA%\Autodesk\Revit\Addins\2027\revit_mcp_plugin\Commands\RevitMCPCommandSet\server\build\index.js`;
+const manualJson = r`"revit-mcp-nbs": {
+  "command": "C:\\Program Files\\nodejs\\node.exe",
   "args": [
-    "C:\\\\Users\\\\elprofessor\\\\Desktop\\\\revit-mcp-server\\\\server\\\\build\\\\index.js"
+    "C:\\Users\\<brugernavn>\\AppData\\Roaming\\Autodesk\\Revit\\Addins\\2027\\revit_mcp_plugin\\Commands\\RevitMCPCommandSet\\server\\build\\index.js"
   ]
 }`;
-
-const images = {
-  online: getAssetPath("assets/revit-mcp-online-status.png"),
-  settings: getAssetPath("assets/revit-nbs-settings.png"),
-  architecture: getAssetPath("assets/revit-nbs-integration-architecture.png"),
-  installer: getAssetPath("assets/revit-mcp-installer-check.png"),
-};
+const manualToml = r`[mcp_servers.revit-mcp-nbs]
+command = "C:\\Program Files\\nodejs\\node.exe"
+args = ["C:\\Users\\<brugernavn>\\AppData\\Roaming\\Autodesk\\Revit\\Addins\\2027\\revit_mcp_plugin\\Commands\\RevitMCPCommandSet\\server\\build\\index.js"]`;
 ---
 
 <BaseLayout
   locale="da"
   currentPage="plugin"
-  title="Installér Revit-plugin"
-  description="Kort guide til installation, MCP-status og opsætning af Revit MCP + NBS Nordic."
+  title={`Installér Revit MCP + NBS Nordic ${pluginVersion}`}
+  description={`Enkel guide til studerende: installér Revit MCP + NBS Nordic version ${pluginVersion}, kontrollér forbindelsen, forbind NBS Nordic og prøv øvelserne. Udviklet af ${issana}.`}
 >
-  <section class="plugin-page">
-    <div class="plugin-hero">
-      <div class="plugin-hero__content">
-        <p class="eyebrow">Revit MCP + NBS Nordic</p>
-        <h1>Installér pluginet og tjek forbindelsen</h1>
-        <p>
-          Start med at installere og logge ind i enten Codex eller Claude Code. Derefter kan du hente MCP + API-udvidelsen,
-          kontrollere at MCP er online i Revit og forbinde modellen med det rigtige NBS Nordic-projekt.
+  <div class="ip">
+    <header class="ip-hero">
+      <div class="ip-hero__copy">
+        <p class="eyebrow">Revit-plugin · Studentinstallation</p>
+        <h1>Installér Revit MCP + NBS Nordic</h1>
+        <p class="ip-hero__lead">
+          Én installationsfil lægger pluginet i Revit 2026/2027 og sætter forbindelsen op i din AI-app – Claude eller Codex.
         </p>
-        <div class="hero__actions">
-          <a class="button button--primary" href="#ai-client-step">Start med AI-klient</a>
-          <a class="button button--quiet" href="#connection-check">Se MCP-status</a>
+        <div class="ip-hero__actions">
+          <a class="button button--primary ip-download" href={installerUrl} download={savedFile}>
+            <span>Download version {pluginVersion}</span>
+            <small>{savedFile}</small>
+          </a>
+        </div>
+        <p class="ip-hero__meta">
+          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 91 MB · Revit 2026/2027
+        </p>
+        <p class="ip-hero__credit">Udviklet af <strong>{issana}</strong> · Byg og Miljø Rådgiver ApS</p>
+      </div>
+
+      <aside class="ip-version" aria-label="Versionsoplysninger">
+        <p class="ip-version__label">Aktuel version</p>
+        <p class="ip-version__number">{pluginVersion}</p>
+        <p class="ip-version__date"><time datetime={releaseDateIso}>{releaseDate}</time></p>
+        <p class="ip-version__title">Sådan ser du versionen</p>
+        <ul>
+          <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{pluginVersion}.0</strong> (Produktversion begynder med {pluginVersion})</li>
+          <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {pluginVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
+          <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong></li>
+        </ul>
+      </aside>
+    </header>
+
+    <nav class="ip-toc" aria-label="Indhold på siden">
+      <ol>
+        {toc.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ol>
+    </nav>
+
+    <!-- 1. Før du starter -->
+    <section class="ip-section" id="foer-du-starter" aria-labelledby="foer-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">1</span>
+        <h2 id="foer-title">Før du starter</h2>
+      </div>
+      <ul class="ip-prereq">
+        <li>
+          <strong>Revit 2026 eller 2027</strong>
+          <p>På en pc med Windows 10 eller 11. Pakken indeholder kun de to Revit-versioner.</p>
+        </li>
+        <li>
+          <strong>Én AI-app, installeret og logget ind</strong>
+          <p>
+            Claude (Desktop eller Code) eller Codex. Installér appen, <em>før</em> du kører installationsfilen – ellers bliver den
+            sprunget over.
+          </p>
+          <p class="ip-prereq__links">
+            <a class="text-link" href={claudeUrl} target="_blank" rel="noopener">Hent Claude</a>{" "}
+            <a class="text-link" href={codexUrl} target="_blank" rel="noopener">Hent Codex</a>
+          </p>
+        </li>
+        <li>
+          <strong>Luk Revit og AI-appen</strong>
+          <p>Gem dit arbejde, og luk begge programmer. Installationen stopper, hvis Revit kører.</p>
+        </li>
+      </ul>
+      <p class="ip-note">
+        <strong>Godt at vide:</strong> Du skal være på internettet. Node.js 18 eller nyere er også nødvendig – mangler den, spørger
+        installeren i TRIN 4, og så vælger du <kbd>1</kbd>. Du behøver ikke være administrator for at installere pluginet – men valg 1
+        (Node.js) kræver administratorrettigheder.
+      </p>
+    </section>
+
+    <!-- 2. Installér -->
+    <section class="ip-section" id="installer" aria-labelledby="installer-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">2</span>
+        <h2 id="installer-title">Installér</h2>
+      </div>
+
+      <ol class="ip-steps">
+        <li>
+          <strong>Hent filen</strong>
+          <p>Klik på <em>Download version {pluginVersion}</em> øverst. Filen hedder <code>{savedFile}</code>.</p>
+        </li>
+        <li>
+          <strong>Start filen – og kom forbi Windows-advarslen</strong>
+          <p>
+            Dobbeltklik på filen. Filen er ikke signeret, så Windows viser måske <q>Windows beskyttede din pc</q>. Klik{" "}
+            <strong>Flere oplysninger</strong> og derefter <strong>Kør alligevel</strong>.
+          </p>
+        </li>
+        <li>
+          <strong>Installationsvinduet åbner</strong>
+          <p>
+            Et lille vindue med ISSANA-logoet viser <q>Revit MCP + NBS Nordic — Studentinstallation · version {pluginVersion}</q>. Det
+            skriver <q>Forbereder installationen …</q>, <q>Kontrollerer installationspakken …</q> og til sidst{" "}
+            <q>Installationen fortsætter i konsolvinduet.</q> Så forsvinder vinduet, og et sort konsolvindue åbner.
+          </p>
+        </li>
+        <li>
+          <strong>Vælg dansk</strong>
+          <p>Ved <code>Vælg / Choose [D/e]:</code> trykker du <kbd>D</kbd> og <kbd>Enter</kbd>. (Enter alene giver også dansk.)</p>
+        </li>
+        <li>
+          <strong>Svar på spørgsmål – kun hvis de kommer</strong>
+          <ul class="ip-answers">
+            <li>
+              <code>Der blev fundet en eksisterende installation.</code> → tryk <kbd>Enter</kbd> (= <kbd>R</kbd>, Erstat) for at
+              opdatere.
+            </li>
+            <li>
+              <code>Node.js 18+ er nødvendig for at køre MCP-serveren.</code> → tryk <kbd>1</kbd> og <kbd>Enter</kbd>. Godkend
+              Windows' administratorspørgsmål, og gennemfør Node.js-guiden med standardvalg. Installeren fortsætter selv – tryk{" "}
+              <em>ikke</em> Enter, selvom der står det.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>TRIN 8: Åbn Revit, mens vinduet venter</strong>
+          <p>
+            Når der står <q>Åbn Revit og dit projekt nu …</q>, lader du konsolvinduet stå åbent. Start Revit, åbn en projektfil{" "}
+            (<code>.rvt</code>), og luk eventuelle dialoger. Spørger Revit <q>Security - Unsigned Add-In</q>, klikker du{" "}
+            <strong>Always Load</strong>. Åbn derefter Claude eller Codex. Installeren venter op til 180 sekunder, og linjen{" "}
+            <q>[!] Revit er ikke klar …</q> er normal, mens Revit starter.
+          </p>
+        </li>
+        <li>
+          <strong>Færdig – tryk en tast</strong>
+          <p>
+            Ser du <q>Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient.</q>, er alt i orden. Læs status for dine
+            AI-apps under TRIN 9, tag evt. et skærmbillede, og tryk en tast ved <q>Tryk en tast for at lukke</q>.
+            Så lukker konsolvinduet, og installationen er slut.
+          </p>
+        </li>
+      </ol>
+
+      <h3 class="ip-sub">Sådan ser konsolvinduet ud</h3>
+      <figure class="ip-term">
+        <div class="ip-term__bar">
+          <span class="ip-term__dots" aria-hidden="true"><i></i><i></i><i></i></span>{" "}
+          <span class="ip-term__title">{terminalTitle}</span>
+        </div>
+        <pre class="ip-term__body" role="region" tabindex="0" aria-label="Eksempel på konsolvinduet under installationen"><code>{
+          terminal.map((line) => (
+            <span class={`ip-t ip-t--${line.k}`}>{line.t}{line.input && <span class="ip-t__input">{line.input}</span>}</span>
+          ))
+        }</code></pre>
+        <figcaption>
+          Eksempel fra en pc med Revit 2027, Claude Desktop og Codex. Stier og versioner af PowerShell, Windows og Node.js afhænger af
+          din pc. Linjerne fra forbindelseskontrollen i TRIN 8 vises uden farve. Vinduets titel får først versionsnummeret, når
+          installeren går i gang.
+        </figcaption>
+      </figure>
+      <ul class="ip-legend" aria-label="Farverne i konsolvinduet">
+        <li><code class="ip-legend__chip ip-t--step">[*]</code> arbejder</li>
+        <li><code class="ip-legend__chip ip-t--ok">[+]</code> OK</li>
+        <li><code class="ip-legend__chip ip-t--warn">[!]</code> advarsel – læs linjen</li>
+        <li><code class="ip-legend__chip ip-t--err">[-]</code> fejl – se <a class="text-link" href="#fejl">Fejl og løsninger</a></li>
+        <li><code class="ip-legend__chip ip-t--info">grå</code> ekstra info</li>
+      </ul>
+    </section>
+
+    <!-- 3. Kontrollér -->
+    <section class="ip-section" id="kontroller" aria-labelledby="kontroller-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">3</span>
+        <h2 id="kontroller-title">Kontrollér at det virker</h2>
+      </div>
+
+      <div class="ip-check-grid">
+        <div>
+          <h3 class="ip-sub">I Revit</h3>
+          <ul class="ip-checks">
+            <li>
+              Fanebladet <strong>ISSANA MCP</strong> findes med panelet <strong>Revit MCP Plugin</strong> og knapperne{" "}
+              <strong>Forbindelse Til/Fra</strong>, <strong>MCP-panel</strong> og <strong>Indstillinger</strong>. (Kan Revit ikke
+              lave fanebladet, ligger panelet under Add-Ins.)
+            </li>
+            <li>
+              Klik <strong>MCP-panel</strong>. Vinduet <q>MCP Server</q> viser en grøn prik og <strong>MCP Online</strong>. Det betyder,
+              at Revit er klar til en AI-app – ikke at appen allerede er forbundet.
+            </li>
+            <li>
+              Står der <strong>MCP Online</strong>, så klik <em>ikke</em> på <strong>Forbindelse Til/Fra</strong>. Forbindelsen starter
+              selv, og et klik slukker den.
+            </li>
+            <li>
+              <strong>Indstillinger</strong> → <strong>Forbindelse</strong> → <strong>Plugin-version</strong> viser{" "}
+              <strong>{pluginVersion}</strong>.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="ip-sub">I installeren</h3>
+          <ul class="ip-checks">
+            <li>
+              Konsolvinduet skrev <code>[+] Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient.</code>
+            </li>
+            <li>TRIN 9 viser <code>OK</code> ud for din AI-app.</li>
+          </ul>
         </div>
       </div>
 
-      <div class="plugin-flow" aria-label="Animeret oversigt over Revit MCP og NBS Nordic flow">
-        <div class="flow-node flow-node--client">
-          <span>AI-klient</span>
-          <strong>Codex / Claude Code</strong>
-        </div>
-        <div class="flow-track" aria-hidden="true">
-          <span class="flow-signal flow-signal--one"></span>
-          <span class="flow-signal flow-signal--two"></span>
-        </div>
-        <div class="flow-node flow-node--mcp">
-          <span>MCP Server</span>
-          <strong>Revit plugin</strong>
-        </div>
-        <div class="flow-track" aria-hidden="true">
-          <span class="flow-signal flow-signal--three"></span>
-        </div>
-        <div class="flow-node flow-node--nbs">
-          <span>NBS Nordic</span>
-          <strong>Projekt + bygningsdele</strong>
-        </div>
+      <h3 class="ip-sub">I AI-appen</h3>
+      <div class="ip-clients">
+        <article class="ip-client">
+          <h4>Claude Desktop</h4>
+          <ol>
+            <li>Afslut Claude helt (ikonet ved uret → Quit), og åbn den igen.</li>
+            <li><strong>Settings</strong> → <strong>Developer</strong>: <code>revit-mcp-nbs</code> står under de lokale MCP-servere med status <em>running</em>.</li>
+            <li>I en chat viser værktøjsmenuen (<strong>+</strong> / <strong>Search and tools</strong>) <code>revit-mcp-nbs</code>.</li>
+          </ol>
+        </article>
+        <article class="ip-client">
+          <h4>Claude Code</h4>
+          <ol>
+            <li>Kør <code>claude mcp list</code>. Linjen <code>revit-mcp-nbs: … - ✔ Connected</code> skal være der.</li>
+            <li>Kør <code>claude mcp get revit-mcp-nbs</code>. Forvent <code>Status: ✔ Connected</code>.</li>
+            <li>I en session viser <code>/mcp</code> serveren som connected.</li>
+          </ol>
+        </article>
+        <article class="ip-client">
+          <h4>Codex</h4>
+          <ol>
+            <li>Kør <code>codex mcp list</code>. Rækken <code>revit-mcp-nbs</code> skal stå som <code>enabled</code>.</li>
+            <li>Kør <code>codex mcp get revit-mcp-nbs</code>. Forvent <code>enabled: true</code>.</li>
+            <li>I en session viser <code>/mcp</code> de konfigurerede MCP-værktøjer.</li>
+          </ol>
+        </article>
       </div>
-    </div>
-
-    <section class="client-prerequisite" id="ai-client-step" aria-labelledby="ai-client-title">
-      <div class="client-prerequisite__copy">
-        <p class="eyebrow">Trin 1</p>
-        <h2 id="ai-client-title">Installer og log ind i Codex eller Claude Code først</h2>
-        <p>
-          MCP + API-udvidelsen skal kobles til en AI-klient. Vælg derfor <strong>én</strong> af de to muligheder herunder,
-          installer den færdigt, åbn programmet og log ind, før du downloader Revit MCP + NBS Nordic-installationsfilen.
-        </p>
-      </div>
-      <div class="client-options" aria-label="Vælg AI-klient før installation af MCP og API-udvidelsen">
-        <a href={codexUrl} target="_blank" rel="noopener">
-          <span>Mulighed A</span>
-          <strong>Codex</strong>
-          <small>Download til Windows, installer og log ind med din konto.</small>
-        </a>
-        <a href={claudeUrl} target="_blank" rel="noopener">
-          <span>Mulighed B</span>
-          <strong>Claude Code</strong>
-          <small>Download Claude, installer og log ind før MCP-opsætningen.</small>
-        </a>
+      <p class="ip-note">
+        <strong>Bemærk:</strong> <code>✔ Connected</code> og <code>enabled</code> betyder kun, at MCP-serveren kan starte. Forbindelsen
+        helt ind til Revit tester du ved at sende denne prompt, mens Revit og et projekt er åbne:
+      </p>
+      <div class="ip-code">
+        <div class="ip-code__bar">
+          <span>Prompt</span>
+          <button type="button" class="ip-copy" data-copy="prompt-test" aria-label="Kopiér testprompten" hidden>Kopiér</button>
+        </div>
+        <pre><code id="prompt-test">{connectionTestPrompt}</code></pre>
       </div>
     </section>
 
-    <div class="plugin-layout">
-      <aside class="plugin-download" aria-labelledby="download-title">
-        <p class="eyebrow">Download</p>
-        <h2 id="download-title">Trin 2: Hent MCP + API-udvidelsen</h2>
-        <ol class="plugin-steps">
-          <li>Kontroller at Codex eller Claude Code er installeret og at du er logget ind.</li>
-          <li>Download Revit MCP + NBS Nordic-installationsfilen.</li>
-          <li>Luk Revit og den AI-klient, du lige har sat op, før installationen køres.</li>
-          <li>Kør installeringen igen, hvis du tidligere har brugt en ældre version.</li>
-          <li>Åbn Revit og kontroller status i MCP-panelet.</li>
-        </ol>
-        <a class="button button--primary" href={installerUrl} download>Download .exe</a>
-        <small>Windows · ca. 91 MB · Revit 2026/2027</small>
-      </aside>
-
-      <div class="plugin-main">
-        <section class="plugin-section" id="connection-check" aria-labelledby="connection-title">
-          <div class="plugin-section__copy">
-            <p class="eyebrow">Forbindelse</p>
-            <h2 id="connection-title">Sådan ser du om MCP er koblet til</h2>
-            <p>
-              Når pluginet virker, kan du åbne MCP-panelet fra Revit-båndet, og øverst i panelet skal status vise en
-              grøn prik med teksten <strong>MCP Online</strong>.
-            </p>
-            <ul class="check-list">
-              <li>Gå til <strong>Add-Ins</strong> i Revit.</li>
-              <li>Åbn <strong>MCP Panel</strong> under Revit MCP Plugin.</li>
-              <li>Kontroller at statuslinjen viser <strong>MCP Online</strong>.</li>
-            </ul>
-          </div>
-          <figure class="plugin-shot">
-            <img src={images.online} alt="Revit MCP-panelet viser grøn status med teksten MCP Online" loading="lazy" />
-            <figcaption>Grøn status betyder, at Revit MCP-serveren er aktiv og klar til en AI-klient.</figcaption>
-          </figure>
-        </section>
-
-        <section class="plugin-section plugin-section--nbs" aria-labelledby="nbs-title">
-          <div class="plugin-section__copy">
-            <p class="eyebrow">NBS Nordic</p>
-            <h2 id="nbs-title">Forbind Revit til NBS Nordic via API</h2>
-            <p>
-              NBS API-nøglen giver pluginet adgang til dine egne NBS Nordic-projekter. Når nøglen er indsat, henter
-              pluginet projektlisten fra NBS Nordic, og du vælger hvilket NBS-projekt der hører til den åbne Revit-model.
-            </p>
-            <ol class="api-steps">
-              <li>Åbn <strong>Add-Ins</strong> i Revit og klik på <strong>Settings</strong>.</li>
-              <li>Vælg fanen <strong>NBS Nordic</strong>.</li>
-              <li>Indsæt din NBS API-nøgle, og klik på <strong>Forbind NBS og hent projekter</strong>.</li>
-              <li>Vælg det NBS-projekt, der passer til den aktuelle Revit-model.</li>
-              <li>Klik på <strong>Forbind projekt og klargør NBS-felter</strong>, så felterne oprettes i modellen.</li>
-            </ol>
-            <p class="api-note">
-              Projektkoblingen gemmes i Revit-modellen. Derefter kan AI-assistenten læse, foreslå og opdatere NBS-felter
-              ud fra den model og det NBS-projekt, du har valgt.
-            </p>
-          </div>
-          <figure class="plugin-shot plugin-shot--wide">
-            <img src={images.settings} alt="NBS Nordic-indstillinger med API-nøgle og projektvalg" loading="lazy" />
-            <figcaption>De røde markeringer viser rækkefølgen: Add-Ins, Settings, NBS Nordic, API-nøgle, projektvalg og forbind-knappen.</figcaption>
-          </figure>
-        </section>
-
-        <section class="plugin-section plugin-section--warning" aria-labelledby="install-title">
-          <div class="plugin-section__copy">
-            <p class="eyebrow">Fejlfinding</p>
-            <h2 id="install-title">Hvorfor installationen kan stoppe</h2>
-            <p>
-              Hvis installationen ikke gennemføres, skyldes det ofte enten netværk/proxy eller at Codex eller Claude Code
-              er for gammel til den MCP-konfiguration, pluginet forventer.
-            </p>
-            <ul class="check-list">
-              <li>Opdater Codex eller Claude Code til nyeste version og kør installeringen igen.</li>
-              <li>Hvis terminalen ikke kan nå <strong>api.github.com</strong>, kontroller internet, firewall eller proxy.</li>
-              <li>Luk Revit og AI-klienten helt, før du genstarter installationen.</li>
-            </ul>
-          </div>
-          <figure class="plugin-shot">
-            <img src={images.installer} alt="Installationsvindue med system checks og fejl ved api.github.com" loading="lazy" />
-            <figcaption>Her er systemet OK, men GitHub API kan ikke nås. Det peger typisk på forbindelse eller proxy.</figcaption>
-          </figure>
-        </section>
-
-        <section class="install-config" aria-labelledby="mcp-config-title">
-          <p class="eyebrow">MCP-konfiguration</p>
-          <h2 id="mcp-config-title">Manuel opsætning er normalt ikke nødvendig</h2>
-          <p>
-            Når du installerer <code>.exe</code>-filen, kan programmet selv koble Revit MCP på i Codex eller Claude Code.
-            Eksemplet her er kun en fallback, hvis du vil kontrollere eller lave opsætningen manuelt.
-          </p>
-          <pre><code>{mcpConfig}</code></pre>
-          <p class="install-config__note"><strong>Bemærk:</strong> Stien er et eksempel. Hvis din Revit MCP-mappe ligger et andet sted, skal du kun ændre stien i <code>args</code>.</p>
-        </section>
-
-        <section class="plugin-diagram" aria-labelledby="diagram-title">
-          <div class="plugin-diagram__heading">
-            <div>
-              <p class="eyebrow">Teknisk overblik</p>
-              <h2 id="diagram-title">Arkitekturdiagrammet ligger her, ikke på forsiden</h2>
-            </div>
-            <a class="text-link" href={images.architecture}>Åbn diagram i stor størrelse</a>
-          </div>
-          <p>
-            Diagrammet er nyttigt, når man vil forstå hele flowet fra AI-klient til Revit, NBS Nordic og output. Det er
-            derfor placeret sammen med plugin-vejledningen, hvor brugeren allerede er i installationskonteksten.
-          </p>
-          <figure class="plugin-architecture">
-            <img src={images.architecture} alt="Revit og NBS Nordic integrationsarkitektur med MCP, Orchestrator, Revit-model, NBS Nordic og output" loading="lazy" />
-          </figure>
-        </section>
-
-        <aside class="install-page__notice">
-          <p><strong>Færdig:</strong> Når Revit viser, at forbindelsen er aktiv, er pluginet klar. Gem API-nøglen kun i Revit-indstillingerne.</p>
-        </aside>
+    <!-- 4. NBS Nordic -->
+    <section class="ip-section" id="nbs" aria-labelledby="nbs-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">4</span>
+        <h2 id="nbs-title">Forbind NBS Nordic</h2>
       </div>
-    </div>
-  </section>
+      <p class="ip-lead">Du skal bruge din personlige NBS Nordic API-nøgle og et NBS-projekt, du har adgang til.</p>
+      <ol class="ip-steps">
+        <li><strong>Åbn en gemt projektfil (.rvt) i Revit</strong><p>Ikke en familie.</p></li>
+        <li>
+          <strong>ISSANA MCP → Indstillinger</strong>
+          <p>Vinduet <q>Indstillinger - ISSANA Revit MCP</q> åbner. Vælg <strong>NBS Nordic</strong> i listen til venstre.</p>
+        </li>
+        <li>
+          <strong>Indsæt din nøgle</strong>
+          <p>Sæt nøglen ind i feltet <strong>NBS Nordic API-nøgle</strong>. Linket <strong>Find min NBS-nøgle</strong> viser, hvor du finder den.</p>
+        </li>
+        <li>
+          <strong>Klik den blå knap nederst: Hent projekter</strong>
+          <p>Der står <q>NBS-adgang verificeret — N aktive projekter. …</q></p>
+        </li>
+        <li>
+          <strong>Vælg projektet</strong>
+          <p>Vælg under <strong>NBS-projekt til denne Revit-model</strong>, og tjek linjen <q>Klassifikationssystem: …</q>.</p>
+        </li>
+        <li>
+          <strong>Klik samme knap igen – nu hedder den Gem og forbind</strong>
+          <p>Der står <q>{"Forbundet til <projekt>. NBS-felterne er klar. Gem Revit-filen; din AI kan nu synkronisere klassifikationerne."}</q></p>
+        </li>
+        <li><strong>Gem RVT-filen (Ctrl+S)</strong><p>Først da er koblingen gemt i modellen.</p></li>
+      </ol>
+      <ul class="ip-tips">
+        <li>
+          Standardvalgene er fine: <strong>Koblingstype</strong> <q>Type and Instance — begge, hver med sin egen kobling</q> og alle fem
+          NBS-felter.
+        </li>
+        <li>
+          Parameterfilen <code>NBSNordicSharedParameters.txt</code> følger ikke med. Ligger den ikke på NBS' standardsti, så udvid{" "}
+          <strong>NBS-parameterfil (avanceret)</strong> og klik <strong>Vælg parameterfil…</strong>.
+        </li>
+        <li>
+          Er modellen allerede koblet til et andet projekt, hedder knappen <strong>Gennemgå projektskift…</strong>. I dialogen{" "}
+          <q>Godkend NBS-projektskift</q> er <q>Annuller — behold nuværende projekt</q> standard.
+        </li>
+        <li>
+          Del aldrig nøglen i en chat. Den gemmes lokalt i <code>{paths.nbsConfig}</code>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 5. Fejl -->
+    <section class="ip-section" id="fejl" aria-labelledby="fejl-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">5</span>
+        <h2 id="fejl-title">Fejlmeddelelser og løsninger</h2>
+      </div>
+      <p class="ip-lead">
+        Klik på beskeden, du ser. Beskederne står ordret – også dem, der kun findes på engelsk. <code>&lt;…&gt;</code>{" "}
+        betyder, at teksten varierer.
+      </p>
+
+      <h3 class="ip-sub">De mest almindelige</h3>
+      <div class="ip-msgs">
+        {
+          commonMessages.map((m) => (
+            <details class="ip-msg">
+              <summary>
+                <span class={`ip-sev ip-sev--${m.sev}`}>{sevLabel[m.sev]}</span>{" "}
+                <code>{m.msg}</code>
+              </summary>
+              <dl>
+                {m.where && (<><dt>Hvor</dt><dd>{m.where}</dd></>)}
+                <dt>Betyder</dt>
+                <dd>{m.means}</dd>
+                <dt>Gør sådan</dt>
+                <dd>{m.todo}</dd>
+              </dl>
+            </details>
+          ))
+        }
+      </div>
+
+      <p class="ip-group-lead">Øvrige beskeder, sorteret efter hvor de vises (de fire almindelige står ovenfor). Klik på en gruppe for at åbne den.</p>
+      <div class="ip-groups">
+        {
+          messageGroups.map((group) => (
+            <details class="ip-group" id={group.id}>
+              <summary>
+                <h3>{group.title}</h3>
+                <span class="ip-count">{group.items.length} beskeder</span>
+              </summary>
+              <div class="ip-group__body">
+                {group.intro && <p class="ip-group-intro">{group.intro}</p>}
+                <div class="ip-msgs">
+                  {group.items.map((m) => (
+                    <details class="ip-msg">
+                      <summary>
+                        <span class={`ip-sev ip-sev--${m.sev}`}>{sevLabel[m.sev]}</span>{" "}
+                        <code>{m.msg}</code>
+                      </summary>
+                      <dl>
+                        {m.where && (<><dt>Hvor</dt><dd>{m.where}</dd></>)}
+                        <dt>Betyder</dt>
+                        <dd>{m.means}</dd>
+                        <dt>Gør sådan</dt>
+                        <dd>{m.todo}</dd>
+                      </dl>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+      <p class="ip-note">
+        <strong>Stadig fast?</strong> Tag et skærmbillede af hele konsolvinduet, og oplys versionen ({pluginVersion}), når du beder om
+        hjælp.
+      </p>
+    </section>
+
+    <!-- 6. Øvelser -->
+    <section class="ip-section" id="oevelser" aria-labelledby="oevelser-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">6</span>
+        <h2 id="oevelser-title">Øvelser</h2>
+      </div>
+      <p class="ip-lead">
+        Kopiér prompten ind i Claude eller Codex, mens Revit og et projekt er åbne. Start med øvelserne mærket <em>Kun læsning</em>.
+      </p>
+
+      <div class="ip-safety">
+        <h3 class="ip-sub">Sikkerhed – læs før du starter</h3>
+        <ul>
+          {generalSafety.map((rule) => <li>{rule}</li>)}
+        </ul>
+      </div>
+
+      {
+        exerciseSets.map((set) => {
+          const Wrap = set.more ? "details" : "div";
+          return (
+            <Wrap class={set.more ? "ip-ex-extra" : undefined}>
+              {set.more && <summary>Flere øvelser ({set.items.length}) – Øvet og NBS</summary>}
+              <div class="ip-exercises">
+                {set.items.map((ex) => (
+                  <article class="ip-ex" aria-labelledby={`ex-${ex.n}-title`}>
+                    <div class="ip-ex__badges">
+                      <span class={`ip-level ${levelClass[ex.level]}`}>{ex.level}</span>
+                      {ex.changesModel ? (
+                        <span class="ip-mode ip-mode--write">Ændrer modellen – gem en kopi først</span>
+                      ) : (
+                        <span class="ip-mode ip-mode--read">Kun læsning</span>
+                      )}
+                    </div>
+                    <h3 id={`ex-${ex.n}-title`}>{ex.title}</h3>
+                    <p class="ip-ex__goal"><strong>Mål:</strong> {ex.goal}</p>
+                    <div class="ip-code">
+                      <div class="ip-code__bar">
+                        <span>Prompt</span>
+                        <button type="button" class="ip-copy" data-copy={`prompt-${ex.n}`} aria-label={`Kopiér prompten til øvelsen ${ex.title}`} hidden>Kopiér</button>
+                      </div>
+                      <pre><code id={`prompt-${ex.n}`}>{ex.prompt}</code></pre>
+                    </div>
+                    <details class="ip-ex__more">
+                      <summary>Forventet resultat og sikkerhed</summary>
+                      <p><strong>Forventet resultat:</strong> {ex.expected}</p>
+                      <p><strong>Sikkerhed:</strong> {ex.safety}</p>
+                    </details>
+                  </article>
+                ))}
+              </div>
+            </Wrap>
+          );
+        })
+      }
+    </section>
+
+    <!-- Manuel opsætning -->
+    <details class="ip-section ip-manual" id="manuel">
+      <summary><h2>Manuel opsætning (kun hvis installeren ikke kunne)</h2></summary>
+      <div class="ip-manual__body">
+        <p>
+          Normalt skal du ikke røre konfigurationsfilerne: installeren sætter alle fundne AI-apps op og tager backup af eksisterende
+          filer. Kør hellere installationsfilen igen (vælg <kbd>R</kbd>), og kontrollér med <code>claude mcp get revit-mcp-nbs</code> eller{" "}
+          <code>codex mcp list</code>.
+        </p>
+        <dl class="ip-facts">
+          <div><dt>Servernavn</dt><dd><code>revit-mcp-nbs</code></dd></div>
+          <div><dt>command</dt><dd>Den fulde sti til node.exe, fx <code>{paths.node}</code></dd></div>
+          <div><dt>args</dt><dd><code>{serverPathExample}</code> (brug <code>2026</code> i stien til Revit 2026)</dd></div>
+          <div><dt>Claude Desktop</dt><dd><code>{paths.claudeDesktop}</code> under <code>mcpServers</code> (Store-udgaven: <code>{paths.claudeStore}</code>)</dd></div>
+          <div><dt>Claude Code</dt><dd><code>{paths.claudeCode}</code> under <code>mcpServers</code></dd></div>
+          <div><dt>Codex</dt><dd><code>{paths.codex}</code> som tabellen <code>[mcp_servers.revit-mcp-nbs]</code></dd></div>
+        </dl>
+        <p>I JSON-filer skal hver <code>{backslash}</code> skrives dobbelt, og <code>%APPDATA%</code> skal skrives helt ud:</p>
+        <h3 class="ip-sub">Claude Desktop og Claude Code (JSON, inde i <code>mcpServers</code>)</h3>
+        <pre class="ip-pre"><code>{manualJson}</code></pre>
+        <h3 class="ip-sub">Codex (TOML)</h3>
+        <pre class="ip-pre"><code>{manualToml}</code></pre>
+        <p>Genstart AI-appen bagefter.</p>
+      </div>
+    </details>
+
+    <footer class="ip-foot">
+      <p>
+        Version {pluginVersion} · <time datetime={releaseDateIso}>{releaseDate}</time> · udviklet af {issana}
+      </p>
+      <a class="ip-foot__link" href={architectureUrl}>Teknisk overblik (arkitekturdiagram)</a>
+    </footer>
+
+    <p class="ip-sr" id="ip-copy-status" aria-live="polite"></p>
+  </div>
 </BaseLayout>
+
+<script>
+  const status = document.getElementById("ip-copy-status");
+
+  if (navigator.clipboard && window.isSecureContext) {
+    document.querySelectorAll<HTMLButtonElement>("button[data-copy]").forEach((button) => {
+      const label = button.textContent ?? "Kopiér";
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy ?? "");
+        if (!target) return;
+        try {
+          await navigator.clipboard.writeText((target.textContent ?? "").trim());
+          button.textContent = "Kopieret";
+          if (status) status.textContent = "Prompten er kopieret.";
+        } catch {
+          button.textContent = "Kunne ikke kopiere";
+        }
+        window.setTimeout(() => {
+          button.textContent = label;
+        }, 2000);
+      });
+    });
+  }
+
+  const openFromHash = () => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  };
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
+</script>
+
+<style>
+  .ip {
+    --ip-radius: 12px;
+    --ip-mono: "Cascadia Mono", "Cascadia Code", Consolas, monospace;
+    width: min(1120px, 100%);
+    margin-inline: auto;
+    padding: clamp(1.25rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  .ip code,
+  .ip kbd {
+    font-family: var(--ip-mono);
+    font-size: 0.86em;
+    overflow-wrap: anywhere;
+  }
+
+  .ip :not(pre) > code {
+    border-radius: 4px;
+    background: rgba(17, 42, 70, 0.07);
+    color: var(--navy);
+    padding: 0.05em 0.3em;
+  }
+
+  .ip kbd {
+    display: inline-block;
+    min-width: 1.6em;
+    border: 1px solid rgba(17, 42, 70, 0.25);
+    border-block-end-width: 2px;
+    border-radius: 4px;
+    background: var(--white);
+    color: var(--navy);
+    font-weight: 700;
+    line-height: 1.3;
+    padding: 0 0.35em;
+    text-align: center;
+  }
+
+  .ip q {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* ---------- Hero ---------- */
+  .ip-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.85fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    overflow: hidden;
+    border-radius: calc(var(--ip-radius) * 1.4);
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      var(--navy);
+    background-size: 40px 40px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    padding: clamp(1.4rem, 5vw, 3.5rem);
+  }
+
+  .ip-hero::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    width: 42%;
+    height: 6px;
+    background: linear-gradient(90deg, var(--orange) 0 58%, var(--mint) 58%);
+  }
+
+  .ip-hero__copy {
+    min-width: 0;
+  }
+
+  .ip-hero h1 {
+    margin-block-end: 0.9rem;
+    color: var(--white);
+    font-size: clamp(2.1rem, 5vw, 3.6rem);
+  }
+
+  .ip-hero__lead {
+    max-width: 38rem;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 1.12rem;
+  }
+
+  .ip-hero__actions {
+    margin-block: 1.5rem 1rem;
+  }
+
+  .ip-download {
+    display: inline-grid;
+    justify-items: start;
+    gap: 0.1rem;
+    max-width: 100%;
+    background: var(--orange);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    color: var(--navy);
+    font-size: 1.12rem;
+    padding: 0.85rem 1.35rem;
+  }
+
+  .ip-download:hover {
+    background: #ffa447;
+  }
+
+  .ip-download small {
+    font-size: 0.74rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .ip-hero__meta {
+    margin-block-end: 0.4rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .ip-hero__meta strong {
+    color: var(--mint);
+  }
+
+  .ip-hero__credit {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.9rem;
+  }
+
+  .ip-hero__credit strong {
+    color: var(--white);
+  }
+
+  .ip-version {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--ip-radius);
+    background: rgba(255, 255, 255, 0.06);
+    padding: clamp(1.1rem, 3vw, 1.6rem);
+  }
+
+  .ip-version__label {
+    margin: 0;
+    color: var(--mint);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ip-version__number {
+    margin: 0;
+    color: var(--white);
+    font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+    font-size: clamp(3rem, 7vw, 4.4rem);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .ip-version__date {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+  }
+
+  .ip-version__title {
+    margin: 1rem 0 0;
+    border-block-start: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--white);
+    font-weight: 800;
+    padding-block-start: 0.9rem;
+  }
+
+  .ip-version ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .ip-version li span {
+    color: var(--orange);
+    font-weight: 800;
+  }
+
+  .ip-version strong {
+    color: var(--mint);
+  }
+
+  .ip-version q {
+    color: var(--white);
+  }
+
+  /* ---------- Indhold ---------- */
+  .ip-toc {
+    margin-block: 1.25rem 0;
+  }
+
+  .ip-toc ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: toc;
+  }
+
+  .ip-toc li {
+    counter-increment: toc;
+  }
+
+  .ip-toc a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--navy);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+  }
+
+  .ip-toc a::before {
+    content: counter(toc);
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  /* Orange fokusring har for lav kontrast på lys baggrund; den mørke top beholder orange. */
+  .ip-toc :focus-visible,
+  .ip-section :focus-visible {
+    outline-color: var(--navy);
+  }
+
+  .ip-toc a:hover {
+    border-color: var(--orange);
+  }
+
+  /* ---------- Sektioner ---------- */
+  .ip-section {
+    scroll-margin-block-start: 9rem;
+    margin-block-start: clamp(1rem, 2.5vw, 1.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--ip-radius);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 18px 45px rgba(17, 42, 70, 0.06);
+    padding: clamp(1.15rem, 4vw, 2.4rem);
+  }
+
+  .ip-section > * {
+    min-width: 0;
+  }
+
+  .ip-section__head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-block-end: 1rem;
+  }
+
+  .ip-section h2 {
+    margin: 0;
+    font-size: clamp(1.55rem, 3vw, 2.1rem);
+  }
+
+  .ip-num {
+    display: inline-grid;
+    flex: none;
+    width: 2.2rem;
+    height: 2.2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--navy);
+    font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .ip-lead {
+    max-width: 48rem;
+    color: var(--ink);
+  }
+
+  .ip-sub {
+    margin-block: 1.6rem 0.7rem;
+    font-size: 1.15rem;
+  }
+
+  .ip-note {
+    margin-block: 1.1rem 0;
+    border-inline-start: 4px solid var(--mint);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: rgba(70, 194, 168, 0.1);
+    color: var(--ink);
+    padding: 0.75rem 1rem;
+  }
+
+  /* Før du starter */
+  .ip-prereq {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: pre;
+  }
+
+  .ip-prereq li {
+    counter-increment: pre;
+    border: 1px solid var(--line);
+    border-block-start: 4px solid var(--mint);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1rem;
+  }
+
+  .ip-prereq strong {
+    display: block;
+    margin-block-end: 0.35rem;
+    color: var(--navy);
+    font-size: 1.05rem;
+  }
+
+  .ip-prereq strong::before {
+    content: counter(pre) ". ";
+    color: var(--navy);
+  }
+
+  .ip-prereq p {
+    margin: 0;
+  }
+
+  .ip-prereq .ip-prereq__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block-start: 0.6rem;
+  }
+
+  /* Trin */
+  .ip-steps {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .ip-steps > li {
+    position: relative;
+    counter-increment: step;
+    border-block-start: 1px solid var(--line);
+    padding: 0.9rem 0 0.9rem 3rem;
+  }
+
+  .ip-steps > li:first-child {
+    border-block-start: 0;
+  }
+
+  .ip-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    inset-block-start: 0.85rem;
+    inset-inline-start: 0;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 2px solid var(--orange);
+    border-radius: 50%;
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .ip-steps > li > strong {
+    display: block;
+    color: var(--navy);
+    font-size: 1.05rem;
+  }
+
+  .ip-steps p {
+    margin: 0.2rem 0 0;
+  }
+
+  .ip-answers {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.4rem 0 0;
+    padding-inline-start: 1.1rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Konsol ---------- */
+  .ip-term {
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: #0c0c0c;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  }
+
+  .ip-term__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #1f1f1f;
+    color: #d6d6d6;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .ip-term__dots {
+    display: flex;
+    flex: none;
+    gap: 0.35rem;
+  }
+
+  .ip-term__dots i {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #4a4a4a;
+  }
+
+  .ip-term__title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ip-term__body {
+    margin: 0;
+    overflow: auto;
+    color: #cccccc;
+    font-family: var(--ip-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    padding: 0.9rem 0.75rem 1rem 0.5rem;
+  }
+
+  .ip-term__body:focus-visible,
+  .ip-section .ip-term__body:focus-visible {
+    outline-color: var(--orange);
+    outline-offset: -3px;
+  }
+
+  .ip-term__body code {
+    font-size: inherit;
+    overflow-wrap: normal;
+  }
+
+  .ip-t {
+    display: block;
+    min-height: 1.5em;
+    white-space: pre;
+  }
+
+  .ip-t--plain {
+    color: #cccccc;
+  }
+
+  .ip-t--banner,
+  .ip-t--step {
+    color: #61d6d6;
+  }
+
+  .ip-t--banner2 {
+    color: #3a96dd;
+  }
+
+  .ip-t--dim {
+    color: #8a8a8a;
+  }
+
+  .ip-t--prompt,
+  .ip-t--head {
+    color: #f2f2f2;
+  }
+
+  .ip-t--ok {
+    color: #16c60c;
+  }
+
+  .ip-t--warn {
+    color: #f9f1a5;
+  }
+
+  .ip-t--err {
+    color: #e74856;
+  }
+
+  .ip-t--info {
+    color: #a6a6a6;
+  }
+
+  .ip-t__input {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ip-term figcaption {
+    border-block-start: 1px solid #2a2a2a;
+    background: #161616;
+    color: #bdbdbd;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .ip-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink);
+    font-size: 0.9rem;
+  }
+
+  .ip-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .ip .ip-legend code.ip-legend__chip {
+    border-radius: 4px;
+    background: #0c0c0c;
+    font-weight: 700;
+    padding: 0.1em 0.45em;
+  }
+
+  .ip .ip-legend code.ip-legend__chip.ip-t--step {
+    color: #61d6d6;
+  }
+
+  .ip .ip-legend code.ip-legend__chip.ip-t--ok {
+    color: #16c60c;
+  }
+
+  .ip .ip-legend code.ip-legend__chip.ip-t--warn {
+    color: #f9f1a5;
+  }
+
+  .ip .ip-legend code.ip-legend__chip.ip-t--err {
+    color: #e74856;
+  }
+
+  .ip .ip-legend code.ip-legend__chip.ip-t--info {
+    color: #a6a6a6;
+  }
+
+  /* ---------- Kontrol ---------- */
+  .ip-check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 0 2rem;
+  }
+
+  .ip-check-grid > div {
+    min-width: 0;
+  }
+
+  .ip-check-grid .ip-sub {
+    margin-block-start: 0.4rem;
+  }
+
+  .ip-checks {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ip-checks li {
+    position: relative;
+    color: var(--ink);
+    padding-inline-start: 1.9rem;
+  }
+
+  .ip-checks li::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.2rem;
+    inset-inline-start: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--mint);
+    border-radius: 4px;
+    background: var(--white);
+  }
+
+  .ip-checks li::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.38rem;
+    inset-inline-start: 0.4rem;
+    width: 0.3rem;
+    height: 0.6rem;
+    border: solid var(--mint);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+  }
+
+  .ip-clients {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 0.85rem;
+  }
+
+  .ip-client {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1rem;
+  }
+
+  .ip-client h4 {
+    margin: 0 0 0.5rem;
+    color: var(--navy);
+    font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+    font-size: 1.05rem;
+  }
+
+  .ip-client ol {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding-inline-start: 1.2rem;
+    color: var(--ink);
+    font-size: 0.93rem;
+  }
+
+  /* ---------- Kodeblokke ---------- */
+  .ip-code {
+    margin-block-start: 0.85rem;
+    overflow: hidden;
+    border: 1px solid rgba(17, 42, 70, 0.2);
+    border-radius: var(--radius);
+    background: #f7f9fb;
+  }
+
+  .ip-code__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-block-end: 1px solid rgba(17, 42, 70, 0.12);
+    background: rgba(17, 42, 70, 0.05);
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.4rem 0.3rem 0.8rem;
+  }
+
+  .ip-copy {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    border: 1px solid rgba(17, 42, 70, 0.25);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: none;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .ip-copy[hidden] {
+    display: none;
+  }
+
+  .ip-copy:hover {
+    border-color: var(--orange);
+  }
+
+  /* .ip-code har overflow: hidden, så ringen skal ligge tæt på knappen for ikke at blive skåret af. */
+  .ip-copy:focus-visible {
+    outline: 3px solid var(--navy);
+    outline-offset: 1px;
+  }
+
+  .ip-code pre {
+    margin: 0;
+    color: var(--navy);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .ip-code pre code {
+    font-size: inherit;
+  }
+
+  .ip-pre {
+    margin: 0;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: #e9f1f8;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    padding: 0.9rem 1rem;
+  }
+
+  .ip-pre code {
+    font-size: inherit;
+    overflow-wrap: normal;
+  }
+
+  /* ---------- NBS ---------- */
+  .ip-tips {
+    display: grid;
+    gap: 0.45rem;
+    margin: 1rem 0 0;
+    border-radius: var(--radius);
+    background: rgba(17, 42, 70, 0.04);
+    color: var(--ink);
+    padding: 0.9rem 1rem 0.9rem 2.1rem;
+  }
+
+  /* ---------- Fejl ---------- */
+  .ip-group-lead {
+    margin-block: 1.6rem 0.6rem;
+    color: var(--ink);
+  }
+
+  .ip-groups {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .ip-group {
+    scroll-margin-block-start: 9rem;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(17, 42, 70, 0.03);
+  }
+
+  .ip-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    padding: 0.8rem 1rem;
+  }
+
+  .ip-group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ip-group > summary h3 {
+    flex: 1;
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+
+  .ip-group > summary::after {
+    content: "";
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: solid var(--navy);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+  }
+
+  .ip-group[open] > summary {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .ip-group[open] > summary::after {
+    rotate: -135deg;
+  }
+
+  .ip-group__body {
+    padding: 0.8rem;
+  }
+
+  .ip-count {
+    flex: none;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .ip-group-intro {
+    margin: 0 0 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  .ip-msgs {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .ip-msg {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+  }
+
+  .ip-msg[open] {
+    border-color: rgba(17, 42, 70, 0.3);
+  }
+
+  .ip-msg summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.6rem;
+    cursor: pointer;
+    list-style: none;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .ip-msg summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ip-msg summary::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-block-start: 0.4rem;
+    border: solid var(--navy);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+    transition: rotate 0.15s ease;
+  }
+
+  .ip-msg[open] summary::after {
+    rotate: -135deg;
+    margin-block-start: 0.6rem;
+  }
+
+  .ip .ip-msg summary code {
+    background: none;
+    color: var(--navy);
+    font-size: 0.84rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    padding: 0;
+  }
+
+  .ip-msg dl {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.35rem 0.9rem;
+    margin: 0;
+    border-block-start: 1px solid var(--line);
+    padding: 0.75rem 0.8rem 0.85rem;
+  }
+
+  .ip-msg dt {
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .ip-msg dd {
+    min-width: 0;
+    margin: 0;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  .ip-sev {
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 0.25rem 0.55rem;
+    white-space: nowrap;
+  }
+
+  .ip-sev--fejl {
+    background: #fdeceb;
+    color: #9f1d14;
+  }
+
+  .ip-sev--advarsel {
+    background: #fff3d6;
+    color: #7a4d00;
+  }
+
+  .ip-sev--info {
+    background: #e7f0f9;
+    color: #1d4f7a;
+  }
+
+  .ip-sev--dialog {
+    background: #e7ecf2;
+    color: var(--navy);
+  }
+
+  /* ---------- Øvelser ---------- */
+  .ip-safety {
+    border: 1px solid rgba(242, 140, 40, 0.45);
+    border-inline-start: 5px solid var(--orange);
+    border-radius: var(--radius);
+    background: rgba(242, 140, 40, 0.07);
+    padding: 0.2rem 1rem 1rem;
+  }
+
+  .ip-safety .ip-sub {
+    margin-block-start: 0.8rem;
+  }
+
+  .ip-safety ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    color: var(--ink);
+    font-size: 0.93rem;
+  }
+
+  .ip-exercises {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 1rem;
+    margin-block-start: 1.25rem;
+  }
+
+  .ip-ex {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1.1rem;
+  }
+
+  .ip-ex h3 {
+    margin: 0.7rem 0 0.5rem;
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+
+  .ip-ex__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .ip-level,
+  .ip-mode {
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 0.28rem 0.6rem;
+  }
+
+  .ip-level--start {
+    background: rgba(70, 194, 168, 0.2);
+    color: #0b5a4b;
+  }
+
+  .ip-level--oevet {
+    background: rgba(242, 140, 40, 0.18);
+    color: #87470a;
+  }
+
+  .ip-level--nbs {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .ip-mode--read {
+    border: 1px solid rgba(70, 194, 168, 0.6);
+    color: #0b5a4b;
+  }
+
+  .ip-mode--write {
+    border: 1px solid rgba(197, 70, 25, 0.5);
+    background: #fdeee6;
+    color: #8a2d0b;
+  }
+
+  .ip-ex__goal {
+    margin: 0;
+    color: var(--ink);
+    font-size: 0.95rem;
+  }
+
+  .ip-ex .ip-code {
+    margin-block: 0.85rem;
+  }
+
+  .ip-ex .ip-code pre {
+    font-size: 0.85rem;
+  }
+
+  .ip-ex__more {
+    margin-block-start: auto;
+    border-block-start: 1px solid var(--line);
+    padding-block-start: 0.6rem;
+  }
+
+  .ip-ex__more summary {
+    cursor: pointer;
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .ip-ex__more p {
+    margin: 0.55rem 0 0;
+    color: var(--ink);
+    font-size: 0.92rem;
+  }
+
+  .ip-ex-extra {
+    margin-block-start: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(17, 42, 70, 0.03);
+  }
+
+  .ip-ex-extra > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    color: var(--navy);
+    font-weight: 800;
+    padding: 0.8rem 1rem;
+  }
+
+  .ip-ex-extra > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ip-ex-extra > summary::after {
+    content: "";
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: solid var(--navy);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+  }
+
+  .ip-ex-extra[open] > summary {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .ip-ex-extra[open] > summary::after {
+    rotate: -135deg;
+  }
+
+  .ip-ex-extra > .ip-exercises {
+    margin: 0;
+    padding: 1rem;
+  }
+
+  /* ---------- Manuel opsætning ---------- */
+  .ip-manual > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ip-manual > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ip-manual > summary h2 {
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  }
+
+  .ip-manual > summary::after {
+    content: "";
+    flex: none;
+    width: 0.65rem;
+    height: 0.65rem;
+    border: solid var(--navy);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+  }
+
+  .ip-manual[open] > summary::after {
+    rotate: -135deg;
+  }
+
+  .ip-manual__body {
+    margin-block-start: 1rem;
+  }
+
+  .ip-manual__body p {
+    color: var(--ink);
+  }
+
+  .ip-facts {
+    display: grid;
+    gap: 0;
+    margin: 0 0 1rem;
+  }
+
+  .ip-facts div {
+    display: grid;
+    grid-template-columns: minmax(7.5rem, max-content) minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    border-block-end: 1px solid var(--line);
+    padding-block: 0.55rem;
+  }
+
+  .ip-facts dt {
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .ip-facts dd {
+    min-width: 0;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  /* ---------- Fod ---------- */
+  .ip-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin-block-start: 1.5rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .ip-foot p {
+    margin: 0;
+  }
+
+  .ip-foot__link {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .ip-foot__link:hover {
+    color: var(--navy);
+  }
+
+  .ip-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---------- Responsivt ---------- */
+  @media (max-width: 820px) {
+    .ip-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ip-steps > li {
+      padding-inline-start: 2.6rem;
+    }
+
+    .ip-msg dl,
+    .ip-facts div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ip-msg dd + dt {
+      margin-block-start: 0.4rem;
+    }
+
+    .ip-section,
+    .ip-group {
+      scroll-margin-block-start: 11rem;
+    }
+  }
+</style>
