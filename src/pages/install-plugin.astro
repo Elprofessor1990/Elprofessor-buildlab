@@ -18,10 +18,12 @@ const releaseDate = "30. september 2026";
 const releaseDateIso = "2026-09-30";
 
 const r = String.raw;
-const installerFile = "ISSANA-MCP-Installer.exe";
-const installerUrl = getAssetPath(`downloads/${installerFile}`);
-/* Den gemte fil får versionen i navnet (download-attributten; samme domæne). */
+/* Installeren ligger som GitHub Release i dette (offentlige) repo, ikke i public/downloads.
+   Asset-navnet er det gemte filnavn, fordi download-attributten ignoreres på tværs af domæner. */
 const savedFile = `ISSANA-MCP-Installer-${pluginVersion}.exe`;
+const releaseTag = `issana-mcp-v${pluginVersion}`;
+const releaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${releaseTag}`;
+const installerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${releaseTag}/${savedFile}`;
 const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
 const codexUrl = "https://openai.com/da-DK/codex/";
@@ -581,7 +583,7 @@ tool_timeout_sec = 300`;
           </a>
         </div>
         <p class="ip-hero__meta">
-          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 92 MB · Revit 2026/2027
+          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 92 MB · Revit 2026/2027 · <a class="ip-hero__link" href={releaseUrl} rel="noopener">GitHub Release</a>
         </p>
         <p class="ip-hero__credit">Udviklet af <a class="ip-hero__link" href={issanaSite} rel="noopener"><strong>{issana}</strong></a> · Byg og Miljø Rådgiver ApS</p>
       </div>
