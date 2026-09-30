@@ -61,7 +61,7 @@ export const nextVersionIcons = [
 
 export const nextVersionFeatures = [
   "Nyt navn og design: ISSANA MCP med fire nye ikoner i båndet.",
-  "Kontrolleret tilstand: AI'en foreslår, og du godkender hver ændring i panelet, før noget sker i modellen.",
+  "Kontrolleret tilstand, som du selv slår til under Indstillinger → Forbindelse: AI'en foreslår, og du godkender hver ændring i panelet, før noget sker i modellen.",
   "Kod bygningsdele hurtigere: tilknyt alle kategorier og synkronisér med NBS i én plan og ét klik.",
 ];
 
@@ -119,7 +119,7 @@ export type Idea = { title: string; text: string; status: "Under test" | "Idé" 
 
 export const pluginIdeas: Idea[] = [
   { title: "Ét klik: tilknyt og synkronisér", text: "Alle kategorier tilknyttes og synkroniseres med NBS i én plan og én godkendelse.", status: "Under test" },
-  { title: "Kontrolleret tilstand", text: "AI'en foreslår, og du godkender hver ændring i panelet. Alt logges.", status: "Under test" },
+  { title: "Kontrolleret tilstand", text: "Slås til under Indstillinger → Forbindelse. Så foreslår AI'en, og du godkender hver ændring i panelet. Alt logges.", status: "Under test" },
   { title: "Beskrivelser med lag og U-værdier", text: "Bygningsdelene får en beskrivelse med lagopbygning, U-værdi og for vinduer g-værdi – hentet fra modellen.", status: "Idé" },
   { title: "Skraveringstjek efter Molio C223b", text: "Kontrollér materialernes snitskraveringer mod C223b, og få rettelser til godkendelse.", status: "Idé" },
   { title: "QA-rapport til afleveringen", text: "Modelkontrol mod firmastandard og informationsniveau samlet i en rapport.", status: "Idé" },
