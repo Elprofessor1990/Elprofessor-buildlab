@@ -94,32 +94,6 @@ export const subjects: Subject[] = [
     links: [],
   },
   {
-    slug: "building-physics",
-    title: { da: "Bygfys", en: "Building Physics", ar: "فيزياء المباني" },
-    description: {
-      da: "Varme, fugt, indeklima og dokumentation med tydelige beregningstrin.",
-      en: "Heat, moisture, indoor climate, and documentation with clear calculation steps.",
-      ar: "الحرارة والرطوبة والمناخ الداخلي والتوثيق بخطوات حسابية واضحة.",
-    },
-    objectives: {
-      da: ["Forklare principper", "Opbygge beregninger", "Kontrollere resultater"],
-      en: ["Explain principles", "Build calculations", "Check results"],
-      ar: ["شرح المبادئ", "بناء الحسابات", "التحقق من النتائج"],
-    },
-    resources: [
-      {
-        title: {
-          da: "Download Bygningsfysik-suite 2.2.0",
-          en: "Download Building Physics Suite 2.2.0",
-          ar: "تنزيل حزمة فيزياء المباني 2.2.0",
-        },
-        type: "link",
-        url: "/bygningsfysik-suite",
-      },
-    ],
-    links: [],
-  },
-  {
     slug: "nbs-nordic",
     title: { da: "NBS Nordic", en: "NBS Nordic", ar: "NBS Nordic" },
     description: {

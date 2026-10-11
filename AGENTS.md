@@ -32,11 +32,10 @@ Create a scalable structure for these subjects:
 4. Semester 3
 5. Semester 4
 6. Semester 5
-7. Building physics
-8. NBS Nordic
-9. LCAbyg — whole-building life-cycle assessment
-10. LCCbyg — building life-cycle costing
-11. FEM-Design
+7. NBS Nordic
+8. LCAbyg — whole-building life-cycle assessment
+9. LCCbyg — building life-cycle costing
+10. FEM-Design
 
 Each subject must be able to contain a description, learning objectives, video lessons, downloadable material, exercises, and links.
 
@@ -62,7 +61,7 @@ Each subject must be able to contain a description, learning objectives, video l
 Build a first version with:
 
 1. A front page with brand, purpose, and subject overview.
-2. Subject cards for the 11 content areas.
+2. Subject cards for the 10 content areas.
 3. A video library layout with filtering by subject and language.
 4. A lesson page template with video embed, objectives, resources, and next lesson.
 5. An About page for Ali Kadum Hassan and AKLCA.

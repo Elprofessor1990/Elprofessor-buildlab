@@ -95,11 +95,11 @@ export const subjectHubs: SubjectHub[] = [
       },
     ],
     connectionNote: {
-      da: "AI kan støtte BIM, pyRevit, bygningsfysik og produktion af undervisningsmaterialer.",
-      en: "AI can support BIM, pyRevit, building physics, and production of teaching resources.",
-      ar: "يمكن أن يدعم AI مجالات BIM وpyRevit وفيزياء المباني وإنتاج مواد التعليم.",
+      da: "AI kan støtte BIM, pyRevit og produktion af undervisningsmaterialer.",
+      en: "AI can support BIM, pyRevit, and production of teaching resources.",
+      ar: "يمكن أن يدعم AI مجالات BIM وpyRevit وإنتاج مواد التعليم.",
     },
-    connections: ["bim", "pyrevit", "building-physics"],
+    connections: ["bim", "pyrevit"],
     featured: {
       eyebrow: { da: "Ny skill-pakke", en: "New skill pack", ar: "حزمة مهارات جديدة" },
       title: {
@@ -197,46 +197,6 @@ export const subjectHubs: SubjectHub[] = [
     connections: ["bim", "nbs-nordic", "lcabyg"],
   },
   {
-    subject: "building-physics",
-    intro: {
-      da: "Bygfys-fanen er til varme, fugt, indeklima, beregningstrin og den dokumentation, der gør resultaterne forståelige.",
-      en: "The Building Physics tab is for heat, moisture, indoor climate, calculation steps, and documentation that makes results understandable.",
-      ar: "تبويب فيزياء المباني مخصص للحرارة والرطوبة والمناخ الداخلي وخطوات الحساب والتوثيق الذي يجعل النتائج مفهومة.",
-    },
-    videoTypes: [
-      {
-        title: { da: "Varme", en: "Heat", ar: "الحرارة" },
-        description: {
-          da: "Korte videoer om lag, U-værdi, varmetab og energiforståelse.",
-          en: "Short videos about layers, U-values, heat loss, and energy understanding.",
-          ar: "فيديوهات قصيرة عن الطبقات وقيمة U وفقد الحرارة وفهم الطاقة.",
-        },
-      },
-      {
-        title: { da: "Fugt og indeklima", en: "Moisture and Indoor Climate", ar: "الرطوبة والمناخ الداخلي" },
-        description: {
-          da: "Forklaringer om fugttransport, komfort, ventilation og dokumentation.",
-          en: "Explanations of moisture transport, comfort, ventilation, and documentation.",
-          ar: "شروحات عن انتقال الرطوبة والراحة والتهوية والتوثيق.",
-        },
-      },
-      {
-        title: { da: "Regneeksempler", en: "Calculation Examples", ar: "أمثلة حسابية" },
-        description: {
-          da: "Trin-for-trin videoer med plads til opgaver og kontrol af resultater.",
-          en: "Step-by-step videos with room for exercises and result checks.",
-          ar: "فيديوهات خطوة بخطوة مع مساحة للتمارين وفحص النتائج.",
-        },
-      },
-    ],
-    connectionNote: {
-      da: "Bygfys kan bruges sammen med BIM og materialevalg i LCAByg.",
-      en: "Building Physics can be used with BIM and material choices in LCAByg.",
-      ar: "يمكن استخدام فيزياء المباني مع BIM واختيار المواد في LCAByg.",
-    },
-    connections: ["bim", "lcabyg"],
-  },
-  {
     subject: "nbs-nordic",
     intro: {
       da: "NBS Nordic-fanen samler videoer om konto, projekt, bygningsdele, Revit-kobling, tilbudslister, LCA-eksport og prisberegning.",
@@ -314,7 +274,7 @@ export const subjectHubs: SubjectHub[] = [
       en: "LCAByg connects with NBS Nordic, LCCByg, and material choices in design work.",
       ar: "يرتبط LCAByg بـ NBS Nordic وLCCByg واختيار المواد في التصميم.",
     },
-    connections: ["nbs-nordic", "lccbyg", "building-physics"],
+    connections: ["nbs-nordic", "lccbyg"],
   },
   {
     subject: "lccbyg",
@@ -390,11 +350,11 @@ export const subjectHubs: SubjectHub[] = [
       },
     ],
     connectionNote: {
-      da: "FEM-Design kan kobles til bygningsfysik og BIM, når analyse og dokumentation samles.",
-      en: "FEM-Design can connect with building physics and BIM when analysis and documentation are collected.",
-      ar: "يمكن ربط FEM-Design بفيزياء المباني وBIM عند جمع التحليل والتوثيق.",
+      da: "FEM-Design kan kobles til BIM, når analyse og dokumentation samles.",
+      en: "FEM-Design can connect with BIM when analysis and documentation are collected.",
+      ar: "يمكن ربط FEM-Design بـ BIM عند جمع التحليل والتوثيق.",
     },
-    connections: ["building-physics", "bim"],
+    connections: ["bim"],
   },
 ];
 

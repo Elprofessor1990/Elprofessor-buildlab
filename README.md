@@ -24,7 +24,6 @@ The site currently includes:
 - AI
 - pyRevit
 - Dalux
-- Building Physics / Bygfys
 - NBS Nordic
 - LCAByg
 - LCCByg

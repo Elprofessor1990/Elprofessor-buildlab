@@ -278,40 +278,4 @@ export const learningTracks: LearningTrack[] = [
       },
     ],
   },
-  {
-    slug: "building-physics",
-    title: { da: "Bygfys", en: "Building Physics", ar: "فيزياء المباني" },
-    label: { da: "Varme, fugt og indeklima", en: "Heat, moisture, indoor climate", ar: "الحرارة والرطوبة والمناخ الداخلي" },
-    description: {
-      da: "Emnet til bygningsfysik, varmetab, fugt, indeklima, beregningstrin og dokumentation.",
-      en: "The subject for building physics, heat loss, moisture, indoor climate, calculation steps, and documentation.",
-      ar: "موضوع فيزياء المباني وفقد الحرارة والرطوبة والمناخ الداخلي وخطوات الحساب والتوثيق.",
-    },
-    note: {
-      da: "Bygfys kan rumme korte beregningsvideoer, øvelser, skemaer og forklarende grafik.",
-      en: "Building Physics can hold short calculation videos, exercises, tables, and explanatory graphics.",
-      ar: "يمكن أن يحتوي هذا الموضوع على فيديوهات حساب قصيرة وتمارين وجداول ورسوم توضيحية.",
-    },
-    primarySubject: "building-physics",
-    categories: [
-      {
-        title: { da: "Varme", en: "Heat", ar: "الحرارة" },
-        description: {
-          da: "U-værdi, lag, kuldebroer og energiforståelse.",
-          en: "U-values, layers, thermal bridges, and energy understanding.",
-          ar: "قيمة U والطبقات والجسور الحرارية وفهم الطاقة.",
-        },
-        subject: "building-physics",
-      },
-      {
-        title: { da: "Fugt og indeklima", en: "Moisture and indoor climate", ar: "الرطوبة والمناخ الداخلي" },
-        description: {
-          da: "Fugttransport, komfort, ventilation og dokumentation.",
-          en: "Moisture transport, comfort, ventilation, and documentation.",
-          ar: "انتقال الرطوبة والراحة والتهوية والتوثيق.",
-        },
-        subject: "building-physics",
-      },
-    ],
-  },
 ];
