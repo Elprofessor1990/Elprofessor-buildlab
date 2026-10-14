@@ -1,0 +1,69 @@
+{
+  "testdato": "2026-10-14",
+  "udgave": "Compose v4 (12. oktober 2026)",
+  "omfang": "Afgrænset prøve af et struktureret dokument via CLI; syntetiske data",
+  "resultater": [
+    {
+      "id": "P01",
+      "test": "Indsæt overskrift, to figurer og tabel uden tab af værdier",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P02",
+      "test": "Gentaget operation-id giver ingen dubletter",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P03",
+      "test": "Udskift figur med bevaret node-id, billedtekst og kildefelt",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P04",
+      "test": "Fortryd gendanner dokumentets indhold og øger revisionen",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P05",
+      "test": "Ombyt figurer uden ændret identitet eller billedtekst",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P06",
+      "test": "Forældet revision afvises uden ændring",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P07",
+      "test": "Ugyldigt PNG og syntaktisk ugyldigt asset-id afvises uden delændring",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P09",
+      "test": "Gyldigt formet men manglende asset afvises atomisk",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    },
+    {
+      "id": "P08",
+      "test": "PDF kompileret med eksisterende v4-runtime",
+      "surface": "CLI v4",
+      "status": "BESTÅET"
+    }
+  ],
+  "ikke_afproevet": [
+    "Samlet Revit til Compose-arbejdsgang",
+    "Compose-appens brugerflade",
+    "Promptlisten",
+    "Installation på en ny computer",
+    "Faglig godkendelse"
+  ],
+  "pdf_sha256": "26DF9031C59DADC26AB71DEAAFCCBAB2E22266BF3F9A9A243C700B9ACC043FCC"
+}

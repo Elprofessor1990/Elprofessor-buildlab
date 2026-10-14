@@ -1,0 +1,280 @@
+---
+import { composeCategories, composePrompts, composeTemplates, composeTestStatus } from "../data/composeGuide";
+import { withBase } from "../i18n";
+
+const workflows = [
+  { number: "01", title: "Planer → notat", text: "Vælg de visninger, du vil forklare. Målet er figurer med billedtekster og en tydelig forbindelse til modellen." },
+  { number: "02", title: "Modeldata → tabel", text: "Vælg rum eller bygningsdele. Målet er overskuelige tabeller med korrekte enheder og synlige mangler." },
+  { number: "03", title: "Udskift → opdatér", text: "Skift en skitse eller opdatér modeldata. Målet er at bevare dokumentets struktur og dine egne tilføjelser." },
+];
+---
+
+<div class="cg">
+  <section class="cg-hero" aria-labelledby="compose-title">
+    <div class="cg-hero__copy">
+      <p class="cg-kicker">ISSANA Compose / Praktisk vejledning</p>
+      <p class="cg-pill">Pilot · under afprøvning</p>
+      <h1 id="compose-title">Fra model til<br /><span>et dokument,<br />du kan arbejde i.</span></h1>
+      <p class="cg-intro">Planer, modeldata og skitser i samme arbejdsproces. Her begynder afprøvningen af en enklere vej fra Revit til dokumentation — til studiet og virksomheden.</p>
+      <div class="cg-actions">
+        <a class="button button--primary" href="#prompts">Find en prompt <span aria-hidden="true">↗</span></a>
+        <a class="cg-hero__link" href="#start">Start pilotforsøget <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <div class="cg-board" aria-label="Illustration af målet: en Revit-visning bliver til en figur i et redigerbart dokument.">
+      <div class="cg-board__top"><span>ARBEJDSGANG / 01</span><span>MODEL → DOKUMENT</span></div>
+      <div class="cg-drawing" aria-hidden="true">
+        <div class="cg-plan"><i></i><i></i><i></i><i></i><span>PLAN</span></div>
+        <span class="cg-transfer">→</span>
+        <div class="cg-paper"><span>PROJEKTNOTAT</span><strong>Et fælles grundlag.</strong><div class="cg-paper__figure"></div><small>Figur 1 · Plan og kilde</small><i></i><i></i><i></i></div>
+      </div>
+      <p>Vælg det relevante. Beskriv det tydeligt.<br /><strong>Kontrollér resultatet.</strong></p>
+      <div class="cg-board__bottom"><span>ILLUSTRERET ARBEJDSGANG</span><span>IKKE ET PROGRAMSKÆRMBILLEDE</span></div>
+    </div>
+  </section>
+
+  <nav class="cg-index" aria-label="På denne side">
+    <a href="#arbejdsgange">01 Arbejdsgange</a><a href="#start">02 Kom i gang</a><a href="#prompts">03 Prompts</a><a href="#status">04 Teststatus</a><a href="#skabeloner">05 Skabeloner</a><a href="#windows">06 Windows</a>
+  </nav>
+
+  <section class="cg-section" id="arbejdsgange" aria-labelledby="workflows-title">
+    <div class="cg-section__heading"><p class="cg-kicker">01 / Det vi vil gøre enklere</p><h2 id="workflows-title">Tre konkrete arbejdsgange.</h2><p>Det følgende er mål for piloten. En samlet, automatisk overførsel fra Revit til Compose er endnu ikke dokumenteret her.</p></div>
+    <div class="cg-workflows">
+      {workflows.map((item) => <article><span class="cg-number">{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+    </div>
+    <div class="cg-audience"><p><strong>For studerende</strong> Øv en enkel metode, sammenlign med modellen, og lær at efterprøve AI'ens arbejde.</p><p><strong>For virksomheder</strong> Afprøv en gentagelig dokumentproces med egne skabeloner, kilder og fagligt review.</p></div>
+  </section>
+
+  <section class="cg-section cg-start" id="start" aria-labelledby="start-title">
+    <div class="cg-section__heading"><p class="cg-kicker">02 / Kom i gang med piloten</p><h2 id="start-title">Et lille forsøg.<br />Et tydeligt resultat.</h2><p>Få først en testudgave og en fungerende forbindelse på plads med den ansvarlige for piloten. <a href={withBase("/install-plugin")}>Revit-pluginets installationsvejledning</a> beskriver Revit-delen; den dokumenterer ikke en færdig Compose-kobling.</p></div>
+    <ol class="cg-steps">
+      <li><span>1</span><div><h3>Åbn en gemt testkopi</h3><p>Brug en model, du må afprøve arbejdsgangen på. Vælg få, tydeligt navngivne planer eller et lille udvalg af rum.</p></div></li>
+      <li><span>2</span><div><h3>Vælg et Compose-testprojekt</h3><p>Opret eller åbn et særskilt dokument, og vælg det afsnit, hvor figurerne eller tabellen skal stå.</p></div></li>
+      <li><span>3</span><div><h3>Beskriv det ønskede output</h3><p>Vælg en prompt nedenfor. Erstat teksten i firkantede parenteser med dine visningsnavne, afsnit og ønsker.</p></div></li>
+      <li><span>4</span><div><h3>Gennemse og notér</h3><p>Sammenlign dokument og PDF med kilden. Notér programversioner, tidsforbrug og det, du måtte rette eller gøre manuelt.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="cg-section" id="prompts" aria-labelledby="prompts-title">
+    <div class="cg-section__heading"><p class="cg-kicker">03 / Promptbibliotek</p><h2 id="prompts-title">Hvad vil du have ud?</h2><p>Vælg opgaven, tilpas prompten, og brug kvalitetskontrollen bagefter. Forslagene kræver afprøvning med den konkrete programversion og model.</p></div>
+    <div class="cg-prompt-status"><span aria-hidden="true">○</span> Promptforslag · endnu ikke live-testet</div>
+    <div class="cg-tools" data-prompt-tools hidden>
+      <div class="cg-filters" role="group" aria-label="Filtrér prompts efter opgave">{composeCategories.map((category) => <button type="button" data-filter={category.id} aria-pressed={category.id === "alle"} aria-controls="prompt-list">{category.label}</button>)}</div>
+      <label class="cg-search"><span>Søg i prompts</span><input type="search" data-prompt-search placeholder="Fx rum, skitse eller billedtekst" aria-controls="prompt-list" /></label>
+    </div>
+    <p class="cg-count" data-prompt-count role="status" aria-live="polite">{composePrompts.length} promptforslag</p>
+    <div class="cg-prompts" id="prompt-list">
+      {composePrompts.map((item, index) => (
+        <article class="cg-prompt" data-prompt-card data-category={item.category} data-search={`${item.title} ${item.input} ${item.output} ${item.check} ${item.prompt}`.toLocaleLowerCase("da")}>
+          <div class="cg-prompt__heading"><span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3></div>
+          <dl><div><dt>Du skal have</dt><dd>{item.input}</dd></div><div><dt>Ønsket output</dt><dd>{item.output}</dd></div></dl>
+          <blockquote id={`prompt-${item.id}`}>{item.prompt}</blockquote>
+          <div class="cg-prompt__copy"><button type="button" data-copy={`prompt-${item.id}`} hidden aria-label={`Kopiér prompt: ${item.title}`}>Kopiér prompt <span aria-hidden="true">↗</span></button><span class="cg-copy-message" role="status" aria-live="polite"></span></div>
+          <p class="cg-quality"><strong>Kontrollér</strong>{item.check}</p>
+        </article>
+      ))}
+    </div>
+    <p class="cg-empty" data-prompt-empty hidden>Ingen prompts matcher. Prøv et andet søgeord eller vælg “Alle prompts”.</p>
+    <p class="cg-note">En god prompt gør ønsket tydeligt. Hvis et nødvendigt værktøj eller en oplysning mangler, skal det fremgå af svaret, før arbejdet fortsætter.</p>
+  </section>
+
+  <section class="cg-section cg-status" id="status" aria-labelledby="status-title">
+    <div class="cg-section__heading"><p class="cg-kicker">04 / Dokumenteret status</p><h2 id="status-title">Hvad er afprøvet?</h2><p>Her samles resultater fra konkrete forsøg. En teknisk prøve af dokumentgenerering er et delresultat; overførslen fra en rigtig Revit-model skal også efterprøves.</p></div>
+    <div class="cg-test-list">{composeTestStatus.map((test) => <article><div><h3>{test.name}</h3><p>{test.detail}</p></div><span>{test.status}</span></article>)}</div>
+    <div class="cg-test-example"><a class="button button--primary" href={withBase("/downloads/compose/compose-pilot-testdata.pdf")}>Se testeksempel (PDF) <span aria-hidden="true">↗</span></a><p>Syntetiske testdata · ingen data fra en Revit-model<br /><a href={withBase("/downloads/compose/pilot-teststatus-2026-10-14.json")}>Testoversigt (JSON)</a> · PDF-eksemplet er visuelt gennemgået.</p></div>
+    <p class="cg-note">Resultaterne gælder de beskrevne prøver i dokumentmotoren. De dokumenterer endnu ikke en samlet arbejdsgang i Revit og Compose-appen eller promptenes virkning.</p>
+  </section>
+
+  <section class="cg-section" id="skabeloner" aria-labelledby="templates-title">
+    <div class="cg-section__heading"><p class="cg-kicker">05 / Planlagt skabelonbibliotek</p><h2 id="templates-title">Samme metode.<br />Flere faglige dokumenter.</h2><p>Planen er et bibliotek, hvor skabelonen beskriver nødvendige input, dokumentets opbygning og krav til review. De følgende skabelonspor er planlagt.</p></div>
+    <ul class="cg-templates">{composeTemplates.map((template) => <li><span>{template}</span><small>Planlagt</small></li>)}</ul>
+    <p class="cg-note">Molio-baserede beskrivelser forudsætter et afklaret rettighedsgrundlag. Faglige krav og standardtekster skal have en kendt kilde og udgave. Virksomhedens egne skabeloner og godkendelser indgår i afprøvningen.</p>
+  </section>
+
+  <section class="cg-section cg-download" id="windows" aria-labelledby="windows-title">
+    <div><p class="cg-kicker">06 / Programmet</p><h2 id="windows-title">Windows-udgave<br />under afprøvning.</h2></div>
+    <div><p>Når en udgave er klar til distribution, bliver den præsenteret her med versionsnummer, systemkrav, installationsvejledning og en oversigt over de afprøvede funktioner.</p><p class="cg-download__status">Der er endnu ingen offentlig Compose-installationsfil på denne side.</p><a class="cg-hero__link" href="#status">Se den aktuelle teststatus <span aria-hidden="true">→</span></a></div>
+  </section>
+</div>
+
+<script>
+  const guide = document.querySelector<HTMLElement>(".cg");
+  if (guide) {
+    const cards = Array.from(guide.querySelectorAll<HTMLElement>("[data-prompt-card]"));
+    const filters = Array.from(guide.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+    const search = guide.querySelector<HTMLInputElement>("[data-prompt-search]");
+    const count = guide.querySelector<HTMLElement>("[data-prompt-count]");
+    const empty = guide.querySelector<HTMLElement>("[data-prompt-empty]");
+    let category = "alle";
+    const update = () => {
+      const query = (search?.value ?? "").trim().toLocaleLowerCase("da");
+      let visible = 0;
+      for (const card of cards) {
+        card.hidden = !(category === "alle" || card.dataset.category === category) || !(card.dataset.search ?? "").includes(query);
+        if (!card.hidden) visible++;
+      }
+      if (count) count.textContent = `${visible} af ${cards.length} promptforslag`;
+      if (empty) empty.hidden = visible !== 0;
+    };
+    const controls = guide.querySelector<HTMLElement>("[data-prompt-tools]");
+    if (controls) controls.hidden = false;
+    for (const filter of filters) {
+      filter.addEventListener("click", () => {
+        category = filter.dataset.filter ?? "alle";
+        for (const item of filters) item.setAttribute("aria-pressed", String(item === filter));
+        update();
+      });
+    }
+    search?.addEventListener("input", update);
+    for (const button of guide.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy ?? "");
+        const feedback = button.parentElement?.querySelector<HTMLElement>(".cg-copy-message");
+        if (!target || !feedback) return;
+        try {
+          await navigator.clipboard.writeText(target.textContent?.trim() ?? "");
+          feedback.textContent = "Kopieret. Tilpas teksten i [parenteser].";
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(target);
+          const selection = window.getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          feedback.textContent = "Markér og kopiér teksten med Ctrl+C eller enhedens kopimenu.";
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  .cg { --cg-pad: clamp(1.25rem, 5vw, 4.5rem); max-width: 1440px; margin: auto; }
+  .cg [hidden] { display: none !important; }
+  .cg section { scroll-margin-top: 8rem; }
+  .cg-kicker { font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .cg-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; padding: 4.5rem var(--cg-pad); background: var(--navy); }
+  .cg-hero .cg-kicker { color: #becbd8; }
+  .cg-pill { display: inline-block; border: 1px solid #788a9c; color: #e0e8ef; padding: .25rem .65rem; font-size: .78rem; margin: .1rem 0 1.4rem; }
+  .cg-hero h1 { font-size: clamp(2.7rem, 4.8vw, 4.75rem); color: white; letter-spacing: -.035em; margin-bottom: 1.6rem; }
+  .cg-hero h1 span { color: #f5c087; }
+  .cg-intro { color: #d9e2ec; font-size: 1.05rem; max-width: 34rem; }
+  .cg-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1.4rem; margin-top: 2rem; }
+  .cg-actions .button--primary { background: var(--orange); color: var(--navy); border-color: var(--orange); }
+  .cg-actions .button--primary:hover { background: #f5b16c; border-color: #f5b16c; }
+  .cg-hero__link { color: white; font-weight: 700; text-decoration: underline; text-underline-offset: .3em; }
+  .cg-board { background: var(--sand); border-top: 5px solid var(--orange); padding: 1.2rem; transform: rotate(1deg); }
+  .cg-board__top, .cg-board__bottom { display: flex; justify-content: space-between; gap: .7rem; font-size: .55rem; font-weight: 800; letter-spacing: .06em; color: var(--navy); }
+  .cg-board__bottom { border-top: 1px solid var(--line); padding-top: .8rem; }
+  .cg-board > p { font-size: .9rem; color: var(--navy); margin: 1.4rem 0 1rem; }
+  .cg-drawing { display: grid; grid-template-columns: 1fr 1.2rem 1fr; align-items: center; gap: .6rem; min-height: 230px; padding: 1.3rem 0 .4rem; }
+  .cg-plan { height: 150px; position: relative; border: 4px solid var(--navy); background: repeating-linear-gradient(90deg, transparent, transparent 19px, #112a460a 20px), repeating-linear-gradient(0deg, transparent, transparent 19px, #112a460a 20px); }
+  .cg-plan i { position: absolute; background: var(--navy); }
+  .cg-plan i:nth-child(1) { left: 45%; top: 0; width: 3px; height: 55%; }
+  .cg-plan i:nth-child(2) { left: 0; top: 55%; width: 45%; height: 3px; }
+  .cg-plan i:nth-child(3) { left: 65%; top: 55%; width: 35%; height: 3px; }
+  .cg-plan i:nth-child(4) { left: 65%; top: 55%; width: 3px; height: 45%; }
+  .cg-plan span { position: absolute; bottom: .6rem; left: .6rem; font-size: .55rem; font-weight: 800; }
+  .cg-transfer { color: #a64f00; font-size: 1.25rem; font-weight: bold; }
+  .cg-paper { background: white; min-height: 230px; padding: 1rem; box-shadow: 0 7px 18px #112a4612; }
+  .cg-paper > span { display: block; font-size: .45rem; letter-spacing: .1em; }
+  .cg-paper strong { display: block; color: var(--navy); line-height: 1.15; margin: .8rem 0; font-size: .9rem; }
+  .cg-paper__figure { height: 65px; border: 2px solid var(--navy); background: linear-gradient(90deg, transparent 43%, var(--navy) 43%, var(--navy) 45%, transparent 45%), linear-gradient(0deg, transparent 48%, var(--navy) 48%, var(--navy) 51%, transparent 51%); }
+  .cg-paper small { display: block; font-size: .4rem; margin: .25rem 0 .8rem; }
+  .cg-paper i { display: block; height: 3px; margin: 5px 0; background: #dce2e8; }
+  .cg-paper i:last-child { width: 65%; }
+  .cg-index { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1.15rem var(--cg-pad); background: white; border-bottom: 1px solid var(--line); font-weight: 700; font-size: .8rem; color: var(--navy); }
+  .cg-index a:hover { text-decoration: underline; text-underline-offset: .3em; }
+  .cg-section { padding: 4rem var(--cg-pad); border-bottom: 1px solid var(--line); }
+  .cg-section__heading { max-width: 46rem; margin-bottom: 2rem; }
+  .cg-section h2 { font-size: clamp(2.1rem, 3.1vw, 3.25rem); letter-spacing: -.025em; margin-bottom: 1rem; }
+  .cg-section__heading a { color: var(--navy); text-decoration: underline; text-underline-offset: .2em; }
+  .cg-workflows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .cg-workflows article { border-top: 2px solid var(--navy); padding-top: 1.1rem; }
+  .cg-number { display: block; font-size: 2.8rem; color: #a9590a; line-height: 1; margin-bottom: 1.2rem; font-weight: 300; }
+  .cg-workflows h3 { font-size: 1.45rem; }
+  .cg-audience { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.25rem; border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .cg-audience strong { display: block; color: var(--navy); }
+  .cg-audience p { margin: 0; }
+  .cg-start { display: grid; grid-template-columns: .9fr 1.1fr; gap: 3rem; background: white; }
+  .cg-steps { list-style: none; padding: 0; margin: 0; }
+  .cg-steps li { display: flex; gap: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 1rem; }
+  .cg-steps li > span { background: var(--sand); color: var(--navy); border-radius: 50%; width: 2rem; height: 2rem; flex: 0 0 2rem; text-align: center; line-height: 2rem; font-weight: 800; }
+  .cg-steps h3 { margin: .3rem 0 .5rem; }
+  .cg-steps p { font-size: .92rem; }
+  .cg-prompt-status { border-left: 3px solid #ab5709; background: #f7e7d6; color: #6b3706; padding: .8rem 1rem; font-weight: 700; font-size: .88rem; }
+  .cg-prompt-status span { margin-right: .4rem; }
+  .cg-tools { margin-top: 1.5rem; display: flex; gap: 1rem; align-items: end; flex-wrap: wrap; justify-content: space-between; }
+  .cg-filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .cg-filters button { background: transparent; border: 1px solid #94a0ab; padding: .55rem .75rem; color: var(--navy); cursor: pointer; font-size: .83rem; font-weight: 700; }
+  .cg-filters button[aria-pressed="true"] { background: var(--navy); color: white; border-color: var(--navy); }
+  .cg-search { display: grid; gap: .25rem; font-size: .78rem; color: var(--navy); font-weight: 700; }
+  .cg-search input { width: min(100%, 19rem); padding: .6rem .75rem; border: 1px solid #94a0ab; background: white; border-radius: 0; font-size: .86rem; }
+  .cg-count { font-size: .8rem; margin: .8rem 0 1.1rem; }
+  .cg-prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+  .cg-prompt { display: flex; flex-direction: column; padding: 1.6rem; border: 1px solid var(--line); background: white; }
+  .cg-prompt__heading { display: flex; gap: .85rem; align-items: baseline; margin-bottom: 1rem; }
+  .cg-prompt__heading > span { color: #9b4a00; font-size: .8rem; font-weight: 800; }
+  .cg-prompt h3 { margin: 0; font-size: 1.35rem; }
+  .cg-prompt dl { margin: 0; }
+  .cg-prompt dl > div { margin-bottom: .8rem; }
+  .cg-prompt dt { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; color: var(--navy); }
+  .cg-prompt dd { margin: .15rem 0 0; font-size: .87rem; color: var(--muted); }
+  .cg-prompt blockquote { margin: .4rem 0 .8rem; background: #f4f6f8; border-left: 2px solid #afbdca; padding: 1rem; font-size: .9rem; line-height: 1.65; color: #253a4e; }
+  .cg-prompt__copy { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; }
+  .cg-prompt__copy button { border: 1px solid var(--navy); background: white; color: var(--navy); padding: .45rem .7rem; font-size: .8rem; font-weight: 800; cursor: pointer; }
+  .cg-prompt__copy button:hover { background: var(--navy); color: white; }
+  .cg-copy-message { color: #225746; font-size: .75rem; }
+  .cg-quality { margin: auto 0 0; border-top: 1px solid var(--line); padding-top: .8rem; font-size: .83rem; }
+  .cg-quality strong { color: var(--navy); display: block; margin-bottom: .2rem; }
+  .cg-note { font-size: .88rem; margin: 1.5rem 0 0; max-width: 55rem; }
+  .cg-empty { background: white; padding: 2rem; border: 1px solid var(--line); }
+  .cg-status { background: #eaf0f3; }
+  .cg-test-list article { display: flex; justify-content: space-between; gap: 1rem; padding: 1.4rem 0; border-top: 1px solid #bac7d0; }
+  .cg-test-list h3 { margin-bottom: .5rem; font-size: 1.1rem; }
+  .cg-test-list p { margin: 0; font-size: .9rem; }
+  .cg-test-list article > span { flex: 0 0 14rem; align-self: start; font-size: .78rem; font-weight: 700; color: var(--navy); border: 1px solid #8a9ca9; padding: .35rem .65rem; }
+  .cg-test-example { margin-top: 1.5rem; }
+  .cg-test-example p { margin: .6rem 0 0; font-size: .8rem; }
+  .cg-test-example p a { text-decoration: underline; text-underline-offset: .2em; color: var(--navy); }
+  .cg-templates { display: grid; grid-template-columns: repeat(2, 1fr); list-style: none; padding: 0; margin: 0; gap: 0 2rem; }
+  .cg-templates li { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--line); color: var(--navy); font-weight: 700; }
+  .cg-templates small { font-size: .72rem; font-weight: 400; color: var(--muted); }
+  .cg-download { background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .cg-download h2 { color: white; }
+  .cg-download .cg-kicker { color: #f5c087; }
+  .cg-download p { color: #d9e2ec; }
+  .cg-download .cg-download__status { font-size: .86rem; border-top: 1px solid #64798f; padding-top: 1rem; color: #f5c087; }
+  @media (max-width: 1050px) {
+    .cg-hero { gap: 2rem; }
+    .cg-board { padding: .9rem; }
+    .cg-drawing { min-height: 200px; gap: .4rem; }
+    .cg-paper { padding: .6rem; }
+    .cg-board__bottom { font-size: .48rem; }
+  }
+  @media (max-width: 760px) {
+    .cg-hero { grid-template-columns: 1fr; padding-block: 3rem; }
+    .cg-hero h1 { font-size: clamp(2.7rem, 9vw, 4rem); }
+    .cg-board { max-width: 450px; width: 100%; margin: auto; }
+    .cg-index { gap: .8rem 1.2rem; }
+    .cg-section { padding-block: 3rem; }
+    .cg-start, .cg-download { grid-template-columns: 1fr; gap: 1rem; }
+    .cg-workflows { gap: 1.2rem; }
+    .cg-workflows h3 { font-size: 1.15rem; }
+    .cg-workflows p { font-size: .88rem; }
+    .cg-prompts { grid-template-columns: 1fr; }
+    .cg-search, .cg-search input { width: 100%; }
+    .cg-test-list article { flex-direction: column; gap: .7rem; }
+    .cg-test-list article > span { flex-basis: auto; }
+  }
+  @media (max-width: 480px) {
+    .cg-workflows, .cg-audience, .cg-templates { grid-template-columns: 1fr; }
+    .cg-workflows article { display: grid; grid-template-columns: 2.6rem 1fr; gap: 0 .8rem; }
+    .cg-number { grid-row: 1 / 3; font-size: 2rem; }
+    .cg-workflows h3 { margin: 0 0 .6rem; }
+    .cg-workflows p { grid-column: 2; margin-bottom: .5rem; }
+    .cg-prompt { padding: 1.15rem; }
+    .cg-actions { gap: 1rem; }
+    .cg-hero__link { font-size: .9rem; }
+  }
+</style>

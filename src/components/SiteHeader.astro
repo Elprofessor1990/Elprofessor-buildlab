@@ -3,7 +3,7 @@ import { getAssetPath, getLocalePath, ui, withBase, type Locale, type PageKey } 
 
 type Props = {
   locale: Locale;
-  currentPage: PageKey | "plugin";
+  currentPage: PageKey | "plugin" | "compose";
 };
 
 const { locale, currentPage } = Astro.props;
@@ -18,6 +18,7 @@ const navItems = [
   { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "subjects" },
   { label: copy.nav.videos, href: getLocalePath(locale, "videos"), key: "videos" },
   { label: pluginLabel, href: withBase("/install-plugin"), key: "plugin" },
+  { label: "Compose", href: withBase("/compose"), key: "compose" },
   { label: copy.nav.about, href: getLocalePath(locale, "about"), key: "about" },
 ];
 ---
