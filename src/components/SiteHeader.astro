@@ -9,16 +9,11 @@ type Props = {
 const { locale, currentPage } = Astro.props;
 const copy = ui[locale];
 const logoUrl = getAssetPath("assets/logo-ldb.png");
-const pluginLabel = {
-  da: "Revit-plugin",
-  en: "Revit plugin",
-  ar: "إضافة Revit",
-}[locale];
 const navItems = [
   { label: copy.nav.subjects, href: `${getLocalePath(locale, "home")}#subjects`, key: "subjects" },
   { label: copy.nav.videos, href: getLocalePath(locale, "videos"), key: "videos" },
-  { label: pluginLabel, href: withBase("/install-plugin"), key: "plugin" },
-  { label: "Compose", href: withBase("/compose"), key: "compose" },
+  { label: "ISSANA MCP Revit", href: withBase("/install-plugin"), key: "plugin" },
+  { label: "ISSANA COMPOSE", href: withBase("/compose"), key: "compose" },
   { label: copy.nav.about, href: getLocalePath(locale, "about"), key: "about" },
 ];
 ---
@@ -48,3 +43,17 @@ const navItems = [
     ))}
   </nav>
 </header>
+
+<style>
+  .main-nav a {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .main-nav {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+  }
+</style>
