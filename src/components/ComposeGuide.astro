@@ -1,5 +1,5 @@
 ---
-import { composeCategories, composePrompts, composeTemplates, composeTestStatus, composeTypstLimits, composeTypstNews } from "../data/composeGuide";
+import { composeCategories, composeDownload, composeInstallSteps, composePackageFiles, composePrompts, composeTemplates, composeTestStatus, composeTypstLimits, composeTypstNews, composeVideos } from "../data/composeGuide";
 import { withBase } from "../i18n";
 
 const workflows = [
@@ -13,12 +13,12 @@ const workflows = [
   <section class="cg-hero" aria-labelledby="compose-title">
     <div class="cg-hero__copy">
       <p class="cg-kicker">ISSANA Compose / Praktisk vejledning</p>
-      <p class="cg-pill">Pilot · under afprøvning · <a href="#typst">nyt: Typst</a></p>
+      <p class="cg-pill">Testudgave 18.10 · <a href="#typst">nyt: Typst</a></p>
       <h1 id="compose-title">Fra model til<br /><span>et dokument,<br />du kan arbejde i.</span></h1>
       <p class="cg-intro">Planer, modeldata og skitser i samme arbejdsproces. Her begynder afprøvningen af en enklere vej fra Revit til dokumentation — til studiet og virksomheden.</p>
       <div class="cg-actions">
-        <a class="button button--primary" href="#prompts">Find en prompt <span aria-hidden="true">↗</span></a>
-        <a class="cg-hero__link" href="#start">Start pilotforsøget <span aria-hidden="true">→</span></a>
+        <a class="button button--primary" href="#hent">Hent Compose <span aria-hidden="true">↓</span></a>
+        <a class="cg-hero__link" href="#installation">Se installationen <span aria-hidden="true">→</span></a>
       </div>
     </div>
     <div class="cg-board" aria-label="Illustration af målet: en Revit-visning bliver til en figur i et redigerbart dokument.">
@@ -34,11 +34,64 @@ const workflows = [
   </section>
 
   <nav class="cg-index" aria-label="På denne side">
-    <a href="#typst">01 Nyt: Typst</a><a href="#arbejdsgange">02 Arbejdsgange</a><a href="#start">03 Kom i gang</a><a href="#prompts">04 Prompts</a><a href="#status">05 Teststatus</a><a href="#skabeloner">06 Skabeloner</a><a href="#windows">07 Windows</a>
+    <a href="#hent">01 Hent</a><a href="#installation">02 Installation</a><a href="#videoer">03 Videoer</a><a href="#typst">04 Nyt: Typst</a><a href="#pilot">05 Pilot</a><a href="#prompts">06 Prompts</a><a href="#status">07 Teststatus</a><a href="#skabeloner">08 Skabeloner</a>
   </nav>
 
+  <section class="cg-section cg-download" id="hent" aria-labelledby="download-title">
+    <div><p class="cg-kicker">01 / Hent Compose</p><h2 id="download-title">Windows-udgaven<br />er på vej.</h2><p>Her kan du hente Compose, når filen er lagt ud. Læs installationen nedenfor, så er du klar.</p></div>
+    <div class="cg-download__panel">
+      <dl class="cg-download__facts">
+        <div><dt>Udgave</dt><dd>{composeDownload.version}</dd></div>
+        <div><dt>Format</dt><dd>{composeDownload.format}</dd></div>
+        <div><dt>Systemkrav</dt><dd>{composeDownload.requirements}</dd></div>
+        <div><dt>Valgfrit</dt><dd>{composeDownload.optional}</dd></div>
+      </dl>
+      {composeDownload.url ? (
+        <>
+          <a class="button button--primary cg-download__button" href={composeDownload.url} download={composeDownload.file}>Hent {composeDownload.file} <span aria-hidden="true">↓</span></a>
+          {composeDownload.sha256 && <p class="cg-download__hash">SHA-256: <code>{composeDownload.sha256}</code></p>}
+        </>
+      ) : (
+        <>
+          <span class="cg-download__button cg-download__button--soon" aria-disabled="true">Download kommer snart</span>
+          <p class="cg-download__status">Filen lægges ud her, når licenserne til de medfølgende komponenter er gennemgået.</p>
+        </>
+      )}
+    </div>
+  </section>
+
+  <section class="cg-section cg-install" id="installation" aria-labelledby="install-title">
+    <div class="cg-section__heading"><p class="cg-kicker">02 / Installation</p><h2 id="install-title">Pak ud. Start.<br />Skriv dit første dokument.</h2><p>Compose kører direkte fra en mappe. Der er ingen installer, og appen ændrer ikke andre programmer på din pc.</p></div>
+    <div class="cg-install__grid">
+      <ol class="cg-steps">
+        {composeInstallSteps.map((step, index) => <li><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}
+      </ol>
+      <aside class="cg-install__files" aria-labelledby="files-title">
+        <h3 id="files-title">Filerne i pakken</h3>
+        <dl>{composePackageFiles.map((file) => <div><dt><code>{file.name}</code></dt><dd>{file.text}</dd></div>)}</dl>
+        <p><strong>Afinstallér</strong> Slet mappen. Dine projekter ligger, hvor du selv har valgt, og slettes ikke.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="cg-section cg-videos" id="videoer" aria-labelledby="videos-title">
+    <div class="cg-section__heading"><p class="cg-kicker">03 / Videoer</p><h2 id="videos-title">Se det gjort.</h2><p>Korte videoer viser hvert trin. De lægges ud her, efterhånden som de bliver optaget.</p></div>
+    <div class="cg-videos__grid">
+      {composeVideos.map((video, index) => (
+        <article class="cg-video" id={`video-${video.id}`}>
+          {video.youtubeId ? (
+            <iframe class="cg-video__frame" src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}`} title={video.title} loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          ) : (
+            <div class="cg-video__frame cg-video__frame--soon" role="img" aria-label={`Pladsholder: ${video.title}. Videoen kommer.`}><span aria-hidden="true">▶</span><small>Video kommer</small></div>
+          )}
+          <div class="cg-video__body"><span>{String(index + 1).padStart(2, "0")}</span><h3>{video.title}</h3><p>{video.text}</p></div>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <section class="cg-section cg-typst" id="typst" aria-labelledby="typst-title">
-    <div class="cg-section__heading"><p class="cg-kicker">01 / Nyt i testudgaven · 18. oktober 2026</p><h2 id="typst-title">Typst i Compose.<br />En ny motor til nye dokumenter.</h2><p>Testudgaven gør Typst til motoren for nye dokumenter. Du kan også konvertere en kopi af et eksisterende LaTeX-dokument. Funktionerne er under intern afprøvning, og testudgaven deles ikke endnu.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">04 / Nyt i testudgaven · 18. oktober 2026</p><h2 id="typst-title">Typst i Compose.<br />En ny motor til nye dokumenter.</h2><p>Testudgaven gør Typst til motoren for nye dokumenter. Du kan også konvertere en kopi af et eksisterende LaTeX-dokument. Funktionerne er under intern afprøvning.</p></div>
     <div class="cg-typst__grid">
       {composeTypstNews.map((item, index) => <article><span class="cg-number">{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
     </div>
@@ -49,26 +102,25 @@ const workflows = [
     <p class="cg-note">Afprøv en konvertering på en kopi, og sammenlign den nye PDF med originalen. Afsnittet beskriver testudgavens funktioner. Det er ikke et testresultat.</p>
   </section>
 
-  <section class="cg-section" id="arbejdsgange" aria-labelledby="workflows-title">
-    <div class="cg-section__heading"><p class="cg-kicker">02 / Det vi vil gøre enklere</p><h2 id="workflows-title">Tre konkrete arbejdsgange.</h2><p>Det følgende er mål for piloten. En samlet, automatisk overførsel fra Revit til Compose er endnu ikke dokumenteret her.</p></div>
+  <section class="cg-section" id="pilot" aria-labelledby="workflows-title">
+    <div class="cg-section__heading"><p class="cg-kicker">05 / Pilot: Revit → dokument</p><h2 id="workflows-title">Tre konkrete arbejdsgange.</h2><p>Det følgende er mål for piloten. En samlet, automatisk overførsel fra Revit til Compose er endnu ikke dokumenteret her. <a href={withBase("/install-plugin")}>Revit-pluginets installationsvejledning</a> beskriver Revit-delen.</p></div>
     <div class="cg-workflows">
       {workflows.map((item) => <article><span class="cg-number">{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
     </div>
     <div class="cg-audience"><p><strong>For studerende</strong> Øv en enkel metode, sammenlign med modellen, og lær at efterprøve AI'ens arbejde.</p><p><strong>For virksomheder</strong> Afprøv en gentagelig dokumentproces med egne skabeloner, kilder og fagligt review.</p></div>
-  </section>
-
-  <section class="cg-section cg-start" id="start" aria-labelledby="start-title">
-    <div class="cg-section__heading"><p class="cg-kicker">03 / Kom i gang med piloten</p><h2 id="start-title">Et lille forsøg.<br />Et tydeligt resultat.</h2><p>Få først en testudgave og en fungerende forbindelse på plads med den ansvarlige for piloten. <a href={withBase("/install-plugin")}>Revit-pluginets installationsvejledning</a> beskriver Revit-delen; den dokumenterer ikke en færdig Compose-kobling.</p></div>
-    <ol class="cg-steps">
-      <li><span>1</span><div><h3>Åbn en gemt testkopi</h3><p>Brug en model, du må afprøve arbejdsgangen på. Vælg få, tydeligt navngivne planer eller et lille udvalg af rum.</p></div></li>
-      <li><span>2</span><div><h3>Vælg et Compose-testprojekt</h3><p>Opret eller åbn et særskilt dokument, og vælg det afsnit, hvor figurerne eller tabellen skal stå.</p></div></li>
-      <li><span>3</span><div><h3>Beskriv det ønskede output</h3><p>Vælg en prompt nedenfor. Erstat teksten i firkantede parenteser med dine visningsnavne, afsnit og ønsker.</p></div></li>
-      <li><span>4</span><div><h3>Gennemse og notér</h3><p>Sammenlign dokument og PDF med kilden. Notér programversioner, tidsforbrug og det, du måtte rette eller gøre manuelt.</p></div></li>
-    </ol>
+    <div class="cg-pilot">
+      <h3>Sådan kører du et pilotforsøg</h3>
+      <ol class="cg-steps">
+        <li><span>1</span><div><h3>Åbn en gemt testkopi</h3><p>Brug en model, du må afprøve arbejdsgangen på. Vælg få, tydeligt navngivne planer eller et lille udvalg af rum.</p></div></li>
+        <li><span>2</span><div><h3>Vælg et Compose-testprojekt</h3><p>Opret eller åbn et særskilt dokument, og vælg det afsnit, hvor figurerne eller tabellen skal stå.</p></div></li>
+        <li><span>3</span><div><h3>Beskriv det ønskede output</h3><p>Vælg en prompt nedenfor. Erstat teksten i firkantede parenteser med dine visningsnavne, afsnit og ønsker.</p></div></li>
+        <li><span>4</span><div><h3>Gennemse og notér</h3><p>Sammenlign dokument og PDF med kilden. Notér programversioner, tidsforbrug og det, du måtte rette eller gøre manuelt.</p></div></li>
+      </ol>
+    </div>
   </section>
 
   <section class="cg-section" id="prompts" aria-labelledby="prompts-title">
-    <div class="cg-section__heading"><p class="cg-kicker">04 / Promptbibliotek</p><h2 id="prompts-title">Hvad vil du have ud?</h2><p>Vælg opgaven, tilpas prompten, og brug kvalitetskontrollen bagefter. Forslagene kræver afprøvning med den konkrete programversion og model.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">06 / Promptbibliotek</p><h2 id="prompts-title">Hvad vil du have ud?</h2><p>Vælg opgaven, tilpas prompten, og brug kvalitetskontrollen bagefter. Forslagene kræver afprøvning med den konkrete programversion og model.</p></div>
     <div class="cg-prompt-status"><span aria-hidden="true">○</span> Promptforslag · endnu ikke live-testet</div>
     <div class="cg-tools" data-prompt-tools hidden>
       <div class="cg-filters" role="group" aria-label="Filtrér prompts efter opgave">{composeCategories.map((category) => <button type="button" data-filter={category.id} aria-pressed={category.id === "alle"} aria-controls="prompt-list">{category.label}</button>)}</div>
@@ -91,21 +143,16 @@ const workflows = [
   </section>
 
   <section class="cg-section cg-status" id="status" aria-labelledby="status-title">
-    <div class="cg-section__heading"><p class="cg-kicker">05 / Dokumenteret status</p><h2 id="status-title">Hvad er afprøvet?</h2><p>Her samles resultater fra konkrete forsøg. En teknisk prøve af dokumentgenerering er et delresultat; overførslen fra en rigtig Revit-model skal også efterprøves.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">07 / Dokumenteret status</p><h2 id="status-title">Hvad er afprøvet?</h2><p>Her samles resultater fra konkrete forsøg. En teknisk prøve af dokumentgenerering er et delresultat; overførslen fra en rigtig Revit-model skal også efterprøves.</p></div>
     <div class="cg-test-list">{composeTestStatus.map((test) => <article><div><h3>{test.name}</h3><p>{test.detail}</p></div><span>{test.status}</span></article>)}</div>
     <div class="cg-test-example"><a class="button button--primary" href={withBase("/downloads/compose/compose-pilot-testdata.pdf")}>Se testeksempel (PDF) <span aria-hidden="true">↗</span></a><p>Syntetiske testdata · ingen data fra en Revit-model<br /><a href={withBase("/downloads/compose/pilot-teststatus-2026-10-14.json")}>Testoversigt (JSON)</a> · PDF-eksemplet er visuelt gennemgået.</p></div>
     <p class="cg-note">Resultaterne gælder de beskrevne prøver i dokumentmotoren. De dokumenterer endnu ikke en samlet arbejdsgang i Revit og Compose-appen eller promptenes virkning.</p>
   </section>
 
   <section class="cg-section" id="skabeloner" aria-labelledby="templates-title">
-    <div class="cg-section__heading"><p class="cg-kicker">06 / Planlagt skabelonbibliotek</p><h2 id="templates-title">Samme metode.<br />Flere faglige dokumenter.</h2><p>Planen er et bibliotek, hvor skabelonen beskriver nødvendige input, dokumentets opbygning og krav til review. De følgende skabelonspor er planlagt.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">08 / Planlagt skabelonbibliotek</p><h2 id="templates-title">Samme metode.<br />Flere faglige dokumenter.</h2><p>Planen er et bibliotek, hvor skabelonen beskriver nødvendige input, dokumentets opbygning og krav til review. De følgende skabelonspor er planlagt.</p></div>
     <ul class="cg-templates">{composeTemplates.map((template) => <li><span>{template}</span><small>Planlagt</small></li>)}</ul>
     <p class="cg-note">Molio-baserede beskrivelser forudsætter et afklaret rettighedsgrundlag. Faglige krav og standardtekster skal have en kendt kilde og udgave. Virksomhedens egne skabeloner og godkendelser indgår i afprøvningen.</p>
-  </section>
-
-  <section class="cg-section cg-download" id="windows" aria-labelledby="windows-title">
-    <div><p class="cg-kicker">07 / Programmet</p><h2 id="windows-title">Windows-udgave<br />under afprøvning.</h2></div>
-    <div><p>Når en udgave er klar til distribution, bliver den præsenteret her med versionsnummer, systemkrav, installationsvejledning og en oversigt over de afprøvede funktioner.</p><p>Den nyeste interne testudgave er fra 18. oktober 2026 og indeholder Typst. Den bruges kun til afprøvning og deles ikke.</p><p class="cg-download__status">Der er endnu ingen offentlig Compose-installationsfil på denne side.</p><a class="cg-hero__link" href="#status">Se den aktuelle teststatus <span aria-hidden="true">→</span></a></div>
   </section>
 </div>
 
@@ -218,7 +265,36 @@ const workflows = [
   .cg-audience { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.25rem; border-top: 1px solid var(--line); padding-top: 1.5rem; }
   .cg-audience strong { display: block; color: var(--navy); }
   .cg-audience p { margin: 0; }
-  .cg-start { display: grid; grid-template-columns: .9fr 1.1fr; gap: 3rem; background: white; }
+  .cg-download__panel { background: #0b1f35; border-top: 4px solid var(--orange); padding: 1.6rem; }
+  .cg-download__facts { margin: 0 0 1.5rem; }
+  .cg-download__facts > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #2b4560; }
+  .cg-download__facts dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; color: #f5c087; }
+  .cg-download__facts dd { margin: 0; color: white; font-size: .92rem; }
+  .cg-download__button { display: inline-flex; align-items: center; gap: .4rem; }
+  .cg-download__button--soon { border: 1px dashed #8fa3b6; color: #c4d1dd; padding: .8rem 1.2rem; font-weight: 800; cursor: not-allowed; }
+  .cg-download__hash { font-size: .75rem; word-break: break-all; margin-top: .8rem; }
+  .cg-install { background: white; }
+  .cg-install__grid { display: grid; grid-template-columns: 1.3fr .9fr; gap: 3rem; align-items: start; }
+  .cg-install__files { background: var(--sand); padding: 1.5rem; }
+  .cg-install__files h3 { font-size: 1.1rem; margin-bottom: .8rem; }
+  .cg-install__files dl { margin: 0 0 1.2rem; }
+  .cg-install__files dl > div { padding: .55rem 0; border-top: 1px solid var(--line); }
+  .cg-install__files dt code { font-size: .82rem; color: var(--navy); font-weight: 700; }
+  .cg-install__files dd { margin: .15rem 0 0; font-size: .86rem; }
+  .cg-install__files > p { font-size: .86rem; margin: 0; }
+  .cg-install__files > p strong { display: block; color: var(--navy); }
+  .cg-videos__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+  .cg-video { background: white; border: 1px solid var(--line); display: flex; flex-direction: column; }
+  .cg-video__frame { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+  .cg-video__frame--soon { display: grid; place-content: center; justify-items: center; gap: .3rem; background: repeating-linear-gradient(135deg, #112a46, #112a46 14px, #16324f 14px, #16324f 28px); color: white; }
+  .cg-video__frame--soon span { font-size: 1.6rem; width: 3.2rem; height: 3.2rem; line-height: 3.2rem; text-align: center; border-radius: 50%; background: var(--orange); color: var(--navy); padding-left: .2rem; }
+  .cg-video__frame--soon small { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #f5c087; }
+  .cg-video__body { padding: 1.1rem 1.2rem 1.3rem; }
+  .cg-video__body > span { color: #9b4a00; font-size: .78rem; font-weight: 800; }
+  .cg-video__body h3 { font-size: 1.1rem; margin: .3rem 0 .5rem; }
+  .cg-video__body p { font-size: .87rem; margin: 0; }
+  .cg-pilot { margin-top: 2.5rem; max-width: 52rem; }
+  .cg-pilot > h3 { font-size: 1.35rem; margin-bottom: 1rem; }
   .cg-steps { list-style: none; padding: 0; margin: 0; }
   .cg-steps li { display: flex; gap: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 1rem; }
   .cg-steps li > span { background: var(--sand); color: var(--navy); border-radius: 50%; width: 2rem; height: 2rem; flex: 0 0 2rem; text-align: center; line-height: 2rem; font-weight: 800; }
@@ -262,13 +338,14 @@ const workflows = [
   .cg-templates { display: grid; grid-template-columns: repeat(2, 1fr); list-style: none; padding: 0; margin: 0; gap: 0 2rem; }
   .cg-templates li { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--line); color: var(--navy); font-weight: 700; }
   .cg-templates small { font-size: .72rem; font-weight: 400; color: var(--muted); }
-  .cg-download { background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .cg-download { background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
   .cg-download h2 { color: white; }
   .cg-download .cg-kicker { color: #f5c087; }
   .cg-download p { color: #d9e2ec; }
   .cg-download .cg-download__status { font-size: .86rem; border-top: 1px solid #64798f; padding-top: 1rem; color: #f5c087; }
   @media (max-width: 1050px) {
     .cg-hero { gap: 2rem; }
+    .cg-videos__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .cg-board { padding: .9rem; }
     .cg-drawing { min-height: 200px; gap: .4rem; }
     .cg-paper { padding: .6rem; }
@@ -280,7 +357,8 @@ const workflows = [
     .cg-board { max-width: 450px; width: 100%; margin: auto; }
     .cg-index { gap: .8rem 1.2rem; }
     .cg-section { padding-block: 3rem; }
-    .cg-start, .cg-download { grid-template-columns: 1fr; gap: 1rem; }
+    .cg-download, .cg-install__grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .cg-download__facts > div { grid-template-columns: 1fr; gap: .2rem; }
     .cg-workflows { gap: 1.2rem; }
     .cg-workflows h3 { font-size: 1.15rem; }
     .cg-workflows p { font-size: .88rem; }
@@ -291,7 +369,7 @@ const workflows = [
     .cg-test-list article > span { flex-basis: auto; }
   }
   @media (max-width: 480px) {
-    .cg-workflows, .cg-audience, .cg-templates { grid-template-columns: 1fr; }
+    .cg-workflows, .cg-audience, .cg-templates, .cg-videos__grid { grid-template-columns: 1fr; }
     .cg-workflows article { display: grid; grid-template-columns: 2.6rem 1fr; gap: 0 .8rem; }
     .cg-number { grid-row: 1 / 3; font-size: 2rem; }
     .cg-workflows h3 { margin: 0 0 .6rem; }

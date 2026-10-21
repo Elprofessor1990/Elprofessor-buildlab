@@ -106,6 +106,48 @@ export const composeTypstLimits = [
   "AI virker i Typst-projekter, men må ikke hente pakker fra nettet, bruge plugins eller stier uden for projektet.",
 ];
 
+// The download stays closed until the bundled components' licences are reviewed.
+// Set file, url and sha256 when a public build exists.
+export const composeDownload: {
+  version: string;
+  format: string;
+  requirements: string;
+  optional: string;
+  file?: string;
+  url?: string;
+  sha256?: string;
+} = {
+  version: "Testudgave 18. oktober 2026",
+  format: "Zip-fil med fem programfiler. Ingen installer.",
+  requirements: "Windows 10 eller 11, 64-bit, med Microsoft Edge WebView2 (følger med Windows 11).",
+  optional: "MiKTeX, hvis du vil arbejde i LaTeX-projekter. Typst kræver ingen ekstra installation.",
+};
+
+export const composeInstallSteps = [
+  { title: "Hent og pak ud", text: "Hent zip-filen, og pak den ud i en mappe, du selv vælger, fx Dokumenter\\ISSANA Compose. Lad alle fem .exe-filer ligge i samme mappe." },
+  { title: "Start appen", text: "Dobbeltklik på compose-desktop.exe. Der er ingen installer, så appen kører direkte fra mappen." },
+  { title: "Hvis Windows advarer", text: "Programfilerne er endnu ikke kodesigneret. Viser Windows «Windows beskyttede din pc», så kontrollér filens SHA-256 her på siden. Vælg derefter «Flere oplysninger» og «Kør alligevel»." },
+  { title: "Opret dit første projekt", text: "Vælg «Nyt projekt …». Motoren «Typst (anbefalet)» er valgt på forhånd. Giv projektet et navn og en mappe, og opret det." },
+  { title: "Markér som betroet og kompilér", text: "Klik «Læs mere og markér som betroet …», læs advarslen, og bekræft. Tryk «Kompilér» eller Ctrl+Enter. PDF'en vises til højre." },
+  { title: "LaTeX, hvis du har brug for det", text: "LaTeX-projekter kræver MiKTeX. Installér det kun, hvis du vil arbejde i LaTeX." },
+];
+
+export const composePackageFiles = [
+  { name: "compose-desktop.exe", text: "Appen. Den er den eneste, du starter." },
+  { name: "compose-typst.exe", text: "Typst-motoren, som bygger PDF'en." },
+  { name: "compose-svg.exe", text: "Konverterer SVG-figurer ved kompilering." },
+  { name: "compose-mcp.exe", text: "Forbindelsen til en AI-klient (MCP)." },
+  { name: "compose.exe", text: "Kommandolinjen. Valgfri." },
+];
+
+// Add a youtubeId when a video is published; the card then shows the video.
+export const composeVideos: Array<{ id: string; title: string; text: string; youtubeId?: string }> = [
+  { id: "installation", title: "Installation og første start", text: "Hent og pak Compose ud, start appen, og kom forbi Windows-advarslen." },
+  { id: "typst-projekt", title: "Dit første Typst-projekt", text: "Opret et projekt, markér det som betroet, skriv overskrifter og henvisninger, og kompilér." },
+  { id: "konvertering", title: "Konvertér LaTeX til Typst", text: "Konvertér en kopi, gennemgå manglerne, og sammenlign de to PDF'er side om side." },
+  { id: "revit", title: "Fra Revit til Compose", text: "Pilotarbejdsgangen: planer og modeldata fra en testmodel ind i dokumentet." },
+];
+
 export const composeTemplates = [
   "Bygningsdelsbeskrivelser", "Statiknotat", "Brandnotat", "Lydnotat", "Fugtnotat", "Installationsnotat",
 ];
