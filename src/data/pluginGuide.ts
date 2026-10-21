@@ -51,21 +51,21 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.6.0 ---------- */
+/* ---------- Nyt i version 2.7.0 ---------- */
 export const nextVersionIcons = [
   { file: "icon-issana.svg", label: "ISSANA MCP", note: "Om og version" },
   { file: "icon-panel.svg", label: "MCP-panel", note: "Forbindelse og chat" },
-  { file: "icon-settings.svg", label: "Indstillinger", note: "Konfiguration" },
-  { file: "icon-sketch.svg", label: "AI Skitse", note: "Tegn – AI'en modellerer" },
-  { file: "icon-design.svg", label: "Design Family", note: "Familie i 3D" },
+  { file: "icon-settings.svg", label: "Indstillinger", note: "Også sprog" },
+  { file: "icon-sketch.svg", label: "AI Skitse", note: "Tegn og Paint" },
+  { file: "icon-design.svg", label: "Design Family", note: "Op til 4 billeder" },
+  { file: "icon-details.svg", label: "Detaljer", note: "Lag og callouts" },
 ];
 
 export const nextVersionFeatures = [
-  "Nyt bånd med panelerne ISSANA, AI-værktøjer og Skills. Knappen Forbindelse Til/Fra er væk: forbindelsen slås til og fra med kontakten øverst i MCP-panelet.",
-  "AI Skitse: tegn på planen eller på et foto, så foreslår AI'en vægge, døre, vinduer og rum, som du anvender som én handling. Nu også buede vægge og gulvkanter.",
-  "Design Family: beskriv en familie eller vis et foto, se den som 3D-model med dele, materialefarver og parametre, og opret den i Revit, når du er tilfreds.",
-  "Skills: gemte, godkendte arbejdsgange, du kører direkte fra båndet uden AI.",
-  "Rettelser: ISSANA-vinduer lukker med Revit, og send_code_to_revit hænger ikke længere efter en timeout.",
+  "Paint (hed før Tusch): mal hen over vægge i AI Skitse, fx Bærende eller Stabiliserende, og tryk Anvend. Væggene får funktionens farve i visningen. Ctrl+Z fortryder.",
+  "Design Family tager op til 4 billeder, fx forfra, fra siden og et snit. Så bliver familien mere præcis.",
+  "Detaljer (forrest i Skills): se alle vægge, dæk og tage med deres lag, og opret med ét klik en callout pr. type i det aktive snit.",
+  "Dansk og engelsk: vælg sprog i installeren eller under Indstillinger → Forbindelse → Sprog / Language.",
 ];
 
 /* ---------- Kod bygningsdele med NBS ---------- */
@@ -118,9 +118,12 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.6.0" | "Nyt i 2.5.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.7.0" | "Nyt i 2.6.0" | "Nyt i 2.5.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
+  { title: "Paint", text: "Mal en væg rød, og den bliver rød i visningen. Bærende, stabiliserende, brand, lyd og ikke-bærende har hver sin farve.", status: "Nyt i 2.7.0" },
+  { title: "Detaljer", text: "Alle opbygninger med lag og én callout pr. type i snittet med ét klik.", status: "Nyt i 2.7.0" },
+  { title: "Tegn i snit og 3D", text: "Skitsér i et snit eller direkte på en flade i 3D, fx \"spær c/c 600\" på taget, og lad AI'en lave konstruktionen.", status: "Idé" },
   { title: "AI Skitse", text: "Tegn på planen eller et foto. AI'en foreslår vægge, døre, vinduer og rum – også buede – og du anvender dem som én handling.", status: "Nyt i 2.6.0" },
   { title: "Design Family", text: "Beskriv eller vis en familie, se den i 3D med parametre, og opret den i Revit.", status: "Nyt i 2.6.0" },
   { title: "Ét klik: tilknyt og synkronisér", text: "Alle kategorier tilknyttes og synkroniseres med NBS i én plan og én godkendelse.", status: "Nyt i 2.5.0" },

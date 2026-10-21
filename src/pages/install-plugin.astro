@@ -13,7 +13,7 @@ import {
   sheetSteps,
 } from "../data/pluginGuide";
 
-const pluginVersion = "2.6.0";
+const pluginVersion = "2.7.0";
 const releaseDate = "21. oktober 2026";
 const releaseDateIso = "2026-10-21";
 
@@ -835,7 +835,7 @@ tool_timeout_sec = 300`;
         <ul>
           {nextVersionFeatures.map((feature) => <li>{feature}</li>)}
         </ul>
-        <p class="ip-next__note">Har du 2.5.0 eller 2.4.0? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
+        <p class="ip-next__note">Har du 2.6.0, 2.5.0 eller 2.4.0? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
       </div>
     </aside>
 
@@ -916,7 +916,7 @@ tool_timeout_sec = 300`;
         (Node.js) kræver administratorrettigheder.
       </p>
       <p class="ip-note">
-        <strong>Opgraderer du fra 2.5.0 eller 2.4.0?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
+        <strong>Opgraderer du fra en tidligere version?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
         NBS-nøgle bevares. Fra 2.4.0 omdøber installeren også MCP-serveren fra <code>revit-mcp-nbs</code> til <code>issana-revit</code>.
         Genstart Claude og Codex bagefter.
       </p>
@@ -950,8 +950,11 @@ tool_timeout_sec = 300`;
           </p>
         </li>
         <li>
-          <strong>Vælg dansk</strong>
-          <p>Ved <code>Vælg / Choose [D/e]:</code> trykker du <kbd>D</kbd> og <kbd>Enter</kbd>. (Enter alene giver også dansk.)</p>
+          <strong>Vælg sprog</strong>
+          <p>
+            Ved <code>Vælg / Choose [D/e]:</code> trykker du <kbd>D</kbd> og <kbd>Enter</kbd> for dansk (Enter alene giver også dansk), eller
+            <kbd>E</kbd> for engelsk. Første gang bliver det også pluginets sprog; du kan skifte under Indstillinger → Forbindelse → Sprog / Language.
+          </p>
         </li>
         <li>
           <strong>Svar på spørgsmål – kun hvis de kommer</strong>
@@ -1026,7 +1029,7 @@ tool_timeout_sec = 300`;
             <li>
               Fanebladet <strong>ISSANA MCP</strong> findes med panelet <strong>ISSANA</strong> (knapperne <strong>ISSANA MCP</strong>,{" "}
               <strong>MCP-panel</strong> og <strong>Indstillinger</strong>), panelet <strong>AI-værktøjer</strong> (<strong>AI Skitse</strong> og{" "}
-              <strong>Design Family</strong>) og panelet <strong>Skills</strong>. (Kan Revit ikke lave fanebladet, ligger panelerne under Add-Ins.)
+              <strong>Design Family</strong>) og panelet <strong>Skills</strong> med <strong>Detaljer</strong> forrest. (Kan Revit ikke lave fanebladet, ligger panelerne under Add-Ins.)
             </li>
             <li>
               Klik <strong>MCP-panel</strong>. Øverst er kontakten <strong>Forbindelse</strong> slået til, og panelet <q>ISSANA MCP</q> viser en grøn prik og <strong>MCP Online</strong>. Det betyder,
@@ -2587,7 +2590,7 @@ tool_timeout_sec = 300`;
 
   .ip-next__ribbon {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.6rem;
     border: 1px solid #dadada;
     border-radius: var(--radius);
