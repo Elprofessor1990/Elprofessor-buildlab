@@ -13,9 +13,9 @@ import {
   sheetSteps,
 } from "../data/pluginGuide";
 
-const pluginVersion = "2.5.0";
-const releaseDate = "30. september 2026";
-const releaseDateIso = "2026-09-30";
+const pluginVersion = "2.6.0";
+const releaseDate = "21. oktober 2026";
+const releaseDateIso = "2026-10-21";
 
 const r = String.raw;
 /* Installeren ligger som GitHub Release i dette (offentlige) repo, ikke i public/downloads.
@@ -274,18 +274,18 @@ const messageGroups: MsgGroup[] = [
     title: "I Revit",
     items: [
       { msg: "Security - Unsigned Add-In   [Always Load] [Load Once] [Do Not Load]", sev: "dialog", where: "Første Revit-start efter installationen", means: "Revit advarer, fordi pluginet ikke er digitalt signeret.", todo: "Klik \"Always Load\". Vælger du \"Do Not Load\", indlæses pluginet ikke." },
-      { msg: "MCP Offline", sev: "advarsel", where: "MCP-panelets statuslinje", means: "Forbindelsen kører ikke.", todo: "Klik \"Forbindelse Til/Fra\" én gang. Tjek også \"Start forbindelsen automatisk, når Revit åbner\" under Indstillinger → Forbindelse." },
-      { msg: "Forbindelsen er afbrudt. Klik igen for at forbinde.", sev: "advarsel", where: "Efter klik på \"Forbindelse Til/Fra\"", means: "Forbindelsen kørte allerede (den starter selv), så dit klik slukkede den.", todo: "Klik \"Forbindelse Til/Fra\" én gang til, og tjek at MCP-panelet viser \"MCP Online\"." },
-      { msg: "Revit er forbundet. Vælg dit NBS-projekt under Settings → NBS Nordic.", sev: "info", where: "Efter klik på \"Forbindelse Til/Fra\"", means: "Forbindelsen er startet. \"Settings\" hedder \"Indstillinger\" på knappen.", todo: "Fortsæt til Indstillinger → NBS Nordic." },
+      { msg: "MCP Offline", sev: "advarsel", where: "MCP-panelets statuslinje", means: "Forbindelsen kører ikke.", todo: "Slå kontakten \"Forbindelse\" til øverst i MCP-panelet. Tjek også \"Start forbindelsen automatisk, når Revit åbner\" under Indstillinger → Forbindelse." },
+      { msg: "Forbindelsen er afbrudt. Slå kontakten til for at forbinde igen.", sev: "advarsel", where: "Efter du har slået kontakten \"Forbindelse\" fra i MCP-panelet", means: "Forbindelsen kørte allerede (den starter selv), så kontakten slukkede den.", todo: "Slå kontakten \"Forbindelse\" til igen, og tjek at MCP-panelet viser \"MCP Online\"." },
+      { msg: "Revit er forbundet. Vælg dit NBS-projekt under Indstillinger → NBS Nordic.", sev: "info", where: "Efter du har slået kontakten \"Forbindelse\" til i MCP-panelet", means: "Forbindelsen er startet.", todo: "Fortsæt til Indstillinger → NBS Nordic." },
       { msg: "Forbindelsen kunne ikke startes. Se loggen under Settings.", sev: "fejl", means: "Forbindelsen startede ikke, fx på grund af en optaget port eller manglende serverfiler. Loggen vises ikke under Indstillinger.", todo: r`Klik diagnoseikonet "Verify Connection" i MCP-panelet. Loggen ligger i %APPDATA%\Autodesk\Revit\Addins\<år>\revit_mcp_plugin\logs\mcp-<dato>.log.` },
       { msg: "node.exe not found (bundled or system). Install Node.js or reinstall the plugin.", sev: "fejl", where: "Boksen \"ISSANA MCP\"", means: "Node.js 18 eller nyere mangler, så forbindelsen kan ikke starte (MCP Offline).", todo: "Installér Node.js LTS fra nodejs.org, eller kør installationsfilen igen og vælg [1] i TRIN 4. Genstart derefter Revit." },
       { msg: "index.js not found at <sti>", sev: "fejl", means: "Serverfilerne mangler, fordi installationen er ufuldstændig.", todo: "Luk Revit, og kør installationsfilen igen." },
       { msg: "No available port near 8080. Please close other applications using these ports and try again.", sev: "fejl", where: "Boksen \"MCP Server - Port Error\"", means: "Portene 8080–8089 er optaget, fx af en anden Revit eller en lokal webserver.", todo: "Luk andre Revit-vinduer eller programmer, der bruger portene, og genstart Revit." },
-      { msg: "Forbindelsen er ikke startet. Klik \"Forbindelse Til/Fra\" under fanen ISSANA MCP for at starte den.", sev: "fejl", where: "MCP-panelets chat", means: "Forbindelsen er slukket.", todo: "Klik \"Forbindelse Til/Fra\" på fanebladet ISSANA MCP." },
+      { msg: "Forbindelsen er ikke startet. Slå kontakten \"Forbindelse\" til øverst i dette panel.", sev: "fejl", where: "MCP-panelets chat", means: "Forbindelsen er slukket.", todo: "Slå kontakten \"Forbindelse\" til øverst i MCP-panelet." },
       { msg: r`API key not configured. Set your Anthropic API key: File: %USERPROFILE%\.claude\api_key.txt or env variable: ANTHROPIC_API_KEY=sk-ant-...`, sev: "info", where: "MCP-panelets chat", means: "Den valgfrie indbyggede chat i MCP-panelet kræver en Anthropic-nøgle.", todo: "Ignorér beskeden, hvis du bruger Claude Desktop, Claude Code eller Codex. Ellers: Indstillinger → Indbygget chat (valgfri)." },
       { msg: "MCP Panel is not available. Please restart Revit.", sev: "fejl", means: "Panelet blev ikke registreret, da Revit startede.", todo: "Genstart Revit." },
       { msg: "[FAIL] Claude Desktop Config: Claude Desktop not installed / Config file missing / issana-revit entry missing", sev: "advarsel", where: "Diagnoseikonet \"Verify Connection\"", means: "Claude Desktop er ikke installeret eller ikke sat op. Det er normalt, hvis du kun bruger Codex eller Claude Code.", todo: "Ignorér ved Codex/Claude Code. Ved Claude Desktop: genstart Revit, eller kør installationsfilen igen." },
-      { msg: "[FAIL] Port Connectivity: Server not started / Port <port> not responding — klik Forbindelse Til/Fra under fanen ISSANA MCP", sev: "fejl", where: "Diagnoseikonet \"Verify Connection\"", means: "Forbindelsen kører ikke.", todo: "Klik \"Forbindelse Til/Fra\"." },
+      { msg: "[FAIL] Port Connectivity: Server not started / Port <port> not responding — slå kontakten Forbindelse til i MCP-panelet (fanen ISSANA MCP)", sev: "fejl", where: "Diagnoseikonet \"Verify Connection\"", means: "Forbindelsen kører ikke.", todo: "Slå kontakten \"Forbindelse\" til øverst i MCP-panelet." },
       { msg: "[FIXED] DLL Blocked: Unblocked N DLL(s)", sev: "info", where: "Diagnoseikonet eller Revit-start", means: "Windows havde blokeret plugin-filer, og det er rettet automatisk.", todo: "Genstart Revit, hvis en funktion stadig ikke virker." },
       { msg: "Indtast et gyldigt portnummer (1-65535).", sev: "advarsel", where: "Indstillinger → Forbindelse → Gem", means: "Porten er ugyldig.", todo: "Klik \"Nulstil til standard\" (8080) og derefter \"Gem\"." },
       { msg: "Indstillingerne er gemt. En ændret port kræver, at Revit genstartes.", sev: "info", where: "Indstillinger → Forbindelse → Gem", means: "Indstillingerne er gemt.", todo: "Genstart Revit, hvis du har ændret porten." },
@@ -307,7 +307,7 @@ const messageGroups: MsgGroup[] = [
       { msg: "NBS-parameterfilen indeholder ikke alle de forventede definitioner.", sev: "fejl", means: "Det er en forkert eller ufuldstændig parameterfil.", todo: "Vælg den officielle NBSNordicSharedParameters.txt." },
       { msg: "Revit-modellen er skrivebeskyttet.", sev: "fejl", means: "Filen er åbnet skrivebeskyttet.", todo: "Gem en lokal kopi, og åbn den." },
       { msg: "Revit svarede ikke. Luk eventuelle dialoger, kontrollér projektstatus og prøv igen. / En projektoperation kører allerede. Prøv igen om et øjeblik.", sev: "fejl", means: "En Revit-dialog blokerer, eller en anden handling er i gang.", todo: "Luk åbne dialoger i Revit, og vent et øjeblik." },
-      { msg: "NBS-projektet er tilknyttet modellen, men MCP-forbindelsen kunne ikke starte. Gem modellen og kontrollér forbindelsen.", sev: "advarsel", means: "Koblingen til NBS lykkedes, men forbindelsen til AI-appen startede ikke.", todo: "Gem RVT-filen, klik \"Forbindelse Til/Fra\", og tjek \"MCP Online\"." },
+      { msg: "NBS-projektet er tilknyttet modellen, men MCP-forbindelsen kunne ikke starte. Gem modellen og kontrollér forbindelsen.", sev: "advarsel", means: "Koblingen til NBS lykkedes, men forbindelsen til AI-appen startede ikke.", todo: "Gem RVT-filen, slå kontakten \"Forbindelse\" til i MCP-panelet, og tjek \"MCP Online\"." },
       { msg: "Ikke gemt: Modellen er koblet til NBS-projekt #<gammelt>, men du har valgt #<nyt>. Tryk Gennemgå projektskift for at se konsekvenserne og godkende. Den gamle koblings værdier opbevares særskilt i modellen; dine øvrige valg bevares.", sev: "advarsel", means: "Modellen er allerede koblet til et andet NBS-projekt.", todo: "Klik \"Brug modellens tilknyttede projekt — behold øvrige valg\" – eller \"Gennemgå projektskift…\" og godkend i dialogen." },
       { msg: "Gem Revit-modellen som en fil først. En ikke-gemt model har ingen entydig identitet, så projektskift kan ikke godkendes sikkert; intet er ændret. / Projektskift kræver en skrivbar, ikke-workshared model. ...", sev: "fejl", means: "Modellen er ikke gemt, eller den er workshared eller skrivebeskyttet.", todo: "Gem modellen som en lokal fil, der ikke er workshared." },
       { msg: "Preview-godkendelsen er udløbet (gyldig i 10 minutter). Hent nyt preview; intet er ændret.", sev: "fejl", means: "Der gik mere end 10 minutter mellem preview og godkendelse.", todo: "Klik \"Gennemgå projektskift…\" igen." },
@@ -319,7 +319,7 @@ const messageGroups: MsgGroup[] = [
     id: "fejl-ai",
     title: "I AI-appen",
     items: [
-      { msg: "<…> failed: Connect to Revit client failed  (eller: Connection to Revit client timed out)", sev: "fejl", means: "AI-appen kunne ikke få forbindelse til Revit: Revit er lukket, intet projekt er åbent, eller forbindelsen er slukket.", todo: "Åbn Revit og en projektfil, tjek \"MCP Online\" i MCP-panelet, og brug evt. \"Forbindelse Til/Fra\"." },
+      { msg: "<…> failed: Connect to Revit client failed  (eller: Connection to Revit client timed out)", sev: "fejl", means: "AI-appen kunne ikke få forbindelse til Revit: Revit er lukket, intet projekt er åbent, eller forbindelsen er slukket.", todo: "Åbn Revit og en projektfil, tjek \"MCP Online\" i MCP-panelet, og slå evt. kontakten \"Forbindelse\" til." },
       { msg: "NBS_API_KEY is not set. Configure it as an environment variable, or via the NBS Nordic settings page in the Revit plugin.", sev: "fejl", means: "Der er ikke gemt en NBS-nøgle.", todo: "Gå til Indstillinger → NBS Nordic, indsæt nøglen, og klik \"Hent projekter\"." },
     ],
   },
@@ -334,7 +334,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.5.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at forbindelsen er slået til. Knappen 'Forbindelse Til/Fra' skifter mellem til og fra, så klik ikke på den, hvis forbindelsen allerede kører.",
+    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.6.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },
@@ -706,7 +706,7 @@ tool_timeout_sec = 300`;
       </div>
 
       <div class="ip-fast">
-        <p class="ip-fast__badge">Nyt i {pluginVersion}</p>
+        <p class="ip-fast__badge">Siden 2.5.0</p>
         <h3>Tilknyt og synkronisér alle kategorier med ét klik</h3>
         <p>
           Når bygningsdelene er importeret i NBS, kan trin 5–6 klares i én plan: alle kategorier tilknyttes i én transaktion, og NBS
@@ -835,7 +835,7 @@ tool_timeout_sec = 300`;
         <ul>
           {nextVersionFeatures.map((feature) => <li>{feature}</li>)}
         </ul>
-        <p class="ip-next__note">Har du 2.4.0? Kør bare den nye installationsfil (vælg R). Serveren hedder nu <code>issana-revit</code> i Claude og Codex – det ordner installeren selv.</p>
+        <p class="ip-next__note">Har du 2.5.0 eller 2.4.0? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
       </div>
     </aside>
 
@@ -916,8 +916,8 @@ tool_timeout_sec = 300`;
         (Node.js) kræver administratorrettigheder.
       </p>
       <p class="ip-note">
-        <strong>Opgraderer du fra 2.4.0?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din NBS-nøgle
-        bevares. MCP-serveren hedder nu <code>issana-revit</code> i stedet for <code>revit-mcp-nbs</code> – installeren omdøber den selv.
+        <strong>Opgraderer du fra 2.5.0 eller 2.4.0?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
+        NBS-nøgle bevares. Fra 2.4.0 omdøber installeren også MCP-serveren fra <code>revit-mcp-nbs</code> til <code>issana-revit</code>.
         Genstart Claude og Codex bagefter.
       </p>
     </section>
@@ -1024,17 +1024,17 @@ tool_timeout_sec = 300`;
           <h3 class="ip-sub">I Revit</h3>
           <ul class="ip-checks">
             <li>
-              Fanebladet <strong>ISSANA MCP</strong> findes med panelet <strong>AI-forbindelse</strong> og knapperne{" "}
-              <strong>ISSANA MCP</strong>, <strong>Forbindelse Til/Fra</strong>, <strong>MCP-panel</strong> og <strong>Indstillinger</strong>. (Kan Revit ikke
-              lave fanebladet, ligger panelet under Add-Ins.)
+              Fanebladet <strong>ISSANA MCP</strong> findes med panelet <strong>ISSANA</strong> (knapperne <strong>ISSANA MCP</strong>,{" "}
+              <strong>MCP-panel</strong> og <strong>Indstillinger</strong>), panelet <strong>AI-værktøjer</strong> (<strong>AI Skitse</strong> og{" "}
+              <strong>Design Family</strong>) og panelet <strong>Skills</strong>. (Kan Revit ikke lave fanebladet, ligger panelerne under Add-Ins.)
             </li>
             <li>
-              Klik <strong>MCP-panel</strong>. Panelet <q>ISSANA MCP</q> viser en grøn prik og <strong>MCP Online</strong>. Det betyder,
+              Klik <strong>MCP-panel</strong>. Øverst er kontakten <strong>Forbindelse</strong> slået til, og panelet <q>ISSANA MCP</q> viser en grøn prik og <strong>MCP Online</strong>. Det betyder,
               at Revit er klar til en AI-app – ikke at appen allerede er forbundet.
             </li>
             <li>
-              Står der <strong>MCP Online</strong>, så klik <em>ikke</em> på <strong>Forbindelse Til/Fra</strong>. Forbindelsen starter
-              selv, og et klik slukker den.
+              Forbindelsen starter selv, når Revit åbner. Står der <strong>MCP Online</strong>, så lad kontakten <strong>Forbindelse</strong>{" "}
+              være – slår du den fra, kan din AI ikke længere arbejde i Revit.
             </li>
             <li>
               <strong>Indstillinger</strong> → <strong>Forbindelse</strong> → <strong>Plugin-version</strong> viser{" "}
@@ -2587,7 +2587,7 @@ tool_timeout_sec = 300`;
 
   .ip-next__ribbon {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.6rem;
     border: 1px solid #dadada;
     border-radius: var(--radius);
@@ -3178,7 +3178,7 @@ tool_timeout_sec = 300`;
       grid-template-columns: 1fr;
     }
   }
-  /* ---------- Nyt i 2.5.0: hurtig tilknytning ---------- */
+  /* ---------- Siden 2.5.0: hurtig tilknytning ---------- */
   .ip-fast {
     margin-block: 0 1.25rem;
     border: 1px solid rgba(15, 76, 76, 0.3);

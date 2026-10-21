@@ -51,19 +51,21 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.5.0 ---------- */
+/* ---------- Nyt i version 2.6.0 ---------- */
 export const nextVersionIcons = [
   { file: "icon-issana.svg", label: "ISSANA MCP", note: "Om og version" },
-  { file: "icon-connection.svg", label: "Forbindelse", note: "Til / Fra" },
-  { file: "icon-panel.svg", label: "MCP-panel", note: "Chat og godkendelser" },
+  { file: "icon-panel.svg", label: "MCP-panel", note: "Forbindelse og chat" },
   { file: "icon-settings.svg", label: "Indstillinger", note: "Konfiguration" },
+  { file: "icon-sketch.svg", label: "AI Skitse", note: "Tegn – AI'en modellerer" },
+  { file: "icon-design.svg", label: "Design Family", note: "Familie i 3D" },
 ];
 
 export const nextVersionFeatures = [
-  "Nyt navn og design: ISSANA MCP med fire nye ikoner i båndet.",
-  "Kontrolleret tilstand, som du selv slår til under Indstillinger → Forbindelse: AI'en foreslår, og du godkender hver ændring i panelet, før noget sker i modellen.",
-  "Kod bygningsdele hurtigere: tilknyt alle kategorier og synkronisér med NBS i én plan og ét klik.",
-  "Links til issana.dk og kontakt, hvis I vil bruge ISSANA MCP i jeres virksomhed.",
+  "Nyt bånd med panelerne ISSANA, AI-værktøjer og Skills. Knappen Forbindelse Til/Fra er væk: forbindelsen slås til og fra med kontakten øverst i MCP-panelet.",
+  "AI Skitse: tegn på planen eller på et foto, så foreslår AI'en vægge, døre, vinduer og rum, som du anvender som én handling. Nu også buede vægge og gulvkanter.",
+  "Design Family: beskriv en familie eller vis et foto, se den som 3D-model med dele, materialefarver og parametre, og opret den i Revit, når du er tilfreds.",
+  "Skills: gemte, godkendte arbejdsgange, du kører direkte fra båndet uden AI.",
+  "Rettelser: ISSANA-vinduer lukker med Revit, og send_code_to_revit hænger ikke længere efter en timeout.",
 ];
 
 /* ---------- Kod bygningsdele med NBS ---------- */
@@ -116,9 +118,11 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.5.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.6.0" | "Nyt i 2.5.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
+  { title: "AI Skitse", text: "Tegn på planen eller et foto. AI'en foreslår vægge, døre, vinduer og rum – også buede – og du anvender dem som én handling.", status: "Nyt i 2.6.0" },
+  { title: "Design Family", text: "Beskriv eller vis en familie, se den i 3D med parametre, og opret den i Revit.", status: "Nyt i 2.6.0" },
   { title: "Ét klik: tilknyt og synkronisér", text: "Alle kategorier tilknyttes og synkroniseres med NBS i én plan og én godkendelse.", status: "Nyt i 2.5.0" },
   { title: "Kontrolleret tilstand", text: "Slås til under Indstillinger → Forbindelse. Så foreslår AI'en, og du godkender hver ændring i panelet. Alt logges.", status: "Nyt i 2.5.0" },
   { title: "Beskrivelser med lag og U-værdier", text: "Bygningsdelene får en beskrivelse med lagopbygning, U-værdi og for vinduer g-værdi – hentet fra modellen.", status: "Idé" },

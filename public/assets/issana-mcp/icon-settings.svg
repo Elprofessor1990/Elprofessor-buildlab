@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Indstillinger · konfiguration. Three sliders; the bottom handle is copper. -->
-  <rect width="64" height="64" rx="11" fill="#0F4C4C"/>
-  <path d="M14 20H50M14 32H50M14 44H50" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="38" cy="20" r="5.5" fill="#FFFFFF"/>
-  <circle cx="24" cy="32" r="5.5" fill="#FFFFFF"/>
-  <rect x="33" y="39" width="17" height="10" rx="5" fill="#C65A2E"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Indstillinger · tandhjul (ISSANA MCP 2.6.0, drawn from plugin/Core/IssanaIcons.cs). -->
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#0F4C4C"/>
+  <path d="M16,5 V8.5 M16,23.5 V27 M5,16 H8.5 M23.5,16 H27 M8.2,8.2 L10.7,10.7 M21.3,21.3 L23.8,23.8 M8.2,23.8 L10.7,21.3 M21.3,10.7 L23.8,8.2 M9.5,16 A6.5,6.5 0 1 0 22.5,16 A6.5,6.5 0 1 0 9.5,16 Z" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.5,16 A2.5,2.5 0 1 0 18.5,16 A2.5,2.5 0 1 0 13.5,16 Z" fill="#C65A2E" fill-rule="evenodd"/>
 </svg>

@@ -1,9 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ISSANA MCP · plugin/start. Petrol tile, ISSANA mark in white with the copper square. -->
-  <rect width="64" height="64" rx="11" fill="#0F4C4C"/>
-  <g transform="translate(11 11) scale(0.2333) translate(-40 -40)">
-    <path d="M48.3 48.3H211.7V211.7H48.3Z M69.2 69.2V190.8H190.8V69.2Z" fill="#FFFFFF" fill-rule="evenodd"/>
-    <path d="M86.3 82.5H173.7V105.3H141.4V154.7H173.7V177.5H86.3V154.7H118.6V105.3H86.3Z" fill="#FFFFFF"/>
-    <rect x="172" y="172" width="36" height="36" fill="#C65A2E"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- ISSANA MCP · om og version (ISSANA MCP 2.6.0, drawn from plugin/Core/IssanaIcons.cs). -->
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#0F4C4C"/>
+  <path d="M6.5,6.5 H25.5 V25.5 H6.5 Z M8.9,8.9 V23.1 H23.1 V8.9 Z M10.9,10.5 H21.1 V13.1 H17.3 V18.9 H21.1 V21.5 H10.9 V18.9 H14.7 V13.1 H10.9 Z" fill="#FFFFFF" fill-rule="evenodd"/>
+  <path d="M20.9,20.9 H25.4 V25.4 H20.9 Z" fill="#C65A2E" fill-rule="evenodd"/>
 </svg>
