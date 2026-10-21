@@ -1,5 +1,5 @@
 ---
-import { composeCategories, composePrompts, composeTemplates, composeTestStatus } from "../data/composeGuide";
+import { composeCategories, composePrompts, composeTemplates, composeTestStatus, composeTypstLimits, composeTypstNews } from "../data/composeGuide";
 import { withBase } from "../i18n";
 
 const workflows = [
@@ -13,7 +13,7 @@ const workflows = [
   <section class="cg-hero" aria-labelledby="compose-title">
     <div class="cg-hero__copy">
       <p class="cg-kicker">ISSANA Compose / Praktisk vejledning</p>
-      <p class="cg-pill">Pilot · under afprøvning</p>
+      <p class="cg-pill">Pilot · under afprøvning · <a href="#typst">nyt: Typst</a></p>
       <h1 id="compose-title">Fra model til<br /><span>et dokument,<br />du kan arbejde i.</span></h1>
       <p class="cg-intro">Planer, modeldata og skitser i samme arbejdsproces. Her begynder afprøvningen af en enklere vej fra Revit til dokumentation — til studiet og virksomheden.</p>
       <div class="cg-actions">
@@ -34,11 +34,23 @@ const workflows = [
   </section>
 
   <nav class="cg-index" aria-label="På denne side">
-    <a href="#arbejdsgange">01 Arbejdsgange</a><a href="#start">02 Kom i gang</a><a href="#prompts">03 Prompts</a><a href="#status">04 Teststatus</a><a href="#skabeloner">05 Skabeloner</a><a href="#windows">06 Windows</a>
+    <a href="#typst">01 Nyt: Typst</a><a href="#arbejdsgange">02 Arbejdsgange</a><a href="#start">03 Kom i gang</a><a href="#prompts">04 Prompts</a><a href="#status">05 Teststatus</a><a href="#skabeloner">06 Skabeloner</a><a href="#windows">07 Windows</a>
   </nav>
 
+  <section class="cg-section cg-typst" id="typst" aria-labelledby="typst-title">
+    <div class="cg-section__heading"><p class="cg-kicker">01 / Nyt i testudgaven · 18. oktober 2026</p><h2 id="typst-title">Typst i Compose.<br />En ny motor til nye dokumenter.</h2><p>Testudgaven gør Typst til motoren for nye dokumenter. Du kan også konvertere en kopi af et eksisterende LaTeX-dokument. Funktionerne er under intern afprøvning, og testudgaven deles ikke endnu.</p></div>
+    <div class="cg-typst__grid">
+      {composeTypstNews.map((item, index) => <article><span class="cg-number">{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+    </div>
+    <div class="cg-typst__limits">
+      <h3>Kendte begrænsninger i testudgaven</h3>
+      <ul>{composeTypstLimits.map((limit) => <li>{limit}</li>)}</ul>
+    </div>
+    <p class="cg-note">Afprøv en konvertering på en kopi, og sammenlign den nye PDF med originalen. Afsnittet beskriver testudgavens funktioner. Det er ikke et testresultat.</p>
+  </section>
+
   <section class="cg-section" id="arbejdsgange" aria-labelledby="workflows-title">
-    <div class="cg-section__heading"><p class="cg-kicker">01 / Det vi vil gøre enklere</p><h2 id="workflows-title">Tre konkrete arbejdsgange.</h2><p>Det følgende er mål for piloten. En samlet, automatisk overførsel fra Revit til Compose er endnu ikke dokumenteret her.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">02 / Det vi vil gøre enklere</p><h2 id="workflows-title">Tre konkrete arbejdsgange.</h2><p>Det følgende er mål for piloten. En samlet, automatisk overførsel fra Revit til Compose er endnu ikke dokumenteret her.</p></div>
     <div class="cg-workflows">
       {workflows.map((item) => <article><span class="cg-number">{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
     </div>
@@ -46,7 +58,7 @@ const workflows = [
   </section>
 
   <section class="cg-section cg-start" id="start" aria-labelledby="start-title">
-    <div class="cg-section__heading"><p class="cg-kicker">02 / Kom i gang med piloten</p><h2 id="start-title">Et lille forsøg.<br />Et tydeligt resultat.</h2><p>Få først en testudgave og en fungerende forbindelse på plads med den ansvarlige for piloten. <a href={withBase("/install-plugin")}>Revit-pluginets installationsvejledning</a> beskriver Revit-delen; den dokumenterer ikke en færdig Compose-kobling.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">03 / Kom i gang med piloten</p><h2 id="start-title">Et lille forsøg.<br />Et tydeligt resultat.</h2><p>Få først en testudgave og en fungerende forbindelse på plads med den ansvarlige for piloten. <a href={withBase("/install-plugin")}>Revit-pluginets installationsvejledning</a> beskriver Revit-delen; den dokumenterer ikke en færdig Compose-kobling.</p></div>
     <ol class="cg-steps">
       <li><span>1</span><div><h3>Åbn en gemt testkopi</h3><p>Brug en model, du må afprøve arbejdsgangen på. Vælg få, tydeligt navngivne planer eller et lille udvalg af rum.</p></div></li>
       <li><span>2</span><div><h3>Vælg et Compose-testprojekt</h3><p>Opret eller åbn et særskilt dokument, og vælg det afsnit, hvor figurerne eller tabellen skal stå.</p></div></li>
@@ -56,7 +68,7 @@ const workflows = [
   </section>
 
   <section class="cg-section" id="prompts" aria-labelledby="prompts-title">
-    <div class="cg-section__heading"><p class="cg-kicker">03 / Promptbibliotek</p><h2 id="prompts-title">Hvad vil du have ud?</h2><p>Vælg opgaven, tilpas prompten, og brug kvalitetskontrollen bagefter. Forslagene kræver afprøvning med den konkrete programversion og model.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">04 / Promptbibliotek</p><h2 id="prompts-title">Hvad vil du have ud?</h2><p>Vælg opgaven, tilpas prompten, og brug kvalitetskontrollen bagefter. Forslagene kræver afprøvning med den konkrete programversion og model.</p></div>
     <div class="cg-prompt-status"><span aria-hidden="true">○</span> Promptforslag · endnu ikke live-testet</div>
     <div class="cg-tools" data-prompt-tools hidden>
       <div class="cg-filters" role="group" aria-label="Filtrér prompts efter opgave">{composeCategories.map((category) => <button type="button" data-filter={category.id} aria-pressed={category.id === "alle"} aria-controls="prompt-list">{category.label}</button>)}</div>
@@ -79,21 +91,21 @@ const workflows = [
   </section>
 
   <section class="cg-section cg-status" id="status" aria-labelledby="status-title">
-    <div class="cg-section__heading"><p class="cg-kicker">04 / Dokumenteret status</p><h2 id="status-title">Hvad er afprøvet?</h2><p>Her samles resultater fra konkrete forsøg. En teknisk prøve af dokumentgenerering er et delresultat; overførslen fra en rigtig Revit-model skal også efterprøves.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">05 / Dokumenteret status</p><h2 id="status-title">Hvad er afprøvet?</h2><p>Her samles resultater fra konkrete forsøg. En teknisk prøve af dokumentgenerering er et delresultat; overførslen fra en rigtig Revit-model skal også efterprøves.</p></div>
     <div class="cg-test-list">{composeTestStatus.map((test) => <article><div><h3>{test.name}</h3><p>{test.detail}</p></div><span>{test.status}</span></article>)}</div>
     <div class="cg-test-example"><a class="button button--primary" href={withBase("/downloads/compose/compose-pilot-testdata.pdf")}>Se testeksempel (PDF) <span aria-hidden="true">↗</span></a><p>Syntetiske testdata · ingen data fra en Revit-model<br /><a href={withBase("/downloads/compose/pilot-teststatus-2026-10-14.json")}>Testoversigt (JSON)</a> · PDF-eksemplet er visuelt gennemgået.</p></div>
     <p class="cg-note">Resultaterne gælder de beskrevne prøver i dokumentmotoren. De dokumenterer endnu ikke en samlet arbejdsgang i Revit og Compose-appen eller promptenes virkning.</p>
   </section>
 
   <section class="cg-section" id="skabeloner" aria-labelledby="templates-title">
-    <div class="cg-section__heading"><p class="cg-kicker">05 / Planlagt skabelonbibliotek</p><h2 id="templates-title">Samme metode.<br />Flere faglige dokumenter.</h2><p>Planen er et bibliotek, hvor skabelonen beskriver nødvendige input, dokumentets opbygning og krav til review. De følgende skabelonspor er planlagt.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">06 / Planlagt skabelonbibliotek</p><h2 id="templates-title">Samme metode.<br />Flere faglige dokumenter.</h2><p>Planen er et bibliotek, hvor skabelonen beskriver nødvendige input, dokumentets opbygning og krav til review. De følgende skabelonspor er planlagt.</p></div>
     <ul class="cg-templates">{composeTemplates.map((template) => <li><span>{template}</span><small>Planlagt</small></li>)}</ul>
     <p class="cg-note">Molio-baserede beskrivelser forudsætter et afklaret rettighedsgrundlag. Faglige krav og standardtekster skal have en kendt kilde og udgave. Virksomhedens egne skabeloner og godkendelser indgår i afprøvningen.</p>
   </section>
 
   <section class="cg-section cg-download" id="windows" aria-labelledby="windows-title">
-    <div><p class="cg-kicker">06 / Programmet</p><h2 id="windows-title">Windows-udgave<br />under afprøvning.</h2></div>
-    <div><p>Når en udgave er klar til distribution, bliver den præsenteret her med versionsnummer, systemkrav, installationsvejledning og en oversigt over de afprøvede funktioner.</p><p class="cg-download__status">Der er endnu ingen offentlig Compose-installationsfil på denne side.</p><a class="cg-hero__link" href="#status">Se den aktuelle teststatus <span aria-hidden="true">→</span></a></div>
+    <div><p class="cg-kicker">07 / Programmet</p><h2 id="windows-title">Windows-udgave<br />under afprøvning.</h2></div>
+    <div><p>Når en udgave er klar til distribution, bliver den præsenteret her med versionsnummer, systemkrav, installationsvejledning og en oversigt over de afprøvede funktioner.</p><p>Den nyeste interne testudgave er fra 18. oktober 2026 og indeholder Typst. Den bruges kun til afprøvning og deles ikke.</p><p class="cg-download__status">Der er endnu ingen offentlig Compose-installationsfil på denne side.</p><a class="cg-hero__link" href="#status">Se den aktuelle teststatus <span aria-hidden="true">→</span></a></div>
   </section>
 </div>
 
@@ -189,6 +201,16 @@ const workflows = [
   .cg-section__heading { max-width: 46rem; margin-bottom: 2rem; }
   .cg-section h2 { font-size: clamp(2.1rem, 3.1vw, 3.25rem); letter-spacing: -.025em; margin-bottom: 1rem; }
   .cg-section__heading a { color: var(--navy); text-decoration: underline; text-underline-offset: .2em; }
+  .cg-pill a { color: #f5c087; text-decoration: underline; text-underline-offset: .2em; }
+  .cg-typst { background: var(--sand); }
+  .cg-typst__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+  .cg-typst__grid article { border-top: 2px solid var(--navy); padding-top: 1.1rem; }
+  .cg-typst__grid h3 { font-size: 1.25rem; }
+  .cg-typst__grid p { font-size: .92rem; }
+  .cg-typst__limits { margin-top: 2rem; background: white; border-left: 3px solid #ab5709; padding: 1.3rem 1.5rem; }
+  .cg-typst__limits h3 { font-size: 1.05rem; margin-bottom: .6rem; }
+  .cg-typst__limits ul { margin: 0; padding-left: 1.1rem; font-size: .88rem; }
+  .cg-typst__limits li { margin-bottom: .35rem; }
   .cg-workflows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
   .cg-workflows article { border-top: 2px solid var(--navy); padding-top: 1.1rem; }
   .cg-number { display: block; font-size: 2.8rem; color: #a9590a; line-height: 1; margin-bottom: 1.2rem; font-weight: 300; }
@@ -262,7 +284,8 @@ const workflows = [
     .cg-workflows { gap: 1.2rem; }
     .cg-workflows h3 { font-size: 1.15rem; }
     .cg-workflows p { font-size: .88rem; }
-    .cg-prompts { grid-template-columns: 1fr; }
+    .cg-prompts, .cg-typst__grid { grid-template-columns: 1fr; }
+    .cg-typst__grid { gap: 1.2rem; }
     .cg-search, .cg-search input { width: 100%; }
     .cg-test-list article { flex-direction: column; gap: .7rem; }
     .cg-test-list article > span { flex-basis: auto; }

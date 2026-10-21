@@ -83,7 +83,27 @@ export const composeTestStatus = [
   { name: "Revit-planer til Compose", status: "Ikke live-testet", detail: "Skal afprøves med en gemt testmodel og kontrol af hver figur." },
   { name: "Modeldata til tabel", status: "Ikke live-testet", detail: "Tal, enheder og manglende felter skal sammenlignes med modellen." },
   { name: "Arbejdsgangen i Compose-appen", status: "Ikke live-testet", detail: "Samspillet mellem brugerfladen, Revit, figurer og dokument skal afprøves samlet. Promptforslagene er endnu ikke live-testet." },
+  { name: "Typst i Compose-appen · testudgave 18.10", status: "Intern afprøvning", detail: "Nyt Typst-projekt, Typst-editoren og konvertering af en kopi er med i testudgaven fra 18. oktober 2026. Funktionerne afprøves internt og er ikke afprøvet hos en ny bruger." },
   { name: "Installation hos en ny bruger", status: "Ikke afprøvet", detail: "Opsætning, systemkrav og første overførsel skal afprøves, før en Windows-udgave præsenteres til download." },
+];
+
+// Features as described in the test build notes of 18 October 2026, not test results.
+export const composeTypstNews = [
+  { title: "Typst som standardmotor", text: "Nye dokumenter oprettes som Typst-projekter. Typst kræver ingen ekstra installation. LaTeX virker som før og kræver fortsat MiKTeX." },
+  { title: "Nyt Typst-projekt", text: "«Nyt projekt …» har motoren «Typst (anbefalet)» valgt på forhånd. Projektet starter med main.typ og en dansk standardtekst, og æ, ø og å virker uden opsætning." },
+  { title: "Kompilering efter tillid", text: "Et nyt Typst-projekt kompileres først, når du har læst advarslen og markeret det som betroet. Derefter bygger «Kompilér» eller Ctrl+Enter PDF'en ved siden af teksten." },
+  { title: "Typst-editoren", text: "Overskrifter skrives som = og == og vises i dispositionen. Henvisninger skrives som @etiket, og editoren foreslår etiketter og filstier. Du kan springe mellem tekst og PDF." },
+  { title: "Konvertér en kopi til Typst", text: "Et LaTeX-projekt kan konverteres til et nyt projekt i en mappe ved siden af originalen. Originalen ændres ikke. Bagefter vises filer, mangler, ord, kompilering og tillid." },
+  { title: "Mangler, du kan se", text: "Det, der ikke kan konverteres automatisk, står som røde bokse i den nye PDF med et ID. Konverteringspanelet viser listen over mangler og de to PDF'er side om side." },
+];
+
+export const composeTypstLimits = [
+  "Den visuelle editor findes kun til LaTeX. Typst har kodevisning.",
+  "TikZ-figurer konverteres ikke og skal tegnes på ny i Typst.",
+  "Konverteringen følger højst 64 filer via \\input og \\include. Egne makroer og nogle layoutkommandoer bliver til mangler.",
+  "Felter, skabeloner og vandmærke findes endnu kun til LaTeX. Skabelonprojekter kan ikke konverteres endnu.",
+  "Litteraturliste virker med en .bib-fil i projektet, #bibliography og @nøgle.",
+  "AI virker i Typst-projekter, men må ikke hente pakker fra nettet, bruge plugins eller stier uden for projektet.",
 ];
 
 export const composeTemplates = [
