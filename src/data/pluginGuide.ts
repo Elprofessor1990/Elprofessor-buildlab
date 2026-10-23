@@ -51,21 +51,23 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.6.0 ---------- */
+/* ---------- Nyt i version 2.8.0 ---------- */
 export const nextVersionIcons = [
-  { file: "icon-issana.svg", label: "ISSANA MCP", note: "Om og version" },
-  { file: "icon-panel.svg", label: "MCP-panel", note: "Forbindelse og chat" },
-  { file: "icon-settings.svg", label: "Indstillinger", note: "Konfiguration" },
-  { file: "icon-sketch.svg", label: "AI Skitse", note: "Tegn – AI'en modellerer" },
-  { file: "icon-design.svg", label: "Design Family", note: "Familie i 3D" },
+  { file: "icon-sketch.svg", label: "AI Skitse", note: "Trapper, døre og vinduer" },
+  { file: "icon-coding.svg", label: "ISSANA Kodning", note: "CCI, CCS, BIM7AA og SfB" },
+  { file: "icon-library.svg", label: "Bibliotek", note: "Signerede skills" },
+  { file: "icon-details.svg", label: "Detaljer", note: "Callouts pr. type" },
+  { file: "icon-design.svg", label: "Design Family", note: "Op til 4 billeder" },
 ];
 
 export const nextVersionFeatures = [
-  "Nyt bånd med panelerne ISSANA, AI-værktøjer og Skills. Knappen Forbindelse Til/Fra er væk: forbindelsen slås til og fra med kontakten øverst i MCP-panelet.",
-  "AI Skitse: tegn på planen eller på et foto, så foreslår AI'en vægge, døre, vinduer og rum, som du anvender som én handling. Nu også buede vægge og gulvkanter.",
-  "Design Family: beskriv en familie eller vis et foto, se den som 3D-model med dele, materialefarver og parametre, og opret den i Revit, når du er tilfreds.",
-  "Skills: gemte, godkendte arbejdsgange, du kører direkte fra båndet uden AI.",
-  "Rettelser: ISSANA-vinduer lukker med Revit, og send_code_to_revit hænger ikke længere efter en timeout.",
+  "AI Skitse – trapper: tegn løbet med en pil, klik + for repos (lige, L eller U), og se trin, gelænder og BR18-tjek, før du anvender. Orange pile = bredde, rød pil = mellemrum i en U-trappe.",
+  "AI Skitse – døre og vinduer: klik på en væg, så sidder de i typens bredde. Klik på døren for at vende den. Rotér med grader og 5-kant.",
+  "ISSANA Kodning: CCI, CCS, BIM7AA og SfB i én skill – også Parts. ISSANA-parametre sættes op automatisk.",
+  "Bibliotek: hent signerede skills, prompts, familier og Paint-farver. Se dine egne skills, og del flere ad gangen.",
+  "Detaljer: ét klik giver detalje-callouts for hver væg-, dæk- og tagtype i snittet.",
+  "Design Family: op til 4 billeder ad gangen og hurtigere rettelser af en familie.",
+  "Dansk eller engelsk: vælg sprog under Indstillinger.",
 ];
 
 /* ---------- Kod bygningsdele med NBS ---------- */
@@ -118,13 +120,14 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.6.0" | "Nyt i 2.5.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.8.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
-  { title: "AI Skitse", text: "Tegn på planen eller et foto. AI'en foreslår vægge, døre, vinduer og rum – også buede – og du anvender dem som én handling.", status: "Nyt i 2.6.0" },
-  { title: "Design Family", text: "Beskriv eller vis en familie, se den i 3D med parametre, og opret den i Revit.", status: "Nyt i 2.6.0" },
-  { title: "Ét klik: tilknyt og synkronisér", text: "Alle kategorier tilknyttes og synkroniseres med NBS i én plan og én godkendelse.", status: "Nyt i 2.5.0" },
-  { title: "Kontrolleret tilstand", text: "Slås til under Indstillinger → Forbindelse. Så foreslår AI'en, og du godkender hver ændring i panelet. Alt logges.", status: "Nyt i 2.5.0" },
+  { title: "Trapper i AI Skitse", text: "Tegn løbet, klik + for repos, og se trin, gelænder og BR18-tjek. Træk i pilene for bredde og mellemrum – reposen følger med.", status: "Nyt i 2.8.0" },
+  { title: "Døre og vinduer som figur", text: "Klik på en væg i skitsen eller i Revit, så sidder døren i typens bredde. Klik igen for at vende den.", status: "Nyt i 2.8.0" },
+  { title: "ISSANA Kodning", text: "CCI, CCS, BIM7AA og SfB i én skill – også Parts, med ISSANA-parametrene sat op automatisk.", status: "Nyt i 2.8.0" },
+  { title: "Bibliotek", text: "Skills, prompts, familier og Paint-farver, som underviseren har signeret. Du vælger selv, hvornår du opdaterer.", status: "Nyt i 2.8.0" },
+  { title: "Ventilation med i installeren", text: "Skill'en Luftskifte beregner luftskifte og luftmængder ud fra modellens rum. Beregningsmotoren kommer med i installeren.", status: "Idé" },
   { title: "Beskrivelser med lag og U-værdier", text: "Bygningsdelene får en beskrivelse med lagopbygning, U-værdi og for vinduer g-værdi – hentet fra modellen.", status: "Idé" },
   { title: "Skraveringstjek efter Molio C223b", text: "Kontrollér materialernes snitskraveringer mod C223b, og få rettelser til godkendelse.", status: "Idé" },
   { title: "QA-rapport til afleveringen", text: "Modelkontrol mod firmastandard og informationsniveau samlet i en rapport.", status: "Idé" },

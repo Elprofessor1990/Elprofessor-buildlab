@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- ISSANA Kodning · parametre (ISSANA MCP 2.8.0, drawn from plugin/Core/IssanaIcons.cs). -->
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#2E7D4F"/>
+  <path d="M7,10 H25 M7,16 H25 M7,22 H25" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9.5,7.5 H14.5 V12.5 H9.5 Z M17.5,13.5 H22.5 V18.5 H17.5 Z M11.5,19.5 H16.5 V24.5 H11.5 Z" fill="#FFFFFF" fill-rule="evenodd"/>
+</svg>

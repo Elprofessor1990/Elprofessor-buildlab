@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Bibliotek · to bøger (ISSANA MCP 2.8.0, drawn from plugin/Core/IssanaIcons.cs). -->
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#0F4C4C"/>
+  <path d="M6.5,7 H13.5 V25 H6.5 Z M16.5,8.6 L22.3,7 L26.6,23.4 L20.8,25 Z" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8,10 H12 V13 H8 Z" fill="#C65A2E" fill-rule="evenodd"/>
+</svg>

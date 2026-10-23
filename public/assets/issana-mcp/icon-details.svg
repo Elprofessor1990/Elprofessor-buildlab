@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Detaljer · lag i en opbygning og en callout-cirkel (ISSANA MCP 2.8.0, drawn from plugin/Core/IssanaIcons.cs). -->
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#2E7D4F"/>
+  <path d="M5,7 H20 M5,11.5 H20 M5,16 H12 M14.5,21 A5.5,5.5 0 1 0 25.5,21 A5.5,5.5 0 1 0 14.5,21 Z" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18,18.5 H23 V23.5 H18 Z" fill="#FFFFFF" fill-rule="evenodd"/>
+</svg>

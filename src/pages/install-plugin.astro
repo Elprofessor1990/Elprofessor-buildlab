@@ -13,8 +13,8 @@ import {
   sheetSteps,
 } from "../data/pluginGuide";
 
-const pluginVersion = "2.6.0";
-const releaseDate = "21. oktober 2026";
+const pluginVersion = "2.8.0";
+const releaseDate = "23. oktober 2026";
 const releaseDateIso = "2026-10-21";
 
 const r = String.raw;
@@ -334,7 +334,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.6.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
+    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.8.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },
@@ -835,7 +835,7 @@ tool_timeout_sec = 300`;
         <ul>
           {nextVersionFeatures.map((feature) => <li>{feature}</li>)}
         </ul>
-        <p class="ip-next__note">Har du 2.5.0 eller 2.4.0? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
+        <p class="ip-next__note">Har du 2.6.0 eller ældre? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
       </div>
     </aside>
 
@@ -845,7 +845,7 @@ tool_timeout_sec = 300`;
         <span class="ip-num" aria-hidden="true">5</span>
         <h2 id="ideer-title">Idéer og det, vi arbejder på</h2>
       </div>
-      <p class="ip-lead">Ting, vi tester eller tænker kan gøre arbejdet smartere. De er ikke en del af den version, du downloader i dag.</p>
+      <p class="ip-lead">Det nyeste i {pluginVersion}, og ting, vi tænker kan gøre arbejdet smartere. Idéerne er ikke en del af den version, du downloader i dag.</p>
       <p><a class="text-link" href={withBase("/compose")}>Revit til dokument: se Compose-piloten og promptvejledningen →</a></p>
       <div class="ip-ideas">
         {pluginIdeas.map((idea) => (
@@ -916,7 +916,7 @@ tool_timeout_sec = 300`;
         (Node.js) kræver administratorrettigheder.
       </p>
       <p class="ip-note">
-        <strong>Opgraderer du fra 2.5.0 eller 2.4.0?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
+        <strong>Opgraderer du fra 2.6.0 eller ældre?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
         NBS-nøgle bevares. Fra 2.4.0 omdøber installeren også MCP-serveren fra <code>revit-mcp-nbs</code> til <code>issana-revit</code>.
         Genstart Claude og Codex bagefter.
       </p>
