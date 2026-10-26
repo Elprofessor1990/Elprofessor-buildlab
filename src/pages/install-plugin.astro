@@ -13,9 +13,9 @@ import {
   sheetSteps,
 } from "../data/pluginGuide";
 
-const pluginVersion = "2.8.0";
-const releaseDate = "23. oktober 2026";
-const releaseDateIso = "2026-10-21";
+const pluginVersion = "2.9.0";
+const releaseDate = "26. oktober 2026";
+const releaseDateIso = "2026-10-26";
 
 const r = String.raw;
 /* Installeren ligger som GitHub Release i dette (offentlige) repo, ikke i public/downloads.
@@ -334,7 +334,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.8.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
+    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.9.0. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },

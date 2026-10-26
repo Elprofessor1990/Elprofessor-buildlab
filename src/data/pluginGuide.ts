@@ -120,9 +120,13 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.8.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
+  { title: "Pris og Sigma", text: "Ét vindue: pris pr. bygningsdel med Molio-poster, de numre du valgte før skrives efter ét Ja, og typer uden nummer får et forslag ud fra navn og lag.", status: "Nyt i 2.9.0" },
+  { title: "Sigma-appen følger med", text: "Installationen lægger fanebladet ISSANA → Kør ventende plan ind i Sigma Estimates, så overførslen virker uden Alt+F12.", status: "Nyt i 2.9.0" },
+  { title: "Kod modellen", text: "AI-forslag pr. type med sikkerhed; de usikre står øverst, så du retter dem først.", status: "Nyt i 2.9.0" },
+  { title: "Eksportér til Compose", text: "Pristabellen som .tex og .typ til dit ISSANA Compose-dokument, med dækning af modellen.", status: "Nyt i 2.9.0" },
   { title: "Trapper i AI Skitse", text: "Tegn løbet, klik + for repos, og se trin, gelænder og BR18-tjek. Træk i pilene for bredde og mellemrum – reposen følger med.", status: "Nyt i 2.8.0" },
   { title: "Døre og vinduer som figur", text: "Klik på en væg i skitsen eller i Revit, så sidder døren i typens bredde. Klik igen for at vende den.", status: "Nyt i 2.8.0" },
   { title: "ISSANA Kodning", text: "CCI, CCS, BIM7AA og SfB i én skill – også Parts, med ISSANA-parametrene sat op automatisk.", status: "Nyt i 2.8.0" },
