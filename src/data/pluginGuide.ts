@@ -120,9 +120,10 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.9.1" | "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
+  { title: "Skills følger med", text: "Installationen lægger de fem ISSANA-skills ind med det samme: CCI-, CCS-, BIM7AA- og SfB-kodning samt Skeletvæg beamsystem. Ingen download fra biblioteket først.", status: "Nyt i 2.9.1" },
   { title: "Pris og Sigma", text: "Ét vindue: pris pr. bygningsdel med Molio-poster, de numre du valgte før skrives efter ét Ja, og typer uden nummer får et forslag ud fra navn og lag.", status: "Nyt i 2.9.0" },
   { title: "Sigma-appen følger med", text: "Installationen lægger fanebladet ISSANA → Kør ventende plan ind i Sigma Estimates, så overførslen virker uden Alt+F12.", status: "Nyt i 2.9.0" },
   { title: "Kod modellen", text: "AI-forslag pr. type med sikkerhed; de usikre står øverst, så du retter dem først.", status: "Nyt i 2.9.0" },
