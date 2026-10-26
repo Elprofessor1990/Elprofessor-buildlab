@@ -13,13 +13,23 @@ const workflows = [
   <section class="cg-hero" aria-labelledby="compose-title">
     <div class="cg-hero__copy">
       <p class="cg-kicker">ISSANA Compose / Praktisk vejledning</p>
-      <p class="cg-pill">Testudgave 18.10 · <a href="#typst">nyt: Typst</a></p>
+      <p class="cg-pill">Beta 0.5.4 · <a href="#typst">nyt: Typst</a></p>
       <h1 id="compose-title">Fra model til<br /><span>et dokument,<br />du kan arbejde i.</span></h1>
       <p class="cg-intro">Planer, modeldata og skitser i samme arbejdsproces. Her begynder afprøvningen af en enklere vej fra Revit til dokumentation — til studiet og virksomheden.</p>
       <div class="cg-actions">
-        <a class="button button--primary" href="#hent">Hent Compose <span aria-hidden="true">↓</span></a>
+        {composeDownload.url ? (
+          <a class="button button--primary cg-hero__download" href={composeDownload.url} download={composeDownload.file}>
+            <span>Download version {composeDownload.number}</span>
+            <small>{composeDownload.file}</small>
+          </a>
+        ) : (
+          <a class="button button--primary" href="#hent">Hent Compose <span aria-hidden="true">↓</span></a>
+        )}
         <a class="cg-hero__link" href="#installation">Se installationen <span aria-hidden="true">→</span></a>
       </div>
+      {composeDownload.url && (
+        <p class="cg-hero__meta"><strong>Version {composeDownload.number}</strong> · <time datetime={composeDownload.dateIso}>{composeDownload.date}</time> · Windows · {composeDownload.size} · <a class="cg-hero__link" href={composeDownload.releaseUrl} rel="noopener">GitHub Release</a></p>
+      )}
     </div>
     <div class="cg-board" aria-label="Illustration af målet: en Revit-visning bliver til en figur i et redigerbart dokument.">
       <div class="cg-board__top"><span>ARBEJDSGANG / 01</span><span>MODEL → DOKUMENT</span></div>
@@ -38,7 +48,7 @@ const workflows = [
   </nav>
 
   <section class="cg-section cg-download" id="hent" aria-labelledby="download-title">
-    <div><p class="cg-kicker">01 / Hent Compose</p><h2 id="download-title">Windows-udgaven<br />er på vej.</h2><p>Her kan du hente Compose, når filen er lagt ud. Læs installationen nedenfor, så er du klar.</p></div>
+    <div><p class="cg-kicker">01 / Hent Compose</p><h2 id="download-title">Windows-udgaven<br />er klar til afprøvning.</h2><p>Hent betaen, og følg installationen nedenfor. Det er en testudgave, og den er endnu ikke kodesigneret.</p></div>
     <div class="cg-download__panel">
       <dl class="cg-download__facts">
         <div><dt>Udgave</dt><dd>{composeDownload.version}</dd></div>
@@ -50,6 +60,7 @@ const workflows = [
         <>
           <a class="button button--primary cg-download__button" href={composeDownload.url} download={composeDownload.file}>Hent {composeDownload.file} <span aria-hidden="true">↓</span></a>
           {composeDownload.sha256 && <p class="cg-download__hash">SHA-256: <code>{composeDownload.sha256}</code></p>}
+          {composeDownload.licenses && <p class="cg-download__status"><a href={composeDownload.licenses} rel="noopener">Tredjepartskomponenter og deres licenser (TXT)</a></p>}
         </>
       ) : (
         <>
@@ -61,15 +72,15 @@ const workflows = [
   </section>
 
   <section class="cg-section cg-install" id="installation" aria-labelledby="install-title">
-    <div class="cg-section__heading"><p class="cg-kicker">02 / Installation</p><h2 id="install-title">Pak ud. Start.<br />Skriv dit første dokument.</h2><p>Compose kører direkte fra en mappe. Der er ingen installer, og appen ændrer ikke andre programmer på din pc.</p></div>
+    <div class="cg-section__heading"><p class="cg-kicker">02 / Installation</p><h2 id="install-title">Installér. Start.<br />Skriv dit første dokument.</h2><p>Compose installeres kun for din egen Windows-bruger og kræver ikke administratorrettigheder.</p></div>
     <div class="cg-install__grid">
       <ol class="cg-steps">
         {composeInstallSteps.map((step, index) => <li><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}
       </ol>
       <aside class="cg-install__files" aria-labelledby="files-title">
-        <h3 id="files-title">Filerne i pakken</h3>
+        <h3 id="files-title">Det installeres</h3>
         <dl>{composePackageFiles.map((file) => <div><dt><code>{file.name}</code></dt><dd>{file.text}</dd></div>)}</dl>
-        <p><strong>Afinstallér</strong> Slet mappen. Dine projekter ligger, hvor du selv har valgt, og slettes ikke.</p>
+        <p><strong>Afinstallér</strong> Windows Indstillinger → Apps → Installerede apps → ISSANA Compose → Afinstaller. Dine projekter ligger, hvor du selv har valgt, og slettes ikke.</p>
       </aside>
     </div>
   </section>
@@ -222,6 +233,10 @@ const workflows = [
   .cg-actions .button--primary { background: var(--orange); color: var(--navy); border-color: var(--orange); }
   .cg-actions .button--primary:hover { background: #f5b16c; border-color: #f5b16c; }
   .cg-hero__link { color: white; font-weight: 700; text-decoration: underline; text-underline-offset: .3em; }
+  .cg-hero__download { display: inline-grid; justify-items: start; gap: .1rem; max-width: 100%; }
+  .cg-hero__download small { font-size: .74rem; font-weight: 700; overflow-wrap: anywhere; }
+  .cg-hero__meta { margin-top: 1.1rem; color: rgba(255, 255, 255, .9); font-size: .95rem; font-weight: 600; }
+  .cg-hero__meta strong { color: var(--mint); }
   .cg-board { background: var(--sand); border-top: 5px solid var(--orange); padding: 1.2rem; transform: rotate(1deg); }
   .cg-board__top, .cg-board__bottom { display: flex; justify-content: space-between; gap: .7rem; font-size: .55rem; font-weight: 800; letter-spacing: .06em; color: var(--navy); }
   .cg-board__bottom { border-top: 1px solid var(--line); padding-top: .8rem; }

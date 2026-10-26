@@ -116,24 +116,40 @@ export const composeDownload: {
   file?: string;
   url?: string;
   sha256?: string;
+  licenses?: string;
+  number?: string;
+  date?: string;
+  dateIso?: string;
+  size?: string;
+  releaseUrl?: string;
 } = {
-  version: "Testudgave 18. oktober 2026",
-  format: "Zip-fil med fem programfiler. Ingen installer.",
-  requirements: "Windows 10 eller 11, 64-bit, med Microsoft Edge WebView2 (følger med Windows 11).",
+  version: "Beta 0.5.4 · 26. oktober 2026",
+  format: "Installationsprogram (.exe, 28,6 MB). Installeres kun for din egen Windows-bruger.",
+  requirements: "Windows 10 eller 11, 64-bit, med Microsoft Edge WebView2. Installationsprogrammet kan hente den ved behov; det kræver internet.",
   optional: "MiKTeX, hvis du vil arbejde i LaTeX-projekter. Typst kræver ingen ekstra installation.",
+  // The installer is a GitHub Release in this (public) repo, not in public/downloads, as on the plugin page.
+  file: "ISSANA-Compose-Installer-0.5.4.exe",
+  url: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-compose-v0.5.4/ISSANA-Compose-Installer-0.5.4.exe",
+  sha256: "f7326827d9d495696ebce06dc81620118727edd22cbfda6f88f672a1eb16fabb",
+  licenses: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-compose-v0.5.4/ISSANA-Compose-0.5.4-TREDJEPARTSLICENSER.txt",
+  number: "0.5.4",
+  date: "26. oktober 2026",
+  dateIso: "2026-10-26",
+  size: "ca. 29 MB",
+  releaseUrl: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/issana-compose-v0.5.4",
 };
 
 export const composeInstallSteps = [
-  { title: "Hent og pak ud", text: "Hent zip-filen, og pak den ud i en mappe, du selv vælger, fx Dokumenter\\ISSANA Compose. Lad alle fem .exe-filer ligge i samme mappe." },
-  { title: "Start appen", text: "Dobbeltklik på compose-desktop.exe. Der er ingen installer, så appen kører direkte fra mappen." },
-  { title: "Hvis Windows advarer", text: "Programfilerne er endnu ikke kodesigneret. Viser Windows «Windows beskyttede din pc», så kontrollér filens SHA-256 her på siden. Vælg derefter «Flere oplysninger» og «Kør alligevel»." },
+  { title: "Hent og installér", text: "Hent installationsprogrammet, og dobbeltklik på det. Compose installeres kun for din egen Windows-bruger og skal ikke køres som administrator. Installationsprogrammet er på engelsk." },
+  { title: "Hvis Windows advarer", text: "Installationsprogrammet er endnu ikke kodesigneret. Viser Windows «Windows beskyttede din pc», så kontrollér filens SHA-256 her på siden. Vælg derefter «Flere oplysninger» og «Kør alligevel»." },
+  { title: "Start appen", text: "Lad «Create desktop shortcut» være afkrydset på installationsprogrammets sidste side. Start ISSANA Compose fra Startmenuen eller genvejen på skrivebordet." },
   { title: "Opret dit første projekt", text: "Vælg «Nyt projekt …». Motoren «Typst (anbefalet)» er valgt på forhånd. Giv projektet et navn og en mappe, og opret det." },
   { title: "Markér som betroet og kompilér", text: "Klik «Læs mere og markér som betroet …», læs advarslen, og bekræft. Tryk «Kompilér» eller Ctrl+Enter. PDF'en vises til højre." },
   { title: "LaTeX, hvis du har brug for det", text: "LaTeX-projekter kræver MiKTeX. Installér det kun, hvis du vil arbejde i LaTeX." },
 ];
 
 export const composePackageFiles = [
-  { name: "compose-desktop.exe", text: "Appen. Den er den eneste, du starter." },
+  { name: "compose-desktop.exe", text: "Appen. Du starter den fra Startmenuen eller skrivebordet." },
   { name: "compose-typst.exe", text: "Typst-motoren, som bygger PDF'en." },
   { name: "compose-svg.exe", text: "Konverterer SVG-figurer ved kompilering." },
   { name: "compose-mcp.exe", text: "Forbindelsen til en AI-klient (MCP)." },
@@ -142,7 +158,7 @@ export const composePackageFiles = [
 
 // Add a youtubeId when a video is published; the card then shows the video.
 export const composeVideos: Array<{ id: string; title: string; text: string; youtubeId?: string }> = [
-  { id: "installation", title: "Installation og første start", text: "Hent og pak Compose ud, start appen, og kom forbi Windows-advarslen." },
+  { id: "installation", title: "Installation og første start", text: "Hent og installér Compose, start appen, og kom forbi Windows-advarslen." },
   { id: "typst-projekt", title: "Dit første Typst-projekt", text: "Opret et projekt, markér det som betroet, skriv overskrifter og henvisninger, og kompilér." },
   { id: "konvertering", title: "Konvertér LaTeX til Typst", text: "Konvertér en kopi, gennemgå manglerne, og sammenlign de to PDF'er side om side." },
   { id: "revit", title: "Fra Revit til Compose", text: "Pilotarbejdsgangen: planer og modeldata fra en testmodel ind i dokumentet." },
