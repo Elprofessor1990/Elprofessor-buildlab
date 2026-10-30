@@ -51,23 +51,22 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.8.0 ---------- */
+/* ---------- Nyt i version 2.12.0 ---------- */
 export const nextVersionIcons = [
-  { file: "icon-sketch.svg", label: "AI Skitse", note: "Trapper, døre og vinduer" },
-  { file: "icon-coding.svg", label: "ISSANA Kodning", note: "CCI, CCS, BIM7AA og SfB" },
-  { file: "icon-library.svg", label: "Bibliotek", note: "Signerede skills" },
-  { file: "icon-details.svg", label: "Detaljer", note: "Callouts pr. type" },
-  { file: "icon-design.svg", label: "Design Family", note: "Op til 4 billeder" },
+  { file: "icon-panel.svg", label: "3D-arbejdsrum", note: "Lag, data og Gem i Revit" },
+  { file: "icon-details.svg", label: "Lyd pr. rum", note: "ISO 12354 mod dine mål" },
+  { file: "icon-coding.svg", label: "CCI-kodning", note: "Efter IKT-specifikationen" },
+  { file: "icon-library.svg", label: "Produkter og LCA", note: "Pr. handlingsstatus" },
+  { file: "icon-sketch.svg", label: "AI i 3D", note: "Forslag før ændring" },
 ];
 
 export const nextVersionFeatures = [
-  "AI Skitse – trapper: tegn løbet med en pil, klik + for repos (lige, L eller U), og se trin, gelænder og BR18-tjek, før du anvender. Orange pile = bredde, rød pil = mellemrum i en U-trappe.",
-  "AI Skitse – døre og vinduer: klik på en væg, så sidder de i typens bredde. Klik på døren for at vende den. Rotér med grader og 5-kant.",
-  "ISSANA Kodning: CCI, CCS, BIM7AA og SfB i én skill – også Parts. ISSANA-parametre sættes op automatisk.",
-  "Bibliotek: hent signerede skills, prompts, familier og Paint-farver. Se dine egne skills, og del flere ad gangen.",
-  "Detaljer: ét klik giver detalje-callouts for hver væg-, dæk- og tagtype i snittet.",
-  "Design Family: op til 4 billeder ad gangen og hurtigere rettelser af en familie.",
-  "Dansk eller engelsk: vælg sprog under Indstillinger.",
+  "3D er arbejdsrummet: Analyse bygningsdele åbner direkte i 3D. Filtrér og farv efter bærende, stabiliserende, lyd- og brandstatus, manglende data, CCI og handlingsstatus. Lag ændrer aldrig noget i Revit.",
+  "Bygningsdata i 3D: tags, handlingsstatus, rummets anvendelse, støj udefra, lyd- og branddata med kilde og kontrol. Du ser ændringerne først, og «Gem i Revit» skriver dem i én transaktion.",
+  "Lyd pr. rum efter DS/EN ISO 12354: udefra gennem facaden, mellem rum, trinlyd og installationer, holdt op mod dine egne lydmål. Det, der mangler, står i en liste i stedet for at blive gættet.",
+  "Graf: se pr. etage og type, hvilke vægge der mangler data, og hvor ens typer har forskellige data. Klik på et rum for at se dets naborum og bygningsdele.",
+  "Sol og skygge for en valgt dato og et klokkeslæt ud fra Revits placering, og produkter med LCA holdt adskilt pr. handlingsstatus i renoveringsprojekter.",
+  "CCI-kodning efter IKT-specifikationen med Molios CCI-parametre fra din egen C421a-fil, og AI-feltet i 3D, der fx forstår «alle ydervægge på 1. sal skal have tagget bærende».",
 ];
 
 /* ---------- Kod bygningsdele med NBS ---------- */
@@ -120,9 +119,12 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.9.1" | "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Nyt i 2.12.0" | "Nyt i 2.9.1" | "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
 
 export const pluginIdeas: Idea[] = [
+  { title: "3D som arbejdsrum", text: "Filtre, farver og bygningsdata direkte i 3D. Ændringer vises først og skrives i Revit med ét klik på «Gem i Revit».", status: "Nyt i 2.12.0" },
+  { title: "Lyd pr. rum", text: "Facade, luftlyd mellem rum, trinlyd og installationer efter DS/EN ISO 12354, holdt op mod dine egne lydmål.", status: "Nyt i 2.12.0" },
+  { title: "Renovering", text: "Handlingsstatus pr. element eller type, forslag ud fra Revits faser, og LCA og Sigma pr. status.", status: "Nyt i 2.12.0" },
   { title: "Skills følger med", text: "Installationen lægger de fem ISSANA-skills ind med det samme: CCI-, CCS-, BIM7AA- og SfB-kodning samt Skeletvæg beamsystem. Ingen download fra biblioteket først.", status: "Nyt i 2.9.1" },
   { title: "Pris og Sigma", text: "Ét vindue: pris pr. bygningsdel med Molio-poster, de numre du valgte før skrives efter ét Ja, og typer uden nummer får et forslag ud fra navn og lag.", status: "Nyt i 2.9.0" },
   { title: "Sigma-appen følger med", text: "Installationen lægger fanebladet ISSANA → Kør ventende plan ind i Sigma Estimates, så overførslen virker uden Alt+F12.", status: "Nyt i 2.9.0" },
