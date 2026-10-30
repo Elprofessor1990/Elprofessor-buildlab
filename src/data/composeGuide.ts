@@ -123,7 +123,7 @@ export const composeDownload: {
   size?: string;
   releaseUrl?: string;
 } = {
-  version: "Beta 0.5.4 · 26. oktober 2026",
+  version: "0.5.4 · Beta – til test, ikke til afleverede sager · 26. oktober 2026",
   format: "Installationsprogram (.exe, 28,6 MB). Installeres kun for din egen Windows-bruger.",
   requirements: "Windows 10 eller 11, 64-bit, med Microsoft Edge WebView2. Installationsprogrammet kan hente den ved behov; det kræver internet.",
   optional: "MiKTeX, hvis du vil arbejde i LaTeX-projekter. Typst kræver ingen ekstra installation.",

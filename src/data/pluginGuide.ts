@@ -51,7 +51,7 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.8.0 ---------- */
+/* ---------- Nyt i version 2.9.1 ---------- */
 export const nextVersionIcons = [
   { file: "icon-sketch.svg", label: "AI Skitse", note: "Trapper, døre og vinduer" },
   { file: "icon-coding.svg", label: "ISSANA Kodning", note: "CCI, CCS, BIM7AA og SfB" },

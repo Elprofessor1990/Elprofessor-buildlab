@@ -1,7 +1,7 @@
 ---
 import Hero from "./Hero.astro";
 import SubjectGrid from "./SubjectGrid.astro";
-import { getLocalePath, ui, type Locale } from "../i18n";
+import { getLocalePath, issanaPrograms, ui, withBase, type Locale } from "../i18n";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = ui[locale];
@@ -10,6 +10,33 @@ const copy = ui[locale];
 <Hero locale={locale} />
 
 <SubjectGrid locale={locale} />
+
+<section class="section section--issana-programs" aria-labelledby="issana-programs-title">
+  <div class="issana-programs">
+    <div class="section__header">
+      <p class="eyebrow">ISSANA</p>
+      <h2 id="issana-programs-title">ISSANA-programmer</h2>
+    </div>
+    <div class="issana-programs__grid">
+      {issanaPrograms.map((program) => (
+        program.href ? (
+          <a class="issana-program" href={withBase(program.href)}>
+            <span class="issana-program__status">{program.status}</span>
+            <h3>{program.name}</h3>
+            <p>{program.text}</p>
+            <span class="issana-program__link">Se vejledning →</span>
+          </a>
+        ) : (
+          <article class="issana-program">
+            <span class="issana-program__status">{program.status}</span>
+            <h3>{program.name}</h3>
+            <p>{program.text}</p>
+          </article>
+        )
+      ))}
+    </div>
+  </div>
+</section>
 
 <section class="section section--workflow" aria-labelledby="workflow-title">
   <div class="workflow-panel">

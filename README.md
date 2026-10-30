@@ -17,6 +17,10 @@ The site currently includes:
 - A video library with subject filtering.
 - Video detail pages with YouTube embeds and playlist context.
 - An About page for Ali Kadum Hassan and AKLCA.
+- ISSANA MCP Revit installation guide: `/install-plugin`.
+- ISSANA MCP Revit short link: `/revit-plugin`.
+- ISSANA Compose guide: `/compose`.
+- Molio A104 skill guide: `/molio-skill`.
 
 ## Current Subjects
 

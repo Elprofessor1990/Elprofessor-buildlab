@@ -561,6 +561,60 @@ p {
   font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
 }
 
+.section--issana-programs {
+  background: var(--sand);
+}
+
+.issana-programs {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.issana-programs__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.issana-program {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  min-height: 180px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--navy);
+  padding: 1rem;
+  text-decoration: none;
+}
+
+a.issana-program:hover {
+  border-color: rgba(242, 140, 40, 0.7);
+  box-shadow: 0 12px 28px rgba(17, 42, 70, 0.1);
+  translate: 0 -2px;
+}
+
+.issana-program h3,
+.issana-program p {
+  margin: 0;
+}
+
+.issana-program p {
+  color: var(--muted);
+}
+
+.issana-program__status,
+.issana-program__link {
+  color: var(--orange);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.issana-program__link {
+  margin-top: auto;
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -1811,6 +1865,10 @@ p {
 }
 
 @media (max-width: 560px) {
+  .issana-programs__grid {
+    grid-template-columns: 1fr;
+  }
+
   h1 {
     font-size: 2.55rem;
   }
@@ -2076,6 +2134,10 @@ p {
 }
 
 @media (max-width: 1100px) {
+  .issana-programs__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .skill-clients {
     grid-template-columns: 1fr;
   }
