@@ -1,5 +1,5 @@
 ---
-import { composeCategories, composeDownload, composeInstallSteps, composePackageFiles, composePrompts, composeTemplates, composeTestStatus, composeTypstLimits, composeTypstNews, composeVideos } from "../data/composeGuide";
+import { composeCategories, composeDownload, composeInstallSteps, composeNextNews, composePackageFiles, composePrompts, composeTemplates, composeTestStatus, composeTypstLimits, composeTypstNews, composeVideos } from "../data/composeGuide";
 import { withBase } from "../i18n";
 
 const workflows = [
@@ -111,6 +111,13 @@ const workflows = [
       <ul>{composeTypstLimits.map((limit) => <li>{limit}</li>)}</ul>
     </div>
     <p class="cg-note">Afprøv en konvertering på en kopi, og sammenlign den nye PDF med originalen. Afsnittet beskriver testudgavens funktioner. Det er ikke et testresultat.</p>
+    <div class="cg-typst__next" id="naeste-testudgave">
+      <h3>På vej i næste testudgave · besluttet 31. oktober 2026</h3>
+      <p>Ændringerne er lavet og gennemgået, men er ikke med i version {composeDownload.number}. De beskriver kommende adfærd, ikke testresultater.</p>
+      <div class="cg-typst__grid">
+        {composeNextNews.map((item, index) => <article><span class="cg-number">{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+      </div>
+    </div>
   </section>
 
   <section class="cg-section" id="pilot" aria-labelledby="workflows-title">
@@ -271,6 +278,9 @@ const workflows = [
   .cg-typst__grid p { font-size: .92rem; }
   .cg-typst__limits { margin-top: 2rem; background: white; border-left: 3px solid #ab5709; padding: 1.3rem 1.5rem; }
   .cg-typst__limits h3 { font-size: 1.05rem; margin-bottom: .6rem; }
+  .cg-typst__next { margin-top: 2.5rem; border-top: 3px solid var(--mint); padding-top: 1.4rem; }
+  .cg-typst__next > h3 { font-size: 1.15rem; margin-bottom: .4rem; }
+  .cg-typst__next > p { font-size: .92rem; margin-bottom: 1.4rem; }
   .cg-typst__limits ul { margin: 0; padding-left: 1.1rem; font-size: .88rem; }
   .cg-typst__limits li { margin-bottom: .35rem; }
   .cg-workflows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }

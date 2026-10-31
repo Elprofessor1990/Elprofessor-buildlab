@@ -84,6 +84,7 @@ export const composeTestStatus = [
   { name: "Modeldata til tabel", status: "Ikke live-testet", detail: "Tal, enheder og manglende felter skal sammenlignes med modellen." },
   { name: "Arbejdsgangen i Compose-appen", status: "Ikke live-testet", detail: "Samspillet mellem brugerfladen, Revit, figurer og dokument skal afprøves samlet. Promptforslagene er endnu ikke live-testet." },
   { name: "Typst i Compose-appen · testudgave 18.10", status: "Intern afprøvning", detail: "Nyt Typst-projekt, Typst-editoren og konvertering af en kopi er med i testudgaven fra 18. oktober 2026. Funktionerne afprøves internt og er ikke afprøvet hos en ny bruger." },
+  { name: "AI-ændringer uden godkendelse · 31.10", status: "Afventer næste testudgave", detail: "31. oktober 2026: ændringen er merget på udviklingsgrenen efter uafhængigt kodereview (tre runder, godkendt). Automatiske tests af kerne, kommandolinje, MCP og brugerflade er grønne på udviklingsmaskinen. Ikke med i 0.5.4 og endnu ikke afprøvet i den kørende app." },
   { name: "Installation hos en ny bruger", status: "Ikke afprøvet", detail: "Opsætning, systemkrav og første overførsel skal afprøves, før en Windows-udgave præsenteres til download." },
 ];
 
@@ -95,6 +96,16 @@ export const composeTypstNews = [
   { title: "Typst-editoren", text: "Overskrifter skrives som = og == og vises i dispositionen. Henvisninger skrives som @etiket, og editoren foreslår etiketter og filstier. Du kan springe mellem tekst og PDF." },
   { title: "Konvertér en kopi til Typst", text: "Et LaTeX-projekt kan konverteres til et nyt projekt i en mappe ved siden af originalen. Originalen ændres ikke. Bagefter vises filer, mangler, ord, kompilering og tillid." },
   { title: "Mangler, du kan se", text: "Det, der ikke kan konverteres automatisk, står som røde bokse i den nye PDF med et ID. Konverteringspanelet viser listen over mangler og de to PDF'er side om side." },
+];
+
+// Changes merged on the development branch on 31 October 2026 (ADR-037 and PO-1810-ui). They are not in beta 0.5.4
+// and are listed here as upcoming behaviour, not as test results.
+export const composeNextNews = [
+  { title: "AI-ændringer uden godkendelsestrin", text: "I nye og konverterede projekter skrives AI'ens ændring direkte i filen, når kørslen er færdig. Du skal ikke længere godkende hvert forslag. Hver ændring står i Historik med forfatter og kan fortrydes med ét klik." },
+  { title: "«Godkend» kan stadig vælges", text: "Under ⋯ → Projektindstillinger → AI vælger du mellem «Direkte» og «Godkend» for hvert projekt. Projekter fra en tidligere udgave beholder deres indstilling." },
+  { title: "Store omskrivninger bliver et forslag", text: "Ændringer i flere trin, «kontrollér» og en kørsel, du stopper, vises fortsat som forslag, du tager stilling til. Kompilering kræver stadig, at projektet er markeret som betroet." },
+  { title: "Automatisk kompilering er slået fra", text: "PDF'en bygges, når du trykker «Kompilér» eller Ctrl+Enter. Vil du have PDF'en opdateret efter hver ændring, slår du «Automatisk kompilering» til under Projektindstillinger." },
+  { title: "Klik i PDF'en", text: "Et dobbeltklik i PDF'en viser en ring dér, hvor du klikkede, og springer til stedet i teksten. Sigtelinjen vises kun, når du navigerer med tastaturet." },
 ];
 
 export const composeTypstLimits = [

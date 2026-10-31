@@ -2,13 +2,13 @@ export type Locale = "da" | "en" | "ar";
 
 export const defaultLocale: Locale = "da";
 
-export const issanaPrograms = [
+export const issanaPrograms: ReadonlyArray<{ name: string; status: string; text: string; href?: string }> = [
   { name: "ISSANA MCP Revit", status: "Udgivet · 2.12.0", text: "Revit-plugin med MCP-forbindelse.", href: "/install-plugin" },
   { name: "Molio A104-skills", status: "Udgivet", text: "Følger med ISSANA MCP.", href: "/molio-skill" },
   { name: "ISSANA Compose", status: "Beta · 0.5.4", text: "Til test, ikke til afleverede sager.", href: "/compose" },
   { name: "ISSANA LCA", status: "På vej", text: "Ingen download endnu." },
   { name: "ISSANA Konstruktion", status: "På vej", text: "Ingen download endnu." },
-] as const;
+];
 
 export const locales: Record<
   Locale,
