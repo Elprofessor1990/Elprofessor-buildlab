@@ -24,6 +24,14 @@ const savedFile = `ISSANA-MCP-Installer-${pluginVersion}.exe`;
 const releaseTag = `issana-mcp-v${pluginVersion}`;
 const releaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${releaseTag}`;
 const installerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${releaseTag}/${savedFile}`;
+/* Testversion: 3D-arbejdsrummet (3.0). Vises under den aktuelle version, tydeligt mærket som test. Tom streng skjuler boksen. */
+const testVersion = "3.0.0";
+const testDate = "31. oktober 2026";
+const testDateIso = "2026-10-31";
+const testFile = `ISSANA-MCP-Installer-${testVersion}-test.exe`;
+const testTag = `issana-mcp-v${testVersion}-test`;
+const testReleaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${testTag}`;
+const testInstallerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${testTag}/${testFile}`;
 const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
 const codexUrl = "https://openai.com/da-DK/codex/";
@@ -598,6 +606,18 @@ tool_timeout_sec = 300`;
           <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {pluginVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
           <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong></li>
         </ul>
+        {testVersion && (
+          <div class="ip-version__test">
+            <p class="ip-version__label">Testversion · ikke til undervisning</p>
+            <p class="ip-version__number ip-version__number--test">{testVersion}</p>
+            <p class="ip-version__date"><time datetime={testDateIso}>{testDate}</time> · 3D-arbejdsrummet: mindmap, klip, opbygning, Konstruktiv funktion, Statik, rigtig AI og Lyd</p>
+            <a class="button ip-download ip-download--test" href={testInstallerUrl} download={testFile}>
+              <span>Download testversion {testVersion}</span>
+              <small>{testFile}</small>
+            </a>
+            <p class="ip-version__date">Erstatter {pluginVersion} ved installation. Geninstallér {pluginVersion} ovenfor for at gå tilbage. <a class="ip-hero__link" href={testReleaseUrl} rel="noopener">Hvad er nyt</a></p>
+          </div>
+        )}
       </aside>
     </header>
 
@@ -1525,6 +1545,19 @@ tool_timeout_sec = 300`;
     font-weight: 700;
   }
 
+  .ip-version__test {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.25);
+  }
+  .ip-version__number--test {
+    color: #f6a623;
+  }
+  .ip-download--test {
+    margin: 0.6rem 0;
+    background: #f6a623;
+    color: #0b1b2b;
+  }
   .ip-version__title {
     margin: 1rem 0 0;
     border-block-start: 1px solid rgba(255, 255, 255, 0.18);
