@@ -3,7 +3,7 @@ export type Locale = "da" | "en" | "ar";
 export const defaultLocale: Locale = "da";
 
 export const issanaPrograms = [
-  { name: "ISSANA MCP Revit", status: "Udgivet · 2.9.1", text: "Revit-plugin med MCP-forbindelse.", href: "/install-plugin" },
+  { name: "ISSANA MCP Revit", status: "Udgivet · 2.12.0", text: "Revit-plugin med MCP-forbindelse.", href: "/install-plugin" },
   { name: "Molio A104-skills", status: "Udgivet", text: "Følger med ISSANA MCP.", href: "/molio-skill" },
   { name: "ISSANA Compose", status: "Beta · 0.5.4", text: "Til test, ikke til afleverede sager.", href: "/compose" },
   { name: "ISSANA LCA", status: "På vej", text: "Ingen download endnu." },
