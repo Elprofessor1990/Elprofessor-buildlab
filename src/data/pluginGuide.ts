@@ -51,7 +51,7 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.12.0 ---------- */
+/* ---------- Nyt i version 2.12.1 (2.12.0 + Sigma-rettelse) ---------- */
 export const nextVersionIcons = [
   { file: "icon-panel.svg", label: "3D-arbejdsrum", note: "Lag, data og Gem i Revit" },
   { file: "icon-details.svg", label: "Lyd pr. rum", note: "ISO 12354 mod dine mål" },
@@ -61,6 +61,7 @@ export const nextVersionIcons = [
 ];
 
 export const nextVersionFeatures = [
+  "2.12.1: Sigma læser overskriftskoden i ISSANA's rækkefølge: ISSANA CCI Code → ISSANA Classificationcode → NBS Classificationcode. En type, du har kodet med ISSANA, beholder sin egen kode i Sigma i stedet for at lande under Molios SfB-gruppe. Den prissatte linje bærer stadig Molio-nummeret.",
   "3D er arbejdsrummet: Analyse bygningsdele åbner direkte i 3D. Filtrér og farv efter bærende, stabiliserende, lyd- og brandstatus, manglende data, CCI og handlingsstatus. Lag ændrer aldrig noget i Revit.",
   "Bygningsdata i 3D: tags, handlingsstatus, rummets anvendelse, støj udefra, lyd- og branddata med kilde og kontrol. Du ser ændringerne først, og «Gem i Revit» skriver dem i én transaktion.",
   "Lyd pr. rum efter DS/EN ISO 12354: udefra gennem facaden, mellem rum, trinlyd og installationer, holdt op mod dine egne lydmål. Det, der mangler, står i en liste i stedet for at blive gættet.",
