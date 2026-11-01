@@ -112,8 +112,8 @@ const workflows = [
     </div>
     <p class="cg-note">Afprøv en konvertering på en kopi, og sammenlign den nye PDF med originalen. Afsnittet beskriver testudgavens funktioner. Det er ikke et testresultat.</p>
     <div class="cg-typst__next" id="naeste-testudgave">
-      <h3>På vej i næste testudgave · besluttet 31. oktober 2026</h3>
-      <p>Ændringerne er lavet og gennemgået, men er ikke med i version {composeDownload.number}. De beskriver kommende adfærd, ikke testresultater.</p>
+      <h3>På vej i version 1.0 · besluttet 31. oktober 2026</h3>
+      <p>Den næste udgave får nummeret 1.0 (besluttet 1. november 2026). Ændringerne er lavet og gennemgået, men er ikke med i version {composeDownload.number}. De beskriver kommende adfærd, ikke testresultater. Også 1.0 er til test, ikke til afleverede sager, indtil testgaten og en prøve i appen er bestået.</p>
       <div class="cg-typst__grid">
         {composeNextNews.map((item, index) => <article><span class="cg-number">{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
       </div>

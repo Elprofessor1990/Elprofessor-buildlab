@@ -84,7 +84,7 @@ export const composeTestStatus = [
   { name: "Modeldata til tabel", status: "Ikke live-testet", detail: "Tal, enheder og manglende felter skal sammenlignes med modellen." },
   { name: "Arbejdsgangen i Compose-appen", status: "Ikke live-testet", detail: "Samspillet mellem brugerfladen, Revit, figurer og dokument skal afprøves samlet. Promptforslagene er endnu ikke live-testet." },
   { name: "Typst i Compose-appen · testudgave 18.10", status: "Intern afprøvning", detail: "Nyt Typst-projekt, Typst-editoren og konvertering af en kopi er med i testudgaven fra 18. oktober 2026. Funktionerne afprøves internt og er ikke afprøvet hos en ny bruger." },
-  { name: "AI-ændringer uden godkendelse · 31.10", status: "Afventer næste testudgave", detail: "31. oktober 2026: ændringen er merget på udviklingsgrenen efter uafhængigt kodereview (tre runder, godkendt). Automatiske tests af kerne, kommandolinje, MCP og brugerflade er grønne på udviklingsmaskinen. Ikke med i 0.5.4 og endnu ikke afprøvet i den kørende app." },
+  { name: "AI-ændringer uden godkendelse · 31.10", status: "Afventer version 1.0", detail: "31. oktober 2026: ændringen er merget på udviklingsgrenen efter uafhængigt kodereview (tre runder, godkendt). Automatiske tests af kerne, kommandolinje, MCP og brugerflade er grønne på udviklingsmaskinen. Ikke med i 0.5.4; kommer i version 1.0 og er endnu ikke afprøvet i den kørende app." },
   { name: "Installation hos en ny bruger", status: "Ikke afprøvet", detail: "Opsætning, systemkrav og første overførsel skal afprøves, før en Windows-udgave præsenteres til download." },
 ];
 
