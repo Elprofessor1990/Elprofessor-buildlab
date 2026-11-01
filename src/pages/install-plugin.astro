@@ -25,9 +25,9 @@ const releaseTag = `issana-mcp-v${pluginVersion}`;
 const releaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${releaseTag}`;
 const installerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${releaseTag}/${savedFile}`;
 /* Testversion: 3D-arbejdsrummet (3.0). Vises under den aktuelle version, tydeligt mærket som test. Tom streng skjuler boksen. */
-const testVersion = "3.0.0";
-const testDate = "31. oktober 2026";
-const testDateIso = "2026-10-31";
+const testVersion = "3.0.1";
+const testDate = "1. november 2026";
+const testDateIso = "2026-11-01";
 const testFile = `ISSANA-MCP-Installer-${testVersion}-test.exe`;
 const testTag = `issana-mcp-v${testVersion}-test`;
 const testReleaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${testTag}`;
@@ -610,7 +610,7 @@ tool_timeout_sec = 300`;
           <div class="ip-version__test">
             <p class="ip-version__label">Testversion · ikke til undervisning</p>
             <p class="ip-version__number ip-version__number--test">{testVersion}</p>
-            <p class="ip-version__date"><time datetime={testDateIso}>{testDate}</time> · 3D-arbejdsrummet: mindmap, klip, opbygning, Konstruktiv funktion, Statik, rigtig AI og Lyd</p>
+            <p class="ip-version__date"><time datetime={testDateIso}>{testDate}</time> · 3D-arbejdsrummet, testversion 2: ét panel ad gangen, mindmap der isolerer, intet oven på 3D, AI med valgknapper og LCA-struktur med EPD-forslag pr. lag</p>
             <a class="button ip-download ip-download--test" href={testInstallerUrl} download={testFile}>
               <span>Download testversion {testVersion}</span>
               <small>{testFile}</small>
