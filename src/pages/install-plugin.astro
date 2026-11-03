@@ -6,32 +6,28 @@ import {
   codingPitfalls,
   codingSteps,
   masterCodingPrompt,
-  nextVersionFeatures,
-  nextVersionIcons,
+  latestVersionFeatures,
+  latestVersionIcons,
   pluginIdeas,
   pluginVideos,
   sheetSteps,
 } from "../data/pluginGuide";
 
-const pluginVersion = "2.12.1";
-const releaseDate = "31. oktober 2026";
-const releaseDateIso = "2026-10-31";
+/* Kun den nyeste version vises. Ældre versioner ligger stadig som GitHub Releases og i git-historikken. */
+const pluginVersion = "3.0.5";
+const releaseDate = "1. november 2026";
+const releaseDateIso = "2026-11-01";
+/* 3.0.5 er udgivet som testversion, derfor "-test" i tag og filnavn. Sæt til "" ved en almindelig udgave; så forsvinder noten i versionsboksen også. */
+const releaseSuffix = "-test";
 
 const r = String.raw;
 /* Installeren ligger som GitHub Release i dette (offentlige) repo, ikke i public/downloads.
    Asset-navnet er det gemte filnavn, fordi download-attributten ignoreres på tværs af domæner. */
-const savedFile = `ISSANA-MCP-Installer-${pluginVersion}.exe`;
-const releaseTag = `issana-mcp-v${pluginVersion}`;
-const releaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${releaseTag}`;
-const installerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${releaseTag}/${savedFile}`;
-/* Testversion: 3D-arbejdsrummet (3.0). Vises under den aktuelle version, tydeligt mærket som test. Tom streng skjuler boksen. */
-const testVersion = "3.0.5";
-const testDate = "1. november 2026";
-const testDateIso = "2026-11-01";
-const testFile = `ISSANA-MCP-Installer-${testVersion}-test.exe`;
-const testTag = `issana-mcp-v${testVersion}-test`;
-const testReleaseUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/${testTag}`;
-const testInstallerUrl = `https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/${testTag}/${testFile}`;
+const repoName = "Elprofessor1990/Elprofessor-buildlab";
+const repoUrl = `https://github.com/${repoName}`;
+const savedFile = `ISSANA-MCP-Installer-${pluginVersion}${releaseSuffix}.exe`;
+const releaseTag = `issana-mcp-v${pluginVersion}${releaseSuffix}`;
+const installerUrl = `${repoUrl}/releases/download/${releaseTag}/${savedFile}`;
 const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
 const codexUrl = "https://openai.com/da-DK/codex/";
@@ -261,7 +257,7 @@ const messageGroups: MsgGroup[] = [
       { msg: "[!] Codex: Fejlede -- Inline mcp_servers TOML configuration cannot be updated safely; original preserved.", sev: "advarsel", means: "config.toml bruger formen mcp_servers = {...}.", todo: "Omskriv til [mcp_servers.<navn>]-tabeller, eller tilføj issana-revit manuelt (se Manuel opsætning nederst)." },
       { msg: "[!] <Klient>: Fejlede -- Temporary config verification failed. / Config changed concurrently; refusing to overwrite. / Config backup verification failed. / Config changed concurrently after backup; refusing to overwrite. / Installed config verification failed.", sev: "advarsel", means: "Filen blev ændret af en kørende app under skrivningen, eller disk/antivirus forstyrrede. Ændringerne rulles tilbage.", todo: "Luk AI-appen helt, og kør installationsfilen igen." },
       { msg: "[!] <Klient>: Fejlede -- <Windows-fejltekst, fx adgang nægtet>", sev: "advarsel", means: "En filsystemfejl, da konfigurationen skulle skrives.", todo: "Luk appen, og kør igen. Send et skærmbillede, hvis fejlen gentager sig." },
-      { msg: "MCP-serveren 'revit-mcp-nbs' hedder nu 'issana-revit' (samme server)", sev: "info", means: "Du opgraderer fra 2.4.0. Serveren har fået nyt navn i din AI-app – det er den samme server.", todo: "Genstart Claude og Codex. I Claude Code: skriv /mcp og vælg issana-revit." },
+      { msg: "MCP-serveren 'revit-mcp-nbs' hedder nu 'issana-revit' (samme server)", sev: "info", means: "Du opgraderer fra en ældre version. Serveren har fået nyt navn i din AI-app – det er den samme server.", todo: "Genstart Claude og Codex. I Claude Code: skriv /mcp og vælg issana-revit." },
       { msg: "[!] <Klient> -- Kept 'revit-mcp-nbs': it points to another server, not this installation.", sev: "advarsel", means: "Der findes en ældre revit-mcp-nbs, som peger et andet sted hen end installationen (fx en manuel opsætning). Den er ikke fjernet, så værktøjerne kan vises to gange.", todo: "Fjern revit-mcp-nbs fra appens MCP-indstillinger, medmindre du bevidst bruger den." },
     ],
   },
@@ -342,7 +338,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: "AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise 2.9.1. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.",
+    expected: `AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise ${pluginVersion}. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.`,
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },
@@ -589,35 +585,28 @@ tool_timeout_sec = 300`;
             <span>Download version {pluginVersion}</span>
             <small>{savedFile}</small>
           </a>
+          <a class="button ip-repo" href={repoUrl} rel="noopener">
+            <span>GitHub-repository</span>
+            <small>{repoName}</small>
+          </a>
         </div>
         <p class="ip-hero__meta">
-          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 100 MB · Revit 2026/2027 · <a class="ip-hero__link" href={releaseUrl} rel="noopener">GitHub Release</a>
+          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 100 MB · Revit 2026/2027
         </p>
         <p class="ip-hero__credit">Udviklet af <a class="ip-hero__link" href={issanaSite} rel="noopener"><strong>{issana}</strong></a> · Byg og Miljø Rådgiver ApS</p>
       </div>
 
       <aside class="ip-version" aria-label="Versionsoplysninger">
-        <p class="ip-version__label">Aktuel version</p>
+        <p class="ip-version__label">Nyeste version</p>
         <p class="ip-version__number">{pluginVersion}</p>
         <p class="ip-version__date"><time datetime={releaseDateIso}>{releaseDate}</time></p>
+        {releaseSuffix && <p class="ip-version__date">Udgivet som testversion, derfor «{releaseSuffix}» i filnavnet.</p>}
         <p class="ip-version__title">Sådan ser du versionen</p>
         <ul>
           <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{pluginVersion}.0</strong> (Produktversion begynder med {pluginVersion})</li>
           <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {pluginVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
           <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong></li>
         </ul>
-        {testVersion && (
-          <div class="ip-version__test">
-            <p class="ip-version__label">Testversion · 3D-arbejdsrum</p>
-            <p class="ip-version__number ip-version__number--test">{testVersion}</p>
-            <p class="ip-version__date"><time datetime={testDateIso}>{testDate}</time> · LCA regnes nu af ISSANA LCA's egen motor i Revit: bygningsdele, konstruktioner og lag bliver automatisk til et LCA-projekt, og fanen viser motorens tal og mangler. «Åbn i ISSANA LCA» sender projektet videre. Desuden blåt AI-felt med svar i sidepanel, direkte isolering og Rediger data pr. element.</p>
-            <a class="button ip-download ip-download--test" href={testInstallerUrl} download={testFile}>
-              <span>Download testversion {testVersion}</span>
-              <small>{testFile}</small>
-            </a>
-            <p class="ip-version__date">Erstatter {pluginVersion} ved installation. Geninstallér {pluginVersion} ovenfor for at gå tilbage. <a class="ip-hero__link" href={testReleaseUrl} rel="noopener">Hvad er nyt</a></p>
-          </div>
-        )}
       </aside>
     </header>
 
@@ -726,7 +715,6 @@ tool_timeout_sec = 300`;
       </div>
 
       <div class="ip-fast">
-        <p class="ip-fast__badge">Siden 2.5.0</p>
         <h3>Tilknyt og synkronisér alle kategorier med ét klik</h3>
         <p>
           Når bygningsdelene er importeret i NBS, kan trin 5–6 klares i én plan: alle kategorier tilknyttes i én transaktion, og NBS
@@ -839,10 +827,10 @@ tool_timeout_sec = 300`;
       }
     </section>
 
-    <!-- Næste version: nye ikoner (under test) -->
+    <!-- Nyt i den nyeste version -->
     <aside class="ip-next" aria-labelledby="next-title">
       <div class="ip-next__ribbon" aria-hidden="true">
-        {nextVersionIcons.map((icon) => (
+        {latestVersionIcons.map((icon) => (
           <figure class="ip-next__icon">
             <img src={iconUrl(icon.file)} alt="" width="56" height="56" loading="lazy" />
             <figcaption>{icon.label}<small>{icon.note}</small></figcaption>
@@ -853,9 +841,9 @@ tool_timeout_sec = 300`;
         <p class="ip-next__badge">Nyt i version {pluginVersion}</p>
         <h2 id="next-title">ISSANA MCP {pluginVersion}</h2>
         <ul>
-          {nextVersionFeatures.map((feature) => <li>{feature}</li>)}
+          {latestVersionFeatures.map((feature) => <li>{feature}</li>)}
         </ul>
-        <p class="ip-next__note">Har du 2.6.0 eller ældre? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
+        <p class="ip-next__note">Har du en ældre version? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
       </div>
     </aside>
 
@@ -865,11 +853,11 @@ tool_timeout_sec = 300`;
         <span class="ip-num" aria-hidden="true">5</span>
         <h2 id="ideer-title">Idéer og det, vi arbejder på</h2>
       </div>
-      <p class="ip-lead">Det nyeste i {pluginVersion}, og ting, vi tænker kan gøre arbejdet smartere. Idéerne er ikke en del af den version, du downloader i dag.</p>
+      <p class="ip-lead">Ting, vi tænker kan gøre arbejdet smartere. Idéerne er ikke en del af den version, du downloader i dag.</p>
       <p><a class="text-link" href={withBase("/compose")}>Revit til dokument: se Compose-piloten og promptvejledningen →</a></p>
       <div class="ip-ideas">
         {pluginIdeas.map((idea) => (
-          <article class={`ip-idea ${idea.status !== "Idé" ? "ip-idea--test" : ""}`}>
+          <article class="ip-idea">
             <p class="ip-idea__status">{idea.status}</p>
             <h3>{idea.title}</h3>
             <p>{idea.text}</p>
@@ -936,8 +924,8 @@ tool_timeout_sec = 300`;
         (Node.js) kræver administratorrettigheder.
       </p>
       <p class="ip-note">
-        <strong>Opgraderer du fra 2.6.0 eller ældre?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
-        NBS-nøgle bevares. Fra 2.4.0 omdøber installeren også MCP-serveren fra <code>revit-mcp-nbs</code> til <code>issana-revit</code>.
+        <strong>Opgraderer du fra en ældre version?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
+        NBS-nøgle bevares. Hedder din MCP-server stadig <code>revit-mcp-nbs</code>, omdøber installeren den til <code>issana-revit</code>.
         Genstart Claude og Codex bagefter.
       </p>
     </section>
@@ -1464,6 +1452,10 @@ tool_timeout_sec = 300`;
   }
 
   .ip-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.75rem;
     margin-block: 1.5rem 1rem;
   }
 
@@ -1484,6 +1476,28 @@ tool_timeout_sec = 300`;
   }
 
   .ip-download small {
+    font-size: 0.74rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .ip-repo {
+    display: inline-grid;
+    justify-items: start;
+    gap: 0.1rem;
+    max-width: 100%;
+    box-shadow: inset 0 0 0 2px var(--white);
+    color: var(--white);
+    font-size: 1.12rem;
+    padding: 0.85rem 1.35rem;
+  }
+
+  .ip-repo:hover {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 2px var(--orange);
+  }
+
+  .ip-repo small {
     font-size: 0.74rem;
     font-weight: 700;
     overflow-wrap: anywhere;
@@ -1545,19 +1559,6 @@ tool_timeout_sec = 300`;
     font-weight: 700;
   }
 
-  .ip-version__test {
-    margin-top: 1.1rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.25);
-  }
-  .ip-version__number--test {
-    color: #f6a623;
-  }
-  .ip-download--test {
-    margin: 0.6rem 0;
-    background: #f6a623;
-    color: #0b1b2b;
-  }
   .ip-version__title {
     margin: 1rem 0 0;
     border-block-start: 1px solid rgba(255, 255, 255, 0.18);
@@ -2988,12 +2989,6 @@ tool_timeout_sec = 300`;
     padding: 1rem;
   }
 
-  .ip-idea--test {
-    border-style: solid;
-    border-color: rgba(15, 76, 76, 0.35);
-    background: linear-gradient(135deg, #ffffff 0%, #ede7de 100%);
-  }
-
   .ip-idea__status {
     display: inline-block;
     margin: 0;
@@ -3005,11 +3000,6 @@ tool_timeout_sec = 300`;
     letter-spacing: 0.06em;
     padding: 0.22rem 0.55rem;
     text-transform: uppercase;
-  }
-
-  .ip-idea--test .ip-idea__status {
-    background: #0f4c4c;
-    color: var(--white);
   }
 
   .ip-idea h3 {
@@ -3211,7 +3201,7 @@ tool_timeout_sec = 300`;
       grid-template-columns: 1fr;
     }
   }
-  /* ---------- Siden 2.5.0: hurtig tilknytning ---------- */
+  /* ---------- Hurtig tilknytning ---------- */
   .ip-fast {
     margin-block: 0 1.25rem;
     border: 1px solid rgba(15, 76, 76, 0.3);
@@ -3221,21 +3211,8 @@ tool_timeout_sec = 300`;
     padding: 1rem 1.1rem;
   }
 
-  .ip-fast__badge {
-    display: inline-block;
-    margin: 0;
-    border-radius: 999px;
-    background: #0f4c4c;
-    color: var(--white);
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    padding: 0.22rem 0.6rem;
-    text-transform: uppercase;
-  }
-
   .ip-fast h3 {
-    margin: 0.5rem 0 0.3rem;
+    margin: 0 0 0.3rem;
     color: #0f4c4c;
     font-size: 1.15rem;
   }

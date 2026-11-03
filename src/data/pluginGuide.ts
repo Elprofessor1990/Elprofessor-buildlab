@@ -51,8 +51,8 @@ export const pluginVideos: PluginVideo[] = [
   },
 ];
 
-/* ---------- Nyt i version 2.12.1 (2.12.0 + Sigma-rettelse) ---------- */
-export const nextVersionIcons = [
+/* ---------- Nyt i den nyeste version (kun den; ældre punkter ligger i git-historikken) ---------- */
+export const latestVersionIcons = [
   { file: "icon-panel.svg", label: "3D-arbejdsrum", note: "Lag, data og Gem i Revit" },
   { file: "icon-details.svg", label: "Lyd pr. rum", note: "ISO 12354 mod dine mål" },
   { file: "icon-coding.svg", label: "CCI-kodning", note: "Efter IKT-specifikationen" },
@@ -60,14 +60,10 @@ export const nextVersionIcons = [
   { file: "icon-sketch.svg", label: "AI i 3D", note: "Forslag før ændring" },
 ];
 
-export const nextVersionFeatures = [
-  "2.12.1: Sigma læser overskriftskoden i ISSANA's rækkefølge: ISSANA CCI Code → ISSANA Classificationcode → NBS Classificationcode. En type, du har kodet med ISSANA, beholder sin egen kode i Sigma i stedet for at lande under Molios SfB-gruppe. Den prissatte linje bærer stadig Molio-nummeret.",
-  "3D er arbejdsrummet: Analyse bygningsdele åbner direkte i 3D. Filtrér og farv efter bærende, stabiliserende, lyd- og brandstatus, manglende data, CCI og handlingsstatus. Lag ændrer aldrig noget i Revit.",
-  "Bygningsdata i 3D: tags, handlingsstatus, rummets anvendelse, støj udefra, lyd- og branddata med kilde og kontrol. Du ser ændringerne først, og «Gem i Revit» skriver dem i én transaktion.",
-  "Lyd pr. rum efter DS/EN ISO 12354: udefra gennem facaden, mellem rum, trinlyd og installationer, holdt op mod dine egne lydmål. Det, der mangler, står i en liste i stedet for at blive gættet.",
-  "Graf: se pr. etage og type, hvilke vægge der mangler data, og hvor ens typer har forskellige data. Klik på et rum for at se dets naborum og bygningsdele.",
-  "Sol og skygge for en valgt dato og et klokkeslæt ud fra Revits placering, og produkter med LCA holdt adskilt pr. handlingsstatus i renoveringsprojekter.",
-  "CCI-kodning efter IKT-specifikationen med Molios CCI-parametre fra din egen C421a-fil, og AI-feltet i 3D, der fx forstår «alle ydervægge på 1. sal skal have tagget bærende».",
+export const latestVersionFeatures = [
+  "LCA regnes nu af ISSANA LCA's egen motor i Revit: bygningsdele, konstruktioner og lag bliver automatisk til et LCA-projekt, og fanen viser motorens tal og mangler.",
+  "«Åbn i ISSANA LCA» sender projektet videre.",
+  "Desuden blåt AI-felt med svar i sidepanel, direkte isolering og Rediger data pr. element.",
 ];
 
 /* ---------- Kod bygningsdele med NBS ---------- */
@@ -120,21 +116,9 @@ export const sheetSteps = [
 ];
 
 /* ---------- Idéer ---------- */
-export type Idea = { title: string; text: string; status: "Nyt i 2.12.0" | "Nyt i 2.9.1" | "Nyt i 2.9.0" | "Nyt i 2.8.0" | "Idé" };
+export type Idea = { title: string; text: string; status: "Idé" };
 
 export const pluginIdeas: Idea[] = [
-  { title: "3D som arbejdsrum", text: "Filtre, farver og bygningsdata direkte i 3D. Ændringer vises først og skrives i Revit med ét klik på «Gem i Revit».", status: "Nyt i 2.12.0" },
-  { title: "Lyd pr. rum", text: "Facade, luftlyd mellem rum, trinlyd og installationer efter DS/EN ISO 12354, holdt op mod dine egne lydmål.", status: "Nyt i 2.12.0" },
-  { title: "Renovering", text: "Handlingsstatus pr. element eller type, forslag ud fra Revits faser, og LCA og Sigma pr. status.", status: "Nyt i 2.12.0" },
-  { title: "Skills følger med", text: "Installationen lægger de fem ISSANA-skills ind med det samme: CCI-, CCS-, BIM7AA- og SfB-kodning samt Skeletvæg beamsystem. Ingen download fra biblioteket først.", status: "Nyt i 2.9.1" },
-  { title: "Pris og Sigma", text: "Ét vindue: pris pr. bygningsdel med Molio-poster, de numre du valgte før skrives efter ét Ja, og typer uden nummer får et forslag ud fra navn og lag.", status: "Nyt i 2.9.0" },
-  { title: "Sigma-appen følger med", text: "Installationen lægger fanebladet ISSANA → Kør ventende plan ind i Sigma Estimates, så overførslen virker uden Alt+F12.", status: "Nyt i 2.9.0" },
-  { title: "Kod modellen", text: "AI-forslag pr. type med sikkerhed; de usikre står øverst, så du retter dem først.", status: "Nyt i 2.9.0" },
-  { title: "Eksportér til Compose", text: "Pristabellen som .tex og .typ til dit ISSANA Compose-dokument, med dækning af modellen.", status: "Nyt i 2.9.0" },
-  { title: "Trapper i AI Skitse", text: "Tegn løbet, klik + for repos, og se trin, gelænder og BR18-tjek. Træk i pilene for bredde og mellemrum – reposen følger med.", status: "Nyt i 2.8.0" },
-  { title: "Døre og vinduer som figur", text: "Klik på en væg i skitsen eller i Revit, så sidder døren i typens bredde. Klik igen for at vende den.", status: "Nyt i 2.8.0" },
-  { title: "ISSANA Kodning", text: "CCI, CCS, BIM7AA og SfB i én skill – også Parts, med ISSANA-parametrene sat op automatisk.", status: "Nyt i 2.8.0" },
-  { title: "Bibliotek", text: "Skills, prompts, familier og Paint-farver, som underviseren har signeret. Du vælger selv, hvornår du opdaterer.", status: "Nyt i 2.8.0" },
   { title: "Ventilation med i installeren", text: "Skill'en Luftskifte beregner luftskifte og luftmængder ud fra modellens rum. Beregningsmotoren kommer med i installeren.", status: "Idé" },
   { title: "Beskrivelser med lag og U-værdier", text: "Bygningsdelene får en beskrivelse med lagopbygning, U-værdi og for vinduer g-værdi – hentet fra modellen.", status: "Idé" },
   { title: "Skraveringstjek efter Molio C223b", text: "Kontrollér materialernes snitskraveringer mod C223b, og få rettelser til godkendelse.", status: "Idé" },
