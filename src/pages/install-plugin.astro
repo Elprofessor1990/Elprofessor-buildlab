@@ -45,6 +45,7 @@ const tocUse = [
   { href: "#ideer", label: "Idéer" },
 ];
 const tocInstall = [
+  { href: "#raekkefoelge", label: "Rækkefølgen" },
   { href: "#foer-du-starter", label: "Før du starter" },
   { href: "#installer", label: "Installér" },
   { href: "#kontroller", label: "Kontrollér" },
@@ -580,11 +581,32 @@ tool_timeout_sec = 300`;
         <p class="ip-hero__lead">
           Én installationsfil lægger pluginet i Revit 2026/2027 og sætter forbindelsen op i din AI-app – Claude eller Codex.
         </p>
+        <p class="ip-order__intro" id="ip-order-title">Først AI-appen, så MCP</p>
+        <ol class="ip-order" aria-labelledby="ip-order-title">
+          <li class="ip-order__step">
+            <p class="ip-order__label"><span class="ip-num" aria-hidden="true">1</span> Trin 1: AI</p>
+            <p class="ip-order__text">
+              Installér og log ind i Claude eller Codex, <strong>før</strong> du kører installationsfilen. Ellers bliver appen sprunget over.
+            </p>
+            <div class="ip-order__actions">
+              <a class="button ip-ai" href={claudeUrl} target="_blank" rel="noopener">Hent Claude</a>
+              <a class="button ip-ai" href={codexUrl} target="_blank" rel="noopener">Hent Codex</a>
+            </div>
+          </li>
+          <li class="ip-order__step">
+            <span class="ip-order__arrow" aria-hidden="true">→</span>
+            <p class="ip-order__label"><span class="ip-num" aria-hidden="true">2</span> Trin 2: MCP</p>
+            <p class="ip-order__text">Luk Revit og AI-appen. Download derefter ISSANA MCP-installeren, og kør den.</p>
+            <div class="ip-order__actions">
+              <a class="button button--primary ip-download" href={installerUrl} download={savedFile}>
+                <span>Download version {pluginVersion}</span>
+                <small>{savedFile}</small>
+              </a>
+            </div>
+          </li>
+        </ol>
+        <p class="ip-order__more"><a class="ip-hero__link" href="#raekkefoelge">Se hele rækkefølgen i fire trin</a></p>
         <div class="ip-hero__actions">
-          <a class="button button--primary ip-download" href={installerUrl} download={savedFile}>
-            <span>Download version {pluginVersion}</span>
-            <small>{savedFile}</small>
-          </a>
           <a class="button ip-repo" href={repoUrl} rel="noopener">
             <span>GitHub-repository</span>
             <small>{repoName}</small>
@@ -631,7 +653,7 @@ tool_timeout_sec = 300`;
         </ol>
       </nav>
       <p class="ip-panel__hint">
-        Har du ikke installeret pluginet endnu? Start under <a class="text-link" href="#foer-du-starter">Installation og fejl</a>.
+        Har du ikke installeret pluginet endnu? Start under <a class="text-link" href="#raekkefoelge">Installation og fejl</a>.
       </p>
 
     <!-- Videoer -->
@@ -885,16 +907,56 @@ tool_timeout_sec = 300`;
     </div>
 
     <div class="ip-panel" id="panel-installation" role="tabpanel" aria-labelledby="tab-installation">
+    <!-- 1. Rækkefølgen (står før indholdslisten, så den er det første, man ser i fanen) -->
+    <section class="ip-section" id="raekkefoelge" aria-labelledby="raekkefoelge-title">
+      <div class="ip-section__head">
+        <span class="ip-num" aria-hidden="true">1</span>
+        <h2 id="raekkefoelge-title">Rækkefølgen: fire trin</h2>
+      </div>
+      <ol class="ip-path">
+        <li>
+          <strong>Installér og log ind i en AI-app</strong>
+          <p>
+            Claude (Desktop eller Code) eller Codex. Installér appen, <strong>før</strong> du kører installationsfilen – ellers bliver den
+            sprunget over.
+          </p>
+          <div class="ip-path__actions">
+            <a class="button button--primary" href={claudeUrl} target="_blank" rel="noopener">Hent Claude</a>
+            <a class="button button--primary" href={codexUrl} target="_blank" rel="noopener">Hent Codex</a>
+          </div>
+        </li>
+        <li>
+          <strong>Luk Revit og AI-appen</strong>
+          <p>Gem dit arbejde, og luk begge programmer. Installationen stopper, hvis Revit kører.</p>
+        </li>
+        <li>
+          <strong>Download og kør ISSANA MCP-installeren</strong>
+          <p>Dobbeltklik på filen, når den er hentet, og følg konsolvinduet. Se <a class="text-link" href="#installer">Installér</a>.</p>
+          <div class="ip-path__actions">
+            <a class="button button--primary" href={installerUrl} download={savedFile}>Download version {pluginVersion}</a>
+          </div>
+        </li>
+        <li>
+          <strong>Start AI-appen og Revit, og kontrollér</strong>
+          <p>
+            Når konsolvinduet i TRIN 8 beder om det, åbner du Revit og en projektfil og derefter din AI-app. Se{" "}
+            <a class="text-link" href="#kontroller">Kontrollér at det virker</a>.
+          </p>
+        </li>
+      </ol>
+      <p class="ip-note">Samme rækkefølge som øverst på siden: punkt 1 er <q>Trin 1: AI</q>, og punkt 2–4 er <q>Trin 2: MCP</q>.</p>
+    </section>
+
       <nav class="ip-toc" aria-label="Indhold: Installation og fejl">
         <ol>
           {tocInstall.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
         </ol>
       </nav>
 
-    <!-- 1. Før du starter -->
+    <!-- 2. Før du starter -->
     <section class="ip-section" id="foer-du-starter" aria-labelledby="foer-title">
       <div class="ip-section__head">
-        <span class="ip-num" aria-hidden="true">1</span>
+        <span class="ip-num" aria-hidden="true">2</span>
         <h2 id="foer-title">Før du starter</h2>
       </div>
       <ul class="ip-prereq">
@@ -903,26 +965,17 @@ tool_timeout_sec = 300`;
           <p>På en pc med Windows 10 eller 11. Pakken indeholder kun de to Revit-versioner.</p>
         </li>
         <li>
-          <strong>Én AI-app, installeret og logget ind</strong>
-          <p>
-            Claude (Desktop eller Code) eller Codex. Installér appen, <em>før</em> du kører installationsfilen – ellers bliver den
-            sprunget over.
-          </p>
-          <p class="ip-prereq__links">
-            <a class="text-link" href={claudeUrl} target="_blank" rel="noopener">Hent Claude</a>{" "}
-            <a class="text-link" href={codexUrl} target="_blank" rel="noopener">Hent Codex</a>
-          </p>
+          <strong>Internet</strong>
+          <p>Du skal være på internettet.</p>
         </li>
         <li>
-          <strong>Luk Revit og AI-appen</strong>
-          <p>Gem dit arbejde, og luk begge programmer. Installationen stopper, hvis Revit kører.</p>
+          <strong>Node.js 18 eller nyere</strong>
+          <p>
+            Mangler den, spørger installeren i TRIN 4, og så vælger du <kbd>1</kbd>. Du behøver ikke være administrator for at installere
+            pluginet – men valg 1 (Node.js) kræver administratorrettigheder.
+          </p>
         </li>
       </ul>
-      <p class="ip-note">
-        <strong>Godt at vide:</strong> Du skal være på internettet. Node.js 18 eller nyere er også nødvendig – mangler den, spørger
-        installeren i TRIN 4, og så vælger du <kbd>1</kbd>. Du behøver ikke være administrator for at installere pluginet – men valg 1
-        (Node.js) kræver administratorrettigheder.
-      </p>
       <p class="ip-note">
         <strong>Opgraderer du fra en ældre version?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
         NBS-nøgle bevares. Hedder din MCP-server stadig <code>revit-mcp-nbs</code>, omdøber installeren den til <code>issana-revit</code>.
@@ -930,10 +983,10 @@ tool_timeout_sec = 300`;
       </p>
     </section>
 
-    <!-- 2. Installér -->
+    <!-- 3. Installér -->
     <section class="ip-section" id="installer" aria-labelledby="installer-title">
       <div class="ip-section__head">
-        <span class="ip-num" aria-hidden="true">2</span>
+        <span class="ip-num" aria-hidden="true">3</span>
         <h2 id="installer-title">Installér</h2>
       </div>
 
@@ -1020,10 +1073,10 @@ tool_timeout_sec = 300`;
       </ul>
     </section>
 
-    <!-- 3. Kontrollér -->
+    <!-- 4. Kontrollér -->
     <section class="ip-section" id="kontroller" aria-labelledby="kontroller-title">
       <div class="ip-section__head">
-        <span class="ip-num" aria-hidden="true">3</span>
+        <span class="ip-num" aria-hidden="true">4</span>
         <h2 id="kontroller-title">Kontrollér at det virker</h2>
       </div>
 
@@ -1105,10 +1158,10 @@ tool_timeout_sec = 300`;
       </div>
     </section>
 
-    <!-- 4. NBS Nordic -->
+    <!-- 5. NBS Nordic -->
     <section class="ip-section" id="nbs" aria-labelledby="nbs-title">
       <div class="ip-section__head">
-        <span class="ip-num" aria-hidden="true">4</span>
+        <span class="ip-num" aria-hidden="true">5</span>
         <h2 id="nbs-title">Forbind NBS Nordic</h2>
       </div>
       <p class="ip-lead">Du skal bruge din personlige NBS Nordic API-nøgle og et NBS-projekt, du har adgang til.</p>
@@ -1155,10 +1208,10 @@ tool_timeout_sec = 300`;
       </ul>
     </section>
 
-    <!-- 5. Fejl -->
+    <!-- 6. Fejl -->
     <section class="ip-section" id="fejl" aria-labelledby="fejl-title">
       <div class="ip-section__head">
-        <span class="ip-num" aria-hidden="true">5</span>
+        <span class="ip-num" aria-hidden="true">6</span>
         <h2 id="fejl-title">Fejlmeddelelser og løsninger</h2>
       </div>
       <p class="ip-lead">
@@ -1437,6 +1490,7 @@ tool_timeout_sec = 300`;
 
   .ip-hero__copy {
     min-width: 0;
+    container-type: inline-size;
   }
 
   .ip-hero h1 {
@@ -1456,7 +1510,109 @@ tool_timeout_sec = 300`;
     flex-wrap: wrap;
     align-items: stretch;
     gap: 0.75rem;
-    margin-block: 1.5rem 1rem;
+    margin-block: 1rem;
+  }
+
+  /* Først AI-appen, så MCP. Over hinanden som standard, side om side når kolonnen er bred nok. */
+  .ip-order__intro {
+    margin: 1.4rem 0 0.7rem;
+    color: var(--mint);
+    font-size: 1.05rem;
+    font-weight: 800;
+  }
+
+  .ip-order {
+    display: grid;
+    gap: 1.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ip-order__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-block-start: 4px solid var(--orange);
+    border-radius: var(--ip-radius);
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1rem;
+  }
+
+  .ip-order__arrow {
+    position: absolute;
+    inset-block-start: -1.75rem;
+    inset-inline-start: 1.1rem;
+    display: grid;
+    width: 1.4rem;
+    height: 1.4rem;
+    place-items: center;
+    color: var(--orange);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    rotate: 90deg;
+  }
+
+  .ip-order__label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    color: var(--white);
+    font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .ip-order__text {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .ip-order__text strong {
+    color: var(--white);
+  }
+
+  .ip-order__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block-start: auto;
+  }
+
+  .ip-ai {
+    background: var(--white);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    color: var(--navy);
+  }
+
+  .ip-ai:hover {
+    background: var(--mint);
+  }
+
+  .ip-order__more {
+    margin: 0.8rem 0 0;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  @container (min-width: 38rem) {
+    .ip-order {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ip-order__arrow {
+      inset-block-start: 50%;
+      inset-inline-start: -1.7rem;
+      translate: 0 -50%;
+      rotate: none;
+    }
   }
 
   .ip-download {
@@ -1700,6 +1856,73 @@ tool_timeout_sec = 300`;
     padding: 0.75rem 1rem;
   }
 
+  /* Rækkefølgen */
+  .ip-path {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: path;
+  }
+
+  /* 1, 2 eller 4 kolonner, så trin 4 aldrig står alene på en række. */
+  @media (min-width: 640px) {
+    .ip-path {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1320px) {
+    .ip-path {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .ip-path > li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    counter-increment: path;
+    border: 1px solid var(--line);
+    border-block-start: 4px solid var(--orange);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1rem;
+  }
+
+  .ip-path > li::before {
+    content: counter(path);
+    display: grid;
+    width: 2.2rem;
+    height: 2.2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--navy);
+    font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .ip-path > li > strong {
+    color: var(--navy);
+    font-size: 1.05rem;
+  }
+
+  .ip-path p {
+    margin: 0;
+  }
+
+  .ip-path__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block-start: auto;
+  }
+
   /* Før du starter */
   .ip-prereq {
     display: grid;
@@ -1708,11 +1931,9 @@ tool_timeout_sec = 300`;
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: pre;
   }
 
   .ip-prereq li {
-    counter-increment: pre;
     border: 1px solid var(--line);
     border-block-start: 4px solid var(--mint);
     border-radius: var(--radius);
@@ -1727,20 +1948,8 @@ tool_timeout_sec = 300`;
     font-size: 1.05rem;
   }
 
-  .ip-prereq strong::before {
-    content: counter(pre) ". ";
-    color: var(--navy);
-  }
-
   .ip-prereq p {
     margin: 0;
-  }
-
-  .ip-prereq .ip-prereq__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-block-start: 0.6rem;
   }
 
   /* Trin */
