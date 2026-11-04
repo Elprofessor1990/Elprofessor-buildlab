@@ -1,0 +1,194 @@
+---
+import { focusDate, focusDateIso, focusDownloadUrl, focusInstallSteps, focusLimitation, focusNoInstall, focusRequirements, focusSavedFile, focusSha256, focusVersion } from "../data/focusGuide";
+---
+
+<div class="fg">
+  <section class="fg-hero" aria-labelledby="focus-title">
+    <div class="fg-hero__copy">
+      <p class="fg-kicker">ISSANA / Til undervisning</p>
+      <p class="fg-pill">Version {focusVersion} · <a href="#begraensning">kendt begrænsning</a></p>
+      <h1 id="focus-title">ISSANA <span>Focus</span></h1>
+      <p class="fg-intro">Et program til skærmtegning og zoom under undervisning. Du betjener det fra en synlig værktøjslinje eller med genveje, og det kan også vise genvejene.</p>
+      <div class="fg-actions">
+        <a class="button button--primary fg-hero__download" href={focusDownloadUrl} download={focusSavedFile}>
+          <span>Download version {focusVersion}</span>
+          <small>{focusSavedFile}</small>
+        </a>
+        <a class="fg-hero__link" href="#installation">Se installationen <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="fg-hero__meta"><strong>Version {focusVersion}</strong> · <time datetime={focusDateIso}>{focusDate}</time> · Windows 11, 64-bit</p>
+    </div>
+    <div class="fg-board" role="img" aria-label="Illustration, ikke et programskærmbillede: en plantegning på en skærm med en tegnet ring og pil, et zoomet udsnit, en værktøjslinje og en visning af en genvej.">
+      <div class="fg-board__top"><span>UNDERVISNING / SKÆRM</span><span>TEGN · ZOOM · GENVEJE</span></div>
+      <svg class="fg-screen" viewBox="0 0 480 270" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="477" height="267" fill="#fff" stroke="#112a46" stroke-width="3" />
+        <g fill="none" stroke="#112a46" stroke-width="4">
+          <path d="M44 42H270V206H44Z" />
+          <path d="M150 42V124H44" />
+          <path d="M270 124H196V206" />
+        </g>
+        <path d="M122 92c32-22 76-9 79 25 3 31-37 47-68 37-31-11-37-44-9-61" fill="none" stroke="#f28c28" stroke-width="4" stroke-linecap="round" />
+        <path d="M236 182l-38-36m0 0l4 17m-4-17l17 3" fill="none" stroke="#f28c28" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="366" cy="104" r="68" fill="#f5f2ea" stroke="#46c2a8" stroke-width="5" />
+        <g fill="none" stroke="#112a46" stroke-width="8">
+          <path d="M366 52V110H318" />
+        </g>
+        <path d="M416 152l34 34" stroke="#46c2a8" stroke-width="9" stroke-linecap="round" />
+        <rect x="120" y="222" width="180" height="32" rx="6" fill="#112a46" />
+        <g fill="#f5f2ea">
+          <circle cx="146" cy="238" r="6" />
+          <circle cx="178" cy="238" r="6" />
+          <circle cx="210" cy="238" r="6" />
+          <circle cx="242" cy="238" r="6" />
+        </g>
+        <circle cx="274" cy="238" r="6" fill="#f28c28" />
+        <rect x="340" y="222" width="118" height="32" rx="4" fill="#f5f2ea" stroke="#112a46" stroke-width="2" />
+        <text x="399" y="243" text-anchor="middle" font-size="15" font-weight="700" fill="#112a46">Skift + Esc</text>
+      </svg>
+      <p>Tegn på skærmen. Zoom ind.<br /><strong>Vis genvejene.</strong></p>
+      <div class="fg-board__bottom"><span>ILLUSTRATION</span><span>IKKE ET PROGRAMSKÆRMBILLEDE</span></div>
+    </div>
+  </section>
+
+  <nav class="fg-index" aria-label="På denne side">
+    <a href="#hent">01 Hent</a><a href="#installation">02 Installation</a><a href="#begraensning">03 Kendt begrænsning</a>
+  </nav>
+
+  <section class="fg-section fg-download" id="hent" aria-labelledby="download-title">
+    <div>
+      <p class="fg-kicker">01 / Hent Focus</p>
+      <h2 id="download-title">Nyeste version:<br />{focusVersion}</h2>
+      <p>Focus er en ZIP-fil, du pakker ud og starter. Der er ikke noget installationsprogram.</p>
+    </div>
+    <div class="fg-download__panel">
+      <dl class="fg-download__facts">
+        <div><dt>Version</dt><dd>{focusVersion} · <time datetime={focusDateIso}>{focusDate}</time></dd></div>
+        <div><dt>Krav</dt><dd>{focusRequirements}</dd></div>
+        <div><dt>Installation</dt><dd>{focusNoInstall}</dd></div>
+      </dl>
+      <a class="button button--primary fg-download__button" href={focusDownloadUrl} download={focusSavedFile}>Hent {focusSavedFile} <span aria-hidden="true">↓</span></a>
+      <p class="fg-download__hash">SHA-256: <code>{focusSha256}</code></p>
+      <p class="fg-download__check">Vil du kontrollere filen, kan du i PowerShell skrive <code>Get-FileHash {focusSavedFile} -Algorithm SHA256</code> og sammenligne med værdien her.</p>
+    </div>
+  </section>
+
+  <section class="fg-section fg-install" id="installation" aria-labelledby="install-title">
+    <div class="fg-section__heading">
+      <p class="fg-kicker">02 / Installation</p>
+      <h2 id="install-title">Klar i tre trin.</h2>
+    </div>
+    <div class="fg-install__grid">
+      <ol class="fg-steps">
+        {focusInstallSteps.map((step, index) => <li><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}
+      </ol>
+      <aside class="fg-install__aside" aria-labelledby="smartscreen-title">
+        <h3 id="smartscreen-title">Hvis Windows advarer</h3>
+        <p>Windows kan vise en SmartScreen-advarsel, fordi programmet endnu ikke er kodesigneret. Har du filen herfra eller fra din underviser, så klik på «Flere oplysninger» og derefter «Kør alligevel».</p>
+        <p>Er Smart App Control slået til på din pc, kan Windows blokere programmet helt. Spørg i så fald din underviser.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="fg-section fg-limit" id="begraensning" aria-labelledby="limit-title">
+    <div class="fg-section__heading">
+      <p class="fg-kicker">03 / Vigtigt, mens Focus kører</p>
+      <h2 id="limit-title">Kendt begrænsning i {focusVersion}</h2>
+    </div>
+    <div class="fg-limit__panel">
+      <p class="fg-limit__lead">{focusLimitation.lead}</p>
+      <p>Focus starter i tegnetilstand og bruger her Skift-genveje i alle programmer. Derfor kan du ikke skrive {focusLimitation.blockedKeys.map((key, index) => <>{index > 0 && (index === focusLimitation.blockedKeys.length - 1 ? " og " : ", ")}<kbd>{key}</kbd></>)} andre steder.</p>
+      <p>Tryk <kbd>Skift+Esc</kbd> for at skifte til genvejstilstand. Så kan du skrive normalt igen.</p>
+      <p>{focusLimitation.next}</p>
+    </div>
+    <dl class="fg-notes">
+      <div><dt>Luk og afslut</dt><dd>Luk/X lægger kun menuen ned i systembakken (ved ^), og Focus kører videre. Du afslutter under Indstillinger (tandhjulet): «Afslut Focus».</dd></div>
+      <div><dt>Fjern Focus</dt><dd>Afslut Focus, og slet mappen. Dine egne profiler og indstillinger ligger i <code>%LOCALAPPDATA%\ISSANA\Focus</code>. Slet også den, hvis de skal væk.</dd></div>
+    </dl>
+  </section>
+</div>
+
+<style>
+  .fg { --fg-pad: clamp(1.25rem, 5vw, 4.5rem); max-width: 1440px; margin: auto; }
+  .fg section { scroll-margin-top: 8rem; }
+  .fg-kicker { font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .fg-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; padding: 4.5rem var(--fg-pad); background: var(--navy); }
+  .fg-hero .fg-kicker { color: #becbd8; }
+  .fg-pill { display: inline-block; border: 1px solid #788a9c; color: #e0e8ef; padding: .25rem .65rem; font-size: .78rem; margin: .1rem 0 1.4rem; }
+  .fg-pill a { color: #f5c087; text-decoration: underline; text-underline-offset: .2em; }
+  .fg-hero h1 { font-size: clamp(2.7rem, 4.8vw, 4.75rem); color: white; letter-spacing: -.035em; margin-bottom: 1.6rem; }
+  .fg-hero h1 span { color: #f5c087; }
+  .fg-intro { color: #d9e2ec; font-size: 1.05rem; max-width: 34rem; }
+  .fg-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1.4rem; margin-top: 2rem; }
+  .fg-actions .button--primary { background: var(--orange); color: var(--navy); }
+  .fg-actions .button--primary:hover { background: #f5b16c; }
+  .fg-hero__link { color: white; font-weight: 700; text-decoration: underline; text-underline-offset: .3em; }
+  .fg-hero__download { display: inline-grid; justify-items: start; gap: .1rem; max-width: 100%; }
+  .fg-hero__download small { font-size: .74rem; font-weight: 700; overflow-wrap: anywhere; }
+  .fg-hero__meta { margin: 1.1rem 0 0; color: rgba(255, 255, 255, .9); font-size: .95rem; font-weight: 600; }
+  .fg-hero__meta strong { color: var(--mint); }
+  .fg-board { background: var(--sand); border-top: 5px solid var(--orange); padding: 1.2rem; transform: rotate(1deg); }
+  .fg-board__top, .fg-board__bottom { display: flex; justify-content: space-between; gap: .7rem; font-size: .55rem; font-weight: 800; letter-spacing: .06em; color: var(--navy); }
+  .fg-board__bottom { border-top: 1px solid var(--line); padding-top: .8rem; }
+  .fg-board > p { font-size: .9rem; color: var(--navy); margin: 1.1rem 0 1rem; }
+  .fg-screen { display: block; width: 100%; height: auto; margin-top: 1rem; }
+  .fg-index { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1.15rem var(--fg-pad); background: white; border-bottom: 1px solid var(--line); font-weight: 700; font-size: .8rem; color: var(--navy); }
+  .fg-index a:hover { text-decoration: underline; text-underline-offset: .3em; }
+  .fg-section { padding: 4rem var(--fg-pad); border-bottom: 1px solid var(--line); }
+  .fg-section__heading { max-width: 46rem; margin-bottom: 2rem; }
+  .fg-section h2 { font-size: clamp(2.1rem, 3.1vw, 3.25rem); letter-spacing: -.025em; margin-bottom: 1rem; }
+  .fg-download { background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .fg-download h2 { color: white; }
+  .fg-download .fg-kicker { color: #f5c087; }
+  .fg-download p { color: #d9e2ec; }
+  .fg-download__panel { background: #0b1f35; border-top: 4px solid var(--orange); padding: 1.6rem; }
+  .fg-download__facts { margin: 0 0 1.5rem; }
+  .fg-download__facts > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #2b4560; }
+  .fg-download__facts dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; color: #f5c087; }
+  .fg-download__facts dd { margin: 0; color: white; font-size: .92rem; }
+  .fg-download__button { background: var(--orange); color: var(--navy); gap: .4rem; max-width: 100%; overflow-wrap: anywhere; }
+  .fg-download__button:hover { background: #f5b16c; }
+  .fg-download__hash { font-size: .75rem; word-break: break-all; margin: 1rem 0 .5rem; }
+  .fg-download__check { font-size: .8rem; margin: 0; overflow-wrap: anywhere; }
+  .fg-install { background: white; }
+  .fg-install__grid { display: grid; grid-template-columns: 1.3fr .9fr; gap: 3rem; align-items: start; }
+  .fg-install__aside { background: var(--sand); padding: 1.5rem; border-left: 3px solid #ab5709; }
+  .fg-install__aside h3 { font-size: 1.1rem; margin-bottom: .8rem; }
+  .fg-install__aside p { font-size: .9rem; color: var(--ink); }
+  .fg-install__aside p:last-child { margin-bottom: 0; }
+  .fg-steps { list-style: none; padding: 0; margin: 0; }
+  .fg-steps li { display: flex; gap: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 1rem; }
+  .fg-steps li > span { background: var(--sand); color: var(--navy); border-radius: 50%; width: 2rem; height: 2rem; flex: 0 0 2rem; text-align: center; line-height: 2rem; font-weight: 800; }
+  .fg-steps li > div { min-width: 0; }
+  .fg-steps h3 { margin: .3rem 0 .5rem; }
+  .fg-steps p { font-size: .92rem; overflow-wrap: anywhere; }
+  .fg-limit { background: var(--sand); }
+  .fg-limit__panel { background: #f7e7d6; border-left: 5px solid #ab5709; padding: 1.5rem 1.75rem; max-width: 55rem; }
+  .fg-limit__panel p { color: var(--ink); }
+  .fg-limit__panel p:last-child { margin-bottom: 0; }
+  .fg-limit__lead { font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif; font-size: 1.3rem; font-weight: 700; line-height: 1.25; }
+  .fg-limit__panel .fg-limit__lead { color: #6b3706; }
+  .fg-limit kbd { font: inherit; font-size: .88em; font-weight: 700; white-space: nowrap; color: var(--navy); background: white; border: 1px solid #c9a27c; border-radius: 3px; padding: .05rem .4rem; }
+  .fg-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0 0; max-width: 55rem; }
+  .fg-notes dt { color: var(--navy); font-weight: 800; }
+  .fg-notes dd { margin: .2rem 0 0; font-size: .9rem; color: var(--muted); overflow-wrap: anywhere; }
+  @media (max-width: 1050px) {
+    .fg-hero { gap: 2rem; }
+    .fg-board { padding: .9rem; }
+    .fg-board__bottom { font-size: .48rem; }
+  }
+  @media (max-width: 760px) {
+    .fg-hero { grid-template-columns: minmax(0, 1fr); padding-block: 3rem; }
+    .fg-hero h1 { font-size: clamp(2.7rem, 9vw, 4rem); }
+    .fg-board { max-width: 450px; width: 100%; margin: auto; }
+    .fg-index { gap: .8rem 1.2rem; }
+    .fg-section { padding-block: 3rem; }
+    .fg-download, .fg-install__grid, .fg-notes { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .fg-download__facts > div { grid-template-columns: 1fr; gap: .2rem; }
+    .fg-limit__panel { padding: 1.2rem; }
+  }
+  @media (max-width: 480px) {
+    .fg-actions { gap: 1rem; }
+    .fg-hero__link { font-size: .9rem; }
+    .fg-download__panel { padding: 1.15rem; }
+  }
+</style>
