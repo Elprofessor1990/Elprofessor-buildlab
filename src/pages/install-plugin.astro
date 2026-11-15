@@ -599,7 +599,7 @@ tool_timeout_sec = 300`;
             <p class="ip-order__text">Luk Revit og AI-appen. Download derefter ISSANA MCP-installeren, og kør den.</p>
             <div class="ip-order__actions">
               <a class="button button--primary ip-download" href={installerUrl} download={savedFile}>
-                <span>Download version {pluginVersion}</span>
+                <span>Download testversion {pluginVersion}</span>
                 <small>{savedFile}</small>
               </a>
             </div>
@@ -613,13 +613,13 @@ tool_timeout_sec = 300`;
           </a>
         </div>
         <p class="ip-hero__meta">
-          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · ca. 100 MB · Revit 2026/2027
+          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · 143 MB · Revit 2026/2027
         </p>
         <p class="ip-hero__credit">Udviklet af <a class="ip-hero__link" href={issanaSite} rel="noopener"><strong>{issana}</strong></a> · Byg og Miljø Rådgiver ApS</p>
       </div>
 
       <aside class="ip-version" aria-label="Versionsoplysninger">
-        <p class="ip-version__label">Nyeste version</p>
+        <p class="ip-version__label">Nyeste offentlige testversion</p>
         <p class="ip-version__number">{pluginVersion}</p>
         <p class="ip-version__date"><time datetime={releaseDateIso}>{releaseDate}</time></p>
         {releaseSuffix && <p class="ip-version__date">Udgivet som testversion, derfor «{releaseSuffix}» i filnavnet.</p>}
@@ -632,6 +632,10 @@ tool_timeout_sec = 300`;
       </aside>
     </header>
 
+    <aside class="ip-release-status" aria-label="Nye funktioner og udgivelsesstatus">
+      <div><strong>Nye funktioner på vej</strong><p>Scriptbibliotek til Python og C#, guidede fagforløb og øvedata. Se billeder, status og det, der mangler før næste udgave.</p></div>
+      <a class="button" href={withBase("/issana-status")}>Se nye funktioner og status →</a>
+    </aside>
     <!-- Faner: brug / installation (uden JavaScript vises begge dele under hinanden) -->
     <div class="ip-tabs" role="tablist" aria-label="Plugin-guiden" data-tabs hidden>
       <button type="button" class="ip-tab" role="tab" id="tab-brug" aria-controls="panel-brug" aria-selected="true" data-tab="brug">
@@ -933,7 +937,7 @@ tool_timeout_sec = 300`;
           <strong>Download og kør ISSANA MCP-installeren</strong>
           <p>Dobbeltklik på filen, når den er hentet, og følg konsolvinduet. Se <a class="text-link" href="#installer">Installér</a>.</p>
           <div class="ip-path__actions">
-            <a class="button button--primary" href={installerUrl} download={savedFile}>Download version {pluginVersion}</a>
+            <a class="button button--primary" href={installerUrl} download={savedFile}>Download testversion {pluginVersion}</a>
           </div>
         </li>
         <li>
@@ -993,7 +997,7 @@ tool_timeout_sec = 300`;
       <ol class="ip-steps">
         <li>
           <strong>Hent filen</strong>
-          <p>Klik på <em>Download version {pluginVersion}</em> øverst. Filen hedder <code>{savedFile}</code>.</p>
+          <p>Klik på <em>Download testversion {pluginVersion}</em> øverst. Filen hedder <code>{savedFile}</code>.</p>
         </li>
         <li>
           <strong>Start filen – og kom forbi Windows-advarslen</strong>
@@ -1419,6 +1423,8 @@ tool_timeout_sec = 300`;
 </script>
 
 <style>
+  .ip-release-status{display:flex;align-items:center;gap:2rem;justify-content:space-between;padding:1.5rem 2rem;margin:2rem 0;background:#edf6f2;border:1px solid #c8e3d9;border-radius:14px}.ip-release-status strong{font-size:1.15rem}.ip-release-status p{max-width:680px;margin:.5rem 0 0;line-height:1.6}.ip-release-status .button{flex-shrink:0}@media(max-width:760px){.ip-release-status{flex-direction:column;align-items:flex-start;padding:1.25rem;gap:1rem}}
+
   .ip {
     --ip-radius: 12px;
     --ip-mono: "Cascadia Mono", "Cascadia Code", Consolas, monospace;
