@@ -5,9 +5,9 @@ Find først faktisk app, Revit-år, installeret ISSANA-version, server/build/ind
 Mangler installationen, brug kun den aktuelle komplette ISSANA MCP-installer fra https://elprofessor1990.github.io/Elprofessor-buildlab/issana-status/ og den tilhørende officielle GitHub-release. Kontrollér version og offentlig SHA-256. Installér ikke generisk Revit MCP fra npm eller en samling gamle patches. En kommende version er ikke en udgivet version.
 
 Ret kun issana-revit i den aktive klients faktiske config:
-- Codex: %CODEX_HOME%\config.toml eller %USERPROFILE%\.codex\config.toml; [mcp_servers.issana-revit], command=node-stien, args=[server-stien], tool_timeout_sec=300.
+- Codex: %CODEX_HOME%\config.toml eller %USERPROFILE%\.codex\config.toml; [mcp_servers.issana-revit], command=node-stien, args=[server-stien], tool_timeout_sec=300 kun som standard, hvis en timeout mangler.
 - Claude Code: user-scope gennem claude mcp add-json; normalt %USERPROFILE%\.claude.json, men respekter CLAUDE_CONFIG_DIR og eventuelle projekt-overrides.
-- Claude Desktop: mcpServers.issana-revit i aktiv claude_desktop_config.json under %APPDATA%\Claude eller den faktisk installerede Store-pakkes LocalCache\Roaming\Claude. Find stien frem for at gætte pakkenavnet.
+- Claude Desktop: find aktiv claude_desktop_config.json, også i eksisterende %LOCALAPPDATA%\Claude-Data\<pakkefamilie> eller Claude-Data selv. Ældre placeringer er %APPDATA%\Claude og Store-pakkens LocalCache\Roaming\Claude. En .user-data-left.<familie>-markør betyder, at den gamle Store-mappe er forladt. Opfind ikke en ny Claude-Data-mappe; verificér, hvilken mappe appen faktisk læser. Posten er mcpServers.issana-revit.
 
 Tag dateret backup. Bevar andre servere, projekter, sikkerhedsindstillinger og eksisterende ISSANA-env/filterindstillinger. Vis aldrig nøgler. Validér JSON/TOML, opdag samtidige ændringer og læs ændringen tilbage. Korrekt opsætning skal være en no-op. Ved fejl gendannes den berørte fil. Luk ikke apps med ikke-gemt arbejde, og omgå ingen sikkerheds- eller organisationsgodkendelser.
 
