@@ -236,7 +236,7 @@ const messageGroups: MsgGroup[] = [
   },
   {
     id: "fejl-trin79",
-    title: "TRIN 7 og 9 – AI-apps",
+    title: "TRIN 7, 9 og 10 – AI-apps",
     intro: "En AI-app, der fejler, stopper ikke installationen. Læs dens særskilte status og fejltekst i TRIN 10. Årsagen står ofte på engelsk.",
     items: [
       { msg: "<Klient>: Ikke installeret -- sprunget over", sev: "info", means: "Appen blev ikke fundet. Claude Code kræver kommandoen claude, Codex kræver kommandoen codex eller Codex-appen, og Claude Desktop kræver Claude-appen.", todo: "Normalt intet. Har du appen, så installér eller genstart den, og kør installationsfilen igen." },
@@ -932,7 +932,7 @@ tool_timeout_sec = 300`;
         </li>
         <li>
           <strong>Luk Revit og AI-appen</strong>
-          <p>Gem dit arbejde, og luk begge programmer. Installationen stopper, hvis Revit kører.</p>
+          <p>Gem dit arbejde, og luk begge programmer. En ny programinstallation kræver lukket Revit; MCP-reparation af en eksisterende installation erstatter ikke Revit-programfiler.</p>
         </li>
         <li>
           <strong>Download og kør ISSANA MCP-installeren</strong>
@@ -1136,7 +1136,7 @@ tool_timeout_sec = 300`;
         </article>
       </div>
       <p class="ip-note">
-        <strong>Bemærk:</strong> <code>✔ Connected</code> og <code>enabled</code> betyder kun, at MCP-serveren kan starte. Forbindelsen
+        <strong>Bemærk:</strong> <code>enabled</code> viser kun, at posten er aktiveret. <code>✔ Connected</code> viser kontakt til MCP-serveren. Forbindelsen
         helt ind til Revit tester du ved at sende denne prompt, mens Revit og et projekt er åbne:
       </p>
       <div class="ip-code">
