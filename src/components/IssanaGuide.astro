@@ -1,0 +1,190 @@
+---
+import { getAssetPath } from "../i18n";
+import { releaseStatus, candidateFeatures, windUpdate, constructionUpdate, remainingWork } from "../data/issanaRelease";
+import { pluginVideos, codingSteps, masterCodingPrompt } from "../data/pluginGuide";
+import planBPrompt from "../../public/assets/issana-mcp/mcp-plan-b.txt?raw";
+import "../styles/issana-guide.css";
+
+const videos = pluginVideos.filter(video => video.youtubeId && /^[\w-]{11}$/.test(video.youtubeId));
+const connectionPrompt = "Kør get_connection_status og get_project_info. Vis navnet på den åbne Revit-model, ISSANA-forbindelsen og eventuelle manglende oplysninger. Ændr ingenting. Skeln mellem en installeret config, synlige MCP-værktøjer og et faktisk svar fra Revit.";
+const feature = (title: string) => candidateFeatures.find(item => item.title === title)!;
+const building = feature("Byggeplan med flere fagmodeller");
+const scripts = feature("Et bibliotek til din kode");
+const wind = feature("Vindzoner og udfoldet diagram");
+const highlighted = new Set([building.title, scripts.title, wind.title]);
+const tabs = [
+  { id: "kom-i-gang", title: "Kom i gang", number: "01" },
+  { id: "hjaelp", title: "Hjælp ved fejl", number: "02" },
+  { id: "nye-funktioner", title: "Nye funktioner", number: "03" },
+];
+const problems = [
+  { id: "fejl-exe", title: "Installationen stopper", text: "Gem dit arbejde, luk Revit, og kør den komplette installer igen. Læs den sidste fejlbesked. Brug Plan B nedenfor, hvis installationen eller et bestemt Revit-år stadig mangler." },
+  { id: "fejl-trin3", title: "ISSANA mangler i Revit", text: "Kontrollér, at du har åbnet det Revit-år, du installerede til. Se efter ISSANA under Add-Ins / Tilføjelsesprogrammer, og læs eventuelle indlæsningsbeskeder. Plan B kan kontrollere pluginfilerne uden at ændre modellen." },
+  { id: "fejl-trin56", title: "Claude eller Codex kan ikke finde MCP", text: "Start AI-appen mindst én gang, og lad installeren sætte forbindelsen op. Åbn derefter en ny chat eller genstart appen efter at have gemt dit arbejde. Virker det stadig ikke, så kopiér Plan B." },
+  { id: "fejl-trin79", title: "Forbindelsen findes, men Revit svarer ikke", text: "Åbn et Revit-projekt, og afslut åbne dialoger. Send forbindelsestesten igen. En grøn status eller en config-fil er ikke nok: AI'en skal kunne læse navnet på dit åbne projekt." },
+];
+---
+
+<div class="ig" data-issana-guide>
+  <header class="ig-hero">
+    <div class="ig-hero-copy">
+      <p class="ig-eyebrow">Elprofessor BuildLab / ISSANA MCP</p>
+      <h1>Din model.<br /><span>Et enklere næste skridt.</span></h1>
+      <p class="ig-intro">Forbind Revit med Claude eller Codex. Kom i gang, få hjælp, og se, hvad du kan arbejde videre med.</p>
+    </div>
+    <div class="ig-release">
+      <img src={getAssetPath("assets/issana-mcp/icon-issana.svg")} width="48" height="48" alt="" />
+      <p class="ig-eyebrow">Aktuel download</p>
+      <strong>{releaseStatus.publicVersion}</strong>
+      <p>Program {releaseStatus.programVersion}<br />Windows · Revit 2026/2027<br /><time datetime={releaseStatus.publicReleaseDateIso}>{releaseStatus.publicReleaseDate}</time></p>
+      <a class="ig-button ig-button-orange" href={releaseStatus.download}>Download til Windows <span aria-hidden="true">↗</span></a>
+      <a class="ig-release-link" href={releaseStatus.release}>Se udgivelse og begrænsninger →</a>
+    </div>
+  </header>
+
+  <nav class="ig-tabs" aria-label="ISSANA-vejledning" data-tablist>
+    {tabs.map(tab => <a href={`#${tab.id}`} id={`tab-${tab.id}`} data-tab={tab.id}><span aria-hidden="true">{tab.number}</span>{tab.title}</a>)}
+  </nav>
+
+  <section id="kom-i-gang" class="ig-panel" data-panel aria-labelledby="tab-kom-i-gang" tabindex="0">
+    <div class="ig-section-heading"><div><p class="ig-eyebrow">Fra installation til første svar</p><h2>Kom godt i gang.</h2></div><p>Brug den komplette installer. Kontrollér bagefter forbindelsen til din egen, åbne Revit-model.</p></div>
+    <div class="ig-start-layout" id="raekkefoelge">
+      <ol class="ig-steps">
+        <li id="foer-du-starter"><span class="ig-step-number" aria-hidden="true">1</span><div><h3>Vælg din AI-app</h3><p>Installér og åbn <a href="https://claude.com/download">Claude</a> eller <a href="https://openai.com/da-DK/codex/">Codex</a> på din pc. Appen skal findes, før ISSANA sætter MCP-forbindelsen op.</p></div></li>
+        <li id="installer"><span class="ig-step-number" aria-hidden="true">2</span><div><h3>Installér ISSANA MCP</h3><p>Gem dit arbejde, og luk Revit. Hent EXE-filen ovenfor, kør den, og læs slutstatus for Revit og din AI-app. Node.js og Python/C#-runtime følger med. Fagberegningsmotoren kræver .NET 10; slutstatus viser, hvis det mangler.</p><details class="ig-small-details"><summary>Filoplysninger og kontrol</summary><dl class="ig-file-data"><dt>Installationsfil</dt><dd>{releaseStatus.download.split("/").pop()}</dd><dt>Størrelse</dt><dd>{releaseStatus.bytes.toLocaleString("da-DK")} bytes</dd><dt>Kontrolleret</dt><dd>{releaseStatus.downloadChecked}</dd><dt>SHA-256</dt><dd><code>{releaseStatus.sha256}</code></dd></dl><a href={releaseStatus.release}>Læs udgivelsens teststatus →</a></details></div></li>
+        <li id="kontroller"><span class="ig-step-number" aria-hidden="true">3</span><div><h3>Få det første svar fra Revit</h3><p>Åbn et projekt i Revit. Start en ny chat i AI-appen, og send testen nedenfor. Den læser projektet uden at ændre det.</p><div class="ig-prompt"><p id="connection-prompt">{connectionPrompt}</p><button class="ig-button ig-button-small" data-copy="connection-prompt" type="button">Kopiér forbindelsestest</button></div><p class="ig-small">Intet svar? <a href="#plan-b">Gå til fælles hjælp for Claude og Codex →</a></p></div></li>
+      </ol>
+      <aside class="ig-start-aside">
+        <figure class="ig-figure"><a href={getAssetPath("assets/revit-mcp-online-status.png")} aria-label="Åbn billedet af MCP-status i fuld størrelse"><img src={getAssetPath("assets/revit-mcp-online-status.png")} width="1233" height="593" alt="Revit med MCP-panelet åbent og markering af status MCP Online." /></a><figcaption>Eksempel fra en tidligere udgave. Knapperne kan se anderledes ud; kontrollér altid med et faktisk svar fra projektet.</figcaption></figure>
+        <div class="ig-ready"><p class="ig-eyebrow">Du er klar, når …</p><ul><li>ISSANA er indlæst i Revit.</li><li>AI-appen kan se MCP-værktøjerne.</li><li>Svaret viser din åbne models navn.</li></ul></div>
+      </aside>
+    </div>
+
+    <section class="ig-video-section" id="videoer" aria-labelledby="video-title">
+      <div class="ig-inline-heading"><h3 id="video-title">Se det trin for trin</h3><span class="ig-small">Videovejledninger</span></div>
+      {videos.length > 0 ? <div class="ig-videos">{videos.map(video => <article><button class="ig-video-play" data-youtube={video.youtubeId} type="button" aria-label={`Afspil: ${video.title}`}><span aria-hidden="true">▶</span><span>{video.title}</span></button><p>{video.description}</p></article>)}</div> : <p class="ig-video-note">Videovejledningerne er endnu ikke offentliggjort. Du kan bruge de tre trin og forbindelsestesten ovenfor imens.</p>}
+    </section>
+
+    <details class="ig-detail" id="nbs"><summary><span>NBS Nordic — forbind dit projekt</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body ig-two-columns"><div><p>Åbn <strong>Indstillinger → NBS Nordic</strong> i Revit. Udfyld din forbindelse, vælg projekt, og tryk <strong>Gem og forbind</strong>. Gem derefter RVT-filen med Ctrl+S.</p><p>Kontrollér forbindelsen før kodning. Hvis NBS siger, at modellen ikke er koblet, skal koblingen og den gemte RVT-fil kontrolleres først.</p><a href="#kodning">Se forløbet for kodning af bygningsdele →</a></div><figure class="ig-figure"><a href={getAssetPath("assets/revit-nbs-settings.png")} aria-label="Åbn billedet af NBS-indstillinger"><img src={getAssetPath("assets/revit-nbs-settings.png")} alt="Indstillinger for forbindelsen til NBS Nordic i Revit." loading="lazy" /></a><figcaption>Forbindelsen skal gemmes i det projekt, du arbejder med.</figcaption></figure></div></details>
+    <details class="ig-detail" id="oevelser"><summary><span>Prøv en lille opgave først</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><ol class="ig-simple-list"><li><strong>Forstå modellen:</strong> Bed AI'en vise etager og rum uden at ændre noget.</li><li><strong>Undersøg en bygningsdel:</strong> Vælg en væg i 3D, og bed om dens opbygning og de oplysninger, der mangler.</li><li><strong>Forbered en beregning:</strong> Vælg et fag, gennemgå forudsætningerne, og ret dem, før du regner videre.</li></ol><p>Begynd i en projektkopi. Kontrollér forslag og resultat, før du gemmer ændringer i Revit.</p></div></details>
+  </section>
+
+  <section id="hjaelp" class="ig-panel" data-panel aria-labelledby="tab-hjaelp" tabindex="0">
+    <div class="ig-section-heading"><div><p class="ig-eyebrow">En kort vej tilbage</p><h2>Når forbindelsen driller.</h2></div><p>Find først symptomet. Hvis det ikke løser problemet, kan samme Plan B-prompt bruges i både Claude Code og Codex.</p></div>
+    <div id="fejl" class="ig-problems">{problems.map((problem, i) => <details id={problem.id} class="ig-detail"><summary><span><small aria-hidden="true">0{i + 1}</small>{problem.title}</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><p>{problem.text}</p></div></details>)}</div>
+    <section id="plan-b" class="ig-plan-b" aria-labelledby="plan-b-title">
+      <div class="ig-plan-b-intro"><p class="ig-eyebrow">Claude Code + Codex</p><h3 id="plan-b-title">Plan B.<br />Lad AI'en hjælpe med opsætningen.</h3><p>Prompten finder installationen og den rigtige config-fil, tager backup og kontrollerer forbindelsen. ISSANA MCP behøver ikke allerede virke.</p><p class="ig-small">Brug en app med lokal adgang til pc'en. En almindelig webchat kan ikke rette dine lokale filer.</p></div>
+      <div class="ig-plan-b-action"><ol class="ig-simple-list"><li>Kopiér prompten til din lokale AI-app.</li><li>Lad den undersøge og reparere forbindelsen.</li><li>Afslut med et læsesvar fra den åbne Revit-model.</li></ol><button type="button" class="ig-button ig-button-orange" data-copy="plan-b-prompt">Kopiér Plan B til Claude / Codex <span aria-hidden="true">↗</span></button><a class="ig-text-link" href={getAssetPath("assets/issana-mcp/mcp-plan-b.txt")} download>Hent prompten som tekstfil</a><details id="plan-b-text" class="ig-small-details"><summary>Læs eller kopiér teksten manuelt</summary><label for="plan-b-prompt" class="ig-sr">Fælles Plan B-prompt</label><textarea id="plan-b-prompt" readonly rows="12">{planBPrompt}</textarea></details></div>
+    </section>
+    <details class="ig-detail" id="manuel"><summary><span>Avanceret: manuel opsætning og filkontrol</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><p>MCP-konfigurationen afhænger af AI-appen, Revit-året og den faktiske installationssti. Brug Plan B til at finde dem, og behold andre forbindelser og personlige indstillinger.</p><p>Kontrollér tre ting hver for sig: gyldige filer og config, synlige værktøjer i AI-appen og et faktisk Revit-svar. En separat servertest beviser ikke, at denne chat har forbindelse.</p><a href={getAssetPath("assets/issana-mcp/mcp-plan-b-udfoerlig.txt")} download>Hent den udførlige vejledning →</a></div></details>
+    <p class="ig-support">Stadig fastlåst? Gem fejlteksten og versionsnummeret. Kontakt <a href="mailto:info@issana.dk">info@issana.dk</a> uden at dele API-nøgler.</p>
+  </section>
+
+  <section id="nye-funktioner" class="ig-panel" data-panel aria-labelledby="tab-nye-funktioner" tabindex="0">
+    <div class="ig-section-heading"><div><p class="ig-eyebrow">Se, forstå og arbejd videre</p><h2>Det nye i ISSANA.</h2></div><p>Status pr. <time datetime={releaseStatus.checkedIso}>{releaseStatus.checked}</time>. Hver funktion har sin egen status. Se udgivelsen for, hvad den aktuelle download indeholder.</p></div>
+    <article class="ig-feature-story" id="byggeplan">
+      <div class="ig-feature-copy"><p class="ig-feature-status">{building.status}</p><h3>{building.title}</h3><p>{building.text}</p><p>Se aktiviteterne som tidsplan, takt og 3D. Ret planen i samme datagrundlag, og hold arbejdszoner adskilt fra leverede produkter.</p><details class="ig-small-details"><summary>Hvad er kontrolleret — og hvad mangler?</summary><p class="ig-small">{constructionUpdate.status} · {constructionUpdate.date}</p>{constructionUpdate.rows.map(row => <div class="ig-check-row"><h4>{row.area}</h4><p class="ig-feature-status">{row.state}</p><p>{row.done}</p><p><strong>Næste kontrol:</strong> {row.next}</p></div>)}</details></div>
+      <figure class="ig-figure ig-diagram"><img src={getAssetPath("assets/issana-mcp/model-to-plan.svg")} width="840" height="620" loading="lazy" alt="Illustration: arkitekt- og installationsmodeller samles i redigerbar JSON, der bruges til tidsplan, takt og 3D." /><figcaption>Principillustration — viser sammenhængen, ikke et projekts faktiske rækkefølge eller byggetider.</figcaption></figure>
+    </article>
+    <article class="ig-feature-story ig-feature-story-wide" id="scripts-title"><div class="ig-feature-copy"><p class="ig-feature-status">{scripts.status}</p><h3>{scripts.title}</h3><p>{scripts.text}</p><p class="ig-small">Python bruger IronPython. Læs og kontrollér kode før kørsel; native pip-pakker og hele Revit API'et er ikke automatisk tilgængelige.</p></div><figure class="ig-figure"><a href={getAssetPath("assets/issana-mcp/script-library-preview.png")} aria-label="Se scriptbiblioteket i fuld størrelse"><img src={getAssetPath("assets/issana-mcp/script-library-preview.png")} width="1180" height="820" alt="ISSANAs scriptbibliotek: vælg Python eller C#, skriv kode, kontrollér den og gem dit script." loading="lazy" /></a><figcaption>Det rigtige vindue fra en isoleret test. Revit er simuleret på billedet; der er ikke ændret en projektmodel.</figcaption></figure></article>
+    <article class="ig-feature-story" id="vind"><div class="ig-feature-copy"><p class="ig-feature-status">{wind.status}</p><h3>{wind.title}</h3><p>{wind.text}</p><details class="ig-small-details"><summary>Læs kontrollen af vindanalysen</summary><p>{windUpdate.validation}</p><p>{windUpdate.sourceStatus}</p>{windUpdate.release && <a href={windUpdate.release}>Dokumentation fra den tidligere vindprøve →</a>}</details></div><figure class="ig-figure ig-diagram"><img src={getAssetPath("assets/issana-mcp/wind-workflow.svg")} width="840" height="540" loading="lazy" alt="Principillustration af en bygnings vindzoner og et udfoldet diagram, som viser samme zonefarver." /><figcaption>Principillustration — farverne forklarer sammenhængen. De er ikke beregnede tryk eller projektets faktiske zoner.</figcaption></figure></article>
+    <div class="ig-feature-list" id="ideer">{candidateFeatures.filter(item => !highlighted.has(item.title)).map(item => <details class="ig-detail"><summary><span>{item.title}<small>{item.status}</small></span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><p>{item.text}</p></div></details>)}</div>
+    <details class="ig-detail" id="kodning"><summary><span>Kodning og NBS — fra type til bygningsdel</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><ol class="ig-simple-list">{codingSteps.map(step => <li><strong>{step.title}.</strong> {step.text}</li>)}</ol><details class="ig-small-details"><summary>Prompt til kodning af bygningsdele</summary><label for="coding-prompt" class="ig-sr">Prompt til NBS-kodning</label><textarea id="coding-prompt" rows="10" readonly>{masterCodingPrompt}</textarea><button type="button" class="ig-button ig-button-small" data-copy="coding-prompt">Kopiér kodningsprompt</button></details></div></details>
+    <details class="ig-detail" id="tegninger"><summary><span>Tegninger — en tydelig liste før oprettelse</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body"><p>Angiv Projekt-ID, fag, etage og ønskede tegninger. Bed AI'en foreslå en tegningsliste med numre, navne, målestok og titelblok, og gennemgå den, før arkene oprettes i en gemt projektkopi.</p><p>ISSANAs funktioner til tegninger og Molio-baseret vejledning bevares. Kontrollér numre og indhold mod projektets aftalte tegningsstandard.</p></div></details>
+    <details class="ig-detail ig-remaining" id="mangler"><summary><span>Det, vi stadig arbejder på</span><span aria-hidden="true">+</span></summary><div class="ig-detail-body">{remainingWork.map(item => <div class="ig-check-row"><h4>{item.title}</h4><p>{item.done}</p><p><strong>Næste skridt:</strong> {item.next}</p></div>)}</div></details>
+  </section>
+  <footer class="ig-footer"><span>ISSANA — Rådgivende Ingeniører</span><a href="https://issana.dk/#kontakt">Kontakt ISSANA ↗</a></footer>
+  <p class="ig-copy-status" id="ig-copy-status" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+  const guide = document.querySelector<HTMLElement>("[data-issana-guide]");
+  if (guide) {
+    const tablist = guide.querySelector<HTMLElement>("[data-tablist]")!;
+    const tabs = Array.from(guide.querySelectorAll<HTMLAnchorElement>("[data-tab]"));
+    const panels = Array.from(guide.querySelectorAll<HTMLElement>("[data-panel]"));
+    const aliases: Record<string, string> = {
+      installation: "kom-i-gang", brug: "kom-i-gang", "tab-installation": "kom-i-gang", "panel-installation": "kom-i-gang", "tab-brug": "kom-i-gang", "panel-brug": "kom-i-gang",
+      "config-title": "installer", "fejl-trin1": "fejl-exe", "fejl-trin2": "fejl-exe", "fejl-trin4": "fejl-trin3", "features-title": "nye-funktioner", "remaining-title": "mangler",
+    };
+    function activate(id: string, focus = false) {
+      panels.forEach(panel => { panel.hidden = panel.id !== id; });
+      tabs.forEach(tab => {
+        const selected = tab.dataset.tab === id;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        if (focus && selected) tab.focus();
+      });
+    }
+    function revealHash(scroll = true) {
+      let id = "";
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed external anchors. */ }
+      id = aliases[id] || id;
+      const target = id ? document.getElementById(id) : null;
+      const panel = target?.closest<HTMLElement>("[data-panel]");
+      activate(panel?.id || "kom-i-gang");
+      if (target && panel) {
+        let current: HTMLElement | null = target;
+        while (current && current !== panel) {
+          if (current instanceof HTMLDetailsElement) current.open = true;
+          current = current.parentElement;
+        }
+        if (scroll) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+      }
+    }
+    tablist.setAttribute("role", "tablist");
+    tabs.forEach((tab, index) => {
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-controls", tab.dataset.tab!);
+      tab.addEventListener("click", event => {
+        event.preventDefault();
+        activate(tab.dataset.tab!);
+        history.pushState(null, "", `#${tab.dataset.tab}`);
+      });
+      tab.addEventListener("keydown", event => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        activate(tabs[next].dataset.tab!, true);
+        history.replaceState(null, "", `#${tabs[next].dataset.tab}`);
+      });
+    });
+    panels.forEach(panel => panel.setAttribute("role", "tabpanel"));
+    guide.dataset.enhanced = "true";
+    revealHash(Boolean(location.hash));
+    window.addEventListener("hashchange", () => revealHash());
+    window.addEventListener("popstate", () => revealHash());
+
+    guide.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy!);
+        const status = document.getElementById("ig-copy-status")!;
+        if (!target) return;
+        const text = target instanceof HTMLTextAreaElement ? target.value : target.textContent || "";
+        try { await navigator.clipboard.writeText(text.trim()); status.textContent = "Kopieret. Indsæt teksten i din AI-app."; }
+        catch {
+          let parent = target.parentElement;
+          while (parent) { if (parent instanceof HTMLDetailsElement) parent.open = true; parent = parent.parentElement; }
+          target.focus();
+          if (target instanceof HTMLTextAreaElement) target.select();
+          else { const range = document.createRange(); range.selectNodeContents(target); const selection = getSelection(); selection?.removeAllRanges(); selection?.addRange(range); }
+          status.textContent = "Kopiér den markerede tekst med Ctrl+C eller din enheds kopifunktion.";
+        }
+        status.hidden = false;
+      });
+    });
+    guide.querySelectorAll<HTMLButtonElement>("[data-youtube]").forEach(button => {
+      button.addEventListener("click", () => {
+        const id = button.dataset.youtube;
+        if (!id || !/^[\w-]{11}$/.test(id)) return;
+        const frame = document.createElement("iframe");
+        frame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+        frame.title = button.getAttribute("aria-label") || "ISSANA-vejledning";
+        frame.allow = "autoplay; encrypted-media; picture-in-picture";
+        frame.allowFullscreen = true;
+        frame.className = "ig-video-frame";
+        button.replaceWith(frame); frame.focus();
+      });
+    });
+  }
+</script>

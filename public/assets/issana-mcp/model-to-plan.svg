@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 620" role="img" aria-labelledby="title desc">
+  <title id="title">Fra fagmodeller til byggeplan</title><desc id="desc">Arkitektur og installationer samles i JSON. Tidsplan, takt og 3D bruger samme redigerbare grundlag. Principillustration.</desc>
+  <rect width="840" height="620" fill="#eaf0e9"/>
+  <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#d9e2d8" stroke-width="1"/></pattern></defs><rect width="840" height="620" fill="url(#grid)"/>
+  <g font-family="Segoe UI, sans-serif" fill="#112a46"><text x="42" y="48" font-size="12" letter-spacing="2">ILLUSTRATION / ÉT FÆLLES GRUNDLAG</text>
+  <g stroke="#112a46" stroke-width="2" stroke-linejoin="round"><path d="M90 160l110-55 110 55v110l-110 55-110-55z" fill="#fff"/><path d="M90 160l110 55 110-55M200 215v110" fill="none"/><path d="M90 196l110 55 110-55M90 233l110 55 110-55" fill="none" stroke="#93aaa2"/><path d="M145 133l110 55M255 133l-110 55" fill="none" stroke="#b9c9bd"/></g>
+  <text x="200" y="366" text-anchor="middle" font-size="20" font-weight="600">Bygning</text><text x="200" y="392" text-anchor="middle" font-size="14" fill="#52665c">ARK + konstruktion</text>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M480 145v122h155v-70h105" stroke="#112a46" stroke-width="12"/><path d="M480 145v122h155v-70h105" stroke="#46c2a8" stroke-width="7"/><path d="M525 122v90h60v100h155" stroke="#f28c28" stroke-width="8"/><path d="M570 159v108M685 197v72" stroke="#46c2a8" stroke-width="7"/></g>
+  <text x="620" y="366" text-anchor="middle" font-size="20" font-weight="600">Installationer</text><text x="620" y="392" text-anchor="middle" font-size="14" fill="#52665c">MEP + kilde og placering</text>
+  <path d="M200 416v32h420v-32M420 448v30" fill="none" stroke="#6a897b" stroke-width="2"/>
+  <rect x="56" y="482" width="728" height="90" rx="5" fill="#112a46"/>
+  <text x="88" y="520" font-size="23" font-weight="600" fill="#fff">{ JSON }</text><text x="88" y="548" font-size="13" fill="#b9d9cf">Ret og gem planen</text>
+  <path d="M278 507v42M440 507v42M600 507v42" stroke="#587482"/>
+  <text x="354" y="532" text-anchor="middle" font-size="18" fill="#fff">Tidsplan</text><text x="520" y="532" text-anchor="middle" font-size="18" fill="#fff">Takt</text><text x="690" y="532" text-anchor="middle" font-size="18" fill="#fff">3D</text>
+  </g>
+</svg>
