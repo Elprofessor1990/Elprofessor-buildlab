@@ -1,0 +1,16 @@
+Få ISSANA MCP til at virke i min Claude/Codex-app på denne Windows-pc. Du må bruge lokal terminal og filer til at reparere opsætningen; ISSANA MCP behøver ikke allerede virke. Har du ingen lokal adgang, sig konkret, at jeg skal åbne prompten i Claude Code/Codex med lokal adgang eller køre ISSANA-installeren.
+
+Find først faktisk app, Revit-år, installeret ISSANA-version, server/build/index.js og fungerende node.exe. Typisk server: %APPDATA%\Autodesk\Revit\Addins\<år>\revit_mcp_plugin\Commands\RevitMCPCommandSet\server\build\index.js; medfølgende Node: server\runtime\node.exe. Kontrollér filerne og brug absolutte stier. Vælg ikke automatisk højeste Revit-år.
+
+Mangler installationen, brug kun den aktuelle komplette ISSANA MCP-installer fra https://elprofessor1990.github.io/Elprofessor-buildlab/issana-status/ og den tilhørende officielle GitHub-release. Kontrollér version og offentlig SHA-256. Installér ikke generisk Revit MCP fra npm eller en samling gamle patches. En kommende version er ikke en udgivet version.
+
+Ret kun issana-revit i den aktive klients faktiske config:
+- Codex: %CODEX_HOME%\config.toml eller %USERPROFILE%\.codex\config.toml; [mcp_servers.issana-revit], command=node-stien, args=[server-stien], tool_timeout_sec=300.
+- Claude Code: user-scope gennem claude mcp add-json; normalt %USERPROFILE%\.claude.json, men respekter CLAUDE_CONFIG_DIR og eventuelle projekt-overrides.
+- Claude Desktop: mcpServers.issana-revit i aktiv claude_desktop_config.json under %APPDATA%\Claude eller den faktisk installerede Store-pakkes LocalCache\Roaming\Claude. Find stien frem for at gætte pakkenavnet.
+
+Tag dateret backup. Bevar andre servere, projekter, sikkerhedsindstillinger og eksisterende ISSANA-env/filterindstillinger. Vis aldrig nøgler. Validér JSON/TOML, opdag samtidige ændringer og læs ændringen tilbage. Korrekt opsætning skal være en no-op. Ved fejl gendannes den berørte fil. Luk ikke apps med ikke-gemt arbejde, og omgå ingen sikkerheds- eller organisationsgodkendelser.
+
+Kontrollér separat: 1) filer/config gyldige, 2) MCP initialize + tools/list og ISSANA-værktøjer synlige i denne AI-app, 3) gyldigt get_project_info-svar fra et åbent Revit-projekt. Kun læsekald; ingen modeloprettelse, opgradering eller gemning. En separat serverprobe beviser ikke, at denne chat virker. Hvis genstart/ny chat, Revit-projekt eller godkendelse mangler, giv kun den nødvendige handling og fortsæt kontrollen bagefter.
+
+Afslut kort på dansk med version, ændret configsti, backupsti og hvilke af de tre kontroller der faktisk bestod. Skriv ikke "virker", før appens værktøjer og Revit-læsekaldet er verificeret.

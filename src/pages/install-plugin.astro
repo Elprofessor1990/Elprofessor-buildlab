@@ -1,6 +1,7 @@
 ---
 import { getAssetPath, withBase } from "../i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { releaseStatus } from "../data/issanaRelease";
 import {
   codingConcepts,
   codingPitfalls,
@@ -14,11 +15,11 @@ import {
 } from "../data/pluginGuide";
 
 /* Kun den nyeste version vises. Ældre versioner ligger stadig som GitHub Releases og i git-historikken. */
-const pluginVersion = "3.0.9";
-const releaseDate = "5. november 2026";
-const releaseDateIso = "2026-11-05";
+const pluginVersion = releaseStatus.publicVersion.replace(/-test$/, "");
+const releaseDate = releaseStatus.publicReleaseDate;
+const releaseDateIso = releaseStatus.publicReleaseDateIso;
 /* 3.0.9 er udgivet som testversion, derfor "-test" i tag og filnavn. Sæt til "" ved en almindelig udgave; så forsvinder noten i versionsboksen også. */
-const releaseSuffix = "-test";
+const releaseSuffix = releaseStatus.publicVersion.endsWith("-test") ? "-test" : "";
 
 const r = String.raw;
 /* Installeren ligger som GitHub Release i dette (offentlige) repo, ikke i public/downloads.
@@ -27,7 +28,7 @@ const repoName = "Elprofessor1990/Elprofessor-buildlab";
 const repoUrl = `https://github.com/${repoName}`;
 const savedFile = `ISSANA-MCP-Installer-${pluginVersion}${releaseSuffix}.exe`;
 const releaseTag = `issana-mcp-v${pluginVersion}${releaseSuffix}`;
-const installerUrl = `${repoUrl}/releases/download/${releaseTag}/${savedFile}`;
+const installerUrl = releaseStatus.download;
 const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
 const codexUrl = "https://openai.com/da-DK/codex/";
@@ -911,6 +912,12 @@ tool_timeout_sec = 300`;
     </div>
 
     <div class="ip-panel" id="panel-installation" role="tabpanel" aria-labelledby="tab-installation">
+      <aside class="ip-note" aria-label="Aktuel installation og hjælp">
+        <p><strong>Status {releaseStatus.checked}: Nyeste komplette installer er {releaseStatus.publicVersion}.</strong> Version {releaseStatus.plannedVersion} er under arbejde og er ikke udgivet. Vindpatchen er kun til en bestemt testinstallation og kan ikke bruges til at installere MCP fra bunden.</p>
+        <p><strong>Kan Claude eller Codex ikke finde MCP?</strong> Brug den fælles Plan B-prompt. Den hjælper AI'en med at finde og reparere den rigtige konfiguration, tage backup og kontrollere forbindelsen til Revit.</p>
+        <a class="button button--primary" href={withBase("/issana-status/#plan-b")}>Åbn hjælp til MCP-opsætning</a>
+      </aside>
+
     <!-- 1. Rækkefølgen (står før indholdslisten, så den er det første, man ser i fanen) -->
     <section class="ip-section" id="raekkefoelge" aria-labelledby="raekkefoelge-title">
       <div class="ip-section__head">
