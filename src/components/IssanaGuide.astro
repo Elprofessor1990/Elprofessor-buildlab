@@ -18,6 +18,7 @@ const tabs = [
   { id: "nye-funktioner", title: "Nye funktioner", number: "03" },
 ];
 const problems = [
+  { id: "fejl-komplet-program", title: "Intet komplet installeret ISSANA-program blev fundet", text: "En fejl i den første 3.10-installer afviste tre korrekt tomme Python-filer. Den rettede installer 1 løser fejlen og forhindrer forkert valg af en ældre ISSANA-server. Hent den aktuelle EXE, gem dit arbejde, luk Revit og kør den igen. Start derefter AI-appen på ny og brug forbindelsestesten nedenfor." },
   { id: "fejl-exe", title: "Installationen stopper", text: "Gem dit arbejde, luk Revit, og kør den komplette installer igen. Læs den sidste fejlbesked. Brug Plan B nedenfor, hvis installationen eller et bestemt Revit-år stadig mangler." },
   { id: "fejl-trin3", title: "ISSANA mangler i Revit", text: "Kontrollér, at du har åbnet det Revit-år, du installerede til. Se efter ISSANA under Add-Ins / Tilføjelsesprogrammer, og læs eventuelle indlæsningsbeskeder. Plan B kan kontrollere pluginfilerne uden at ændre modellen." },
   { id: "fejl-trin56", title: "Claude eller Codex kan ikke finde MCP", text: "Start AI-appen mindst én gang, og lad installeren sætte forbindelsen op. Åbn derefter en ny chat eller genstart appen efter at have gemt dit arbejde. Virker det stadig ikke, så kopiér Plan B." },
@@ -37,6 +38,7 @@ const problems = [
       <p class="ig-eyebrow">Aktuel download</p>
       <strong>{releaseStatus.publicVersion}</strong>
       <p>Program {releaseStatus.programVersion}<br />Windows · Revit 2026/2027<br /><time datetime={releaseStatus.publicReleaseDateIso}>{releaseStatus.publicReleaseDate}</time></p>
+      <p>Komplet program · rettet MCP-opsætning. Udvalgte funktioner afprøvet i Revit 2027. Revit 2026.5 er endnu ikke liveafprøvet.</p>
       <a class="ig-button ig-button-orange" href={releaseStatus.download}>Download til Windows <span aria-hidden="true">↗</span></a>
       <a class="ig-release-link" href={releaseStatus.release}>Se udgivelse og begrænsninger →</a>
     </div>
