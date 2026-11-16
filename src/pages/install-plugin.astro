@@ -15,7 +15,8 @@ import {
 } from "../data/pluginGuide";
 
 /* Kun den nyeste version vises. Ældre versioner ligger stadig som GitHub Releases og i git-historikken. */
-const pluginVersion = releaseStatus.publicVersion.replace(/-test$/, "");
+const pluginVersion = releaseStatus.programVersion;
+const installerVersion = releaseStatus.publicVersion.replace(/-test$/, "");
 const releaseDate = releaseStatus.publicReleaseDate;
 const releaseDateIso = releaseStatus.publicReleaseDateIso;
 /* 3.0.9 er udgivet som testversion, derfor "-test" i tag og filnavn. Sæt til "" ved en almindelig udgave; så forsvinder noten i versionsboksen også. */
@@ -26,8 +27,7 @@ const r = String.raw;
    Asset-navnet er det gemte filnavn, fordi download-attributten ignoreres på tværs af domæner. */
 const repoName = "Elprofessor1990/Elprofessor-buildlab";
 const repoUrl = `https://github.com/${repoName}`;
-const savedFile = `ISSANA-MCP-Installer-${pluginVersion}${releaseSuffix}.exe`;
-const releaseTag = `issana-mcp-v${pluginVersion}${releaseSuffix}`;
+const savedFile = releaseStatus.download.split("/").pop()!;
 const installerUrl = releaseStatus.download;
 const architectureUrl = getAssetPath("assets/revit-nbs-integration-architecture.png");
 const claudeUrl = "https://claude.com/download";
@@ -56,7 +56,7 @@ const tocInstall = [
 ];
 const iconUrl = (file: string) => getAssetPath(`assets/issana-mcp/${file}`);
 
-/* ---------- Konsolvinduet (ordret fra installeren, forkortet ved "…") ---------- */
+/* ---------- Forkortet illustration af konsolvinduet; lokale stier varierer ---------- */
 type TermKind = "plain" | "banner" | "banner2" | "dim" | "prompt" | "head" | "step" | "ok" | "warn" | "err" | "info";
 type TermLine = { k: TermKind; t: string; input?: string };
 
@@ -106,17 +106,12 @@ const terminal: TermLine[] = [
   { k: "ok", t: r`  [+] Claude Desktop -- sat op: C:\Users\studerende\AppData\Roaming\Claude\claude_desktop_config.json` },
   { k: "info", t: r`      Backup af konfiguration: C:\Users\studerende\AppData\Roaming\Claude\claude_desktop_config.json.installer-20260924-101532417-<guid>.bak` },
   { k: "ok", t: r`  [+] Codex -- sat op: C:\Users\studerende\.codex\config.toml` },
-  { k: "head", t: "  TRIN 8  --  Kontrol af forbindelsen" },
-  { k: "step", t: "  [*] Åbn Revit og dit projekt nu, og åbn derefter din AI-klient. Dette vindue tjekker forbindelsen automatisk." },
-  { k: "info", t: "      Venter op til 180 sekunder. Ingen ændringer i modellen og ingen NBS-kald." },
-  { k: "plain", t: "  [+] MCP-serveren svarer. Tjekker forbindelsen til Revit..." },
-  { k: "plain", t: "  [!] Revit er ikke klar. Åbn Revit og dit projekt, og luk eventuelle dialogbokse; prøver igen..." },
-  { k: "plain", t: "  [+] Forbindelsen MCP -> plugin -> Revit er bekræftet (get_project_info)." },
-  { k: "ok", t: "  [+] Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient." },
-  { k: "head", t: "  TRIN 9  --  Status for AI-klienter" },
-  { k: "ok", t: "  [+] Claude Desktop: OK" },
+  { k: "head", t: "  TRIN 8  --  Kontrol af forbindelsen sprunget over (kør med -Verify for at tjekke live)" },
+  { k: "head", t: "  TRIN 9  --  Genstart af AI-klienter" },
+  { k: "head", t: "  TRIN 10  --  Oversigt: ISSANA MCP i dine AI-klienter" },
+  { k: "ok", t: "  [+] Claude Desktop: sat op" },
   { k: "info", t: "      Claude Code: Ikke installeret -- sprunget over" },
-  { k: "ok", t: "  [+] Codex: OK" },
+  { k: "ok", t: "  [+] Codex: sat op" },
   { k: "plain", t: "" },
   { k: "prompt", t: "  Tryk en tast for at lukke / Press any key to close." },
 ];
@@ -140,7 +135,7 @@ const commonMessages: Msg[] = [
     msg: "[!] Node.js ikke fundet (system eller medfølgende)",
     sev: "advarsel",
     where: "TRIN 4",
-    means: "Node.js (kræves af MCP-serveren) er ikke installeret, eller kommandoen node findes ikke. Node.js følger ikke med installationsfilen.",
+    means: "Hverken en egnet systeminstallation eller den medfølgende Node.js kunne findes. Node.js følger med EXE-filen; beskeden kan skyldes manglende eller blokerede filer.",
     todo: "Vælg [1] i menuen, der kommer lige efter. Godkend Windows' administratorspørgsmål (UAC), og gennemfør Node.js-guiden med standardvalg.",
   },
   {
@@ -155,7 +150,7 @@ const commonMessages: Msg[] = [
     sev: "advarsel",
     where: "TRIN 8",
     means: "Kontrollen lykkedes ikke – typisk fordi Revit og en projektfil ikke var åbne og klar inden for 180 sekunder, eller fordi en dialog blokerede. Filerne ER installeret. Linjen over viser årsagen (fx \"Live Revit verification timed out: …\").",
-    todo: "Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". Test derefter fra AI-appen med get_connection_status. Vil du have en ny automatisk kontrol, så luk Revit og kør installationsfilen igen (vælg R).",
+    todo: "Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". Test derefter fra AI-appen med get_connection_status. Vil du have en ny automatisk kontrol, så luk Revit og kør installationsfilen igen.",
   },
 ];
 
@@ -202,11 +197,8 @@ const messageGroups: MsgGroup[] = [
     id: "fejl-trin3",
     title: "TRIN 3 – Eksisterende installation",
     items: [
-      { msg: "[!] Eksisterende installation fundet for Revit <år>", sev: "advarsel", means: "Pluginet er allerede installeret – en tidligere ISSANA-version eller det oprindelige mcp-servers-for-revit.", todo: "Tryk Enter (= R, Erstat) ved spørgsmålet \"Vælg [R/s/a]:\" for at opdatere." },
-      { msg: "[*] Erstatter eksisterende installation.", sev: "info", means: "Du valgte R (eller trykkede Enter).", todo: "Intet." },
-      { msg: "[*] Springer over: <år>", sev: "info", means: "Du valgte S, så den gamle version beholdes for det Revit-år.", todo: "Intet." },
-      { msg: "[!] Intet nyt at installere.", sev: "advarsel", means: "Du valgte S, og alle fundne Revit-år har allerede pluginet. Installeren stopper uden at opdatere, sætte AI-apps op eller kontrollere forbindelsen.", todo: "Kør installationsfilen igen og vælg R, hvis du vil have den nye version." },
-      { msg: "[!] Installation afbrudt  --  intet er ændret.", sev: "advarsel", means: "Du valgte A (Afbryd).", todo: "Kør installationsfilen igen og vælg R." },
+      { msg: "Eksisterende ISSANA-programfiler bevares", sev: "info", means: "Installationsrettelsen reparerer klientopsætningen uden at nedgradere en eksisterende ISSANA-version.", todo: "Lad den fortsætte til opsætning og forbindelseskontrol." },
+      { msg: "Ingen eksisterende installation fundet", sev: "info", means: "Programgrundlaget 3.0.9 installeres til de fundne understøttede Revit-versioner.", todo: "Følg vinduet, og kontrollér bagefter forbindelsen fra AI-appen til en åben Revit-model." },
     ],
   },
   {
@@ -214,14 +206,14 @@ const messageGroups: MsgGroup[] = [
     title: "TRIN 4 – Node.js",
     items: [
       { msg: "[!] Node.js <version> fundet, men v18+ kræves", sev: "advarsel", means: "Node.js er for gammel.", todo: "Vælg [1] i menuen, eller installér Node.js LTS fra nodejs.org og kør installationsfilen igen." },
-      { msg: "Bemærk: installerer du fra den officielle Release-ZIP, medfølger Node.js automatisk.", sev: "info", means: "Forældet tekst: der findes ingen Release-ZIP, og Node.js følger ikke med.", todo: "Ignorér linjen, og vælg [1]." },
+      { msg: "Bemærk: installerer du fra den officielle Release-ZIP, medfølger Node.js automatisk.", sev: "info", means: "Både den komplette EXE og den manuelle ZIP indeholder Node.js. En separat systeminstallation er normalt unødvendig.", todo: "Fortsæt med den medfølgende runtime." },
       { msg: "[*] Henter nyeste Node.js LTS-version...\n[*] Downloader Node.js <version>...\n[+] Downloadet", sev: "info", means: "Du valgte [1]. Installeren henter Node.js LTS fra nodejs.org.", todo: "Vent. Derefter starter Node.js-guiden." },
       { msg: "[*] Starter installer (følg guiden, og tryk derefter Enter her)...", sev: "info", means: "Node.js-guiden starter. Installeren venter selv, til guiden lukker – der kommer intet Enter-spørgsmål.", todo: "Godkend administratorspørgsmålet (UAC), og gennemfør guiden med standardvalg." },
       { msg: "[+] Node.js v<version> installeret", sev: "info", means: "Node.js er installeret og fundet. Installationen fortsætter.", todo: "Intet." },
-      { msg: "[!] Node.js er installeret, men endnu ikke i PATH  --  genstart PowerShell efter dette script", sev: "advarsel", means: "Node.js-guiden er lukket, men kommandoen node findes ikke. Enten blev guiden annulleret, administratorspørgsmålet (UAC) afvist, du mangler administratorrettigheder – eller Windows har ikke opdateret PATH endnu. Derfor fejler opsætningen af AI-apps, og TRIN 8 kan ikke kontrollere.", todo: "Lad installationen løbe færdig, og luk vinduet. Mangler du administratorrettigheder, så bed IT installere Node.js LTS. Kør derefter installationsfilen igen (vælg R)." },
+      { msg: "[!] Node.js er installeret, men endnu ikke i PATH  --  genstart PowerShell efter dette script", sev: "advarsel", means: "Node.js-guiden er lukket, men kommandoen node findes ikke. Enten blev guiden annulleret, administratorspørgsmålet (UAC) afvist, du mangler administratorrettigheder – eller Windows har ikke opdateret PATH endnu. Derfor fejler opsætningen af AI-apps, og TRIN 8 kan ikke kontrollere.", todo: "Lad installationen løbe færdig, og luk vinduet. Mangler du administratorrettigheder, så bed IT installere Node.js LTS. Kør derefter installationsfilen igen." },
       { msg: "[-] Installation af Node.js fejlede: <fejltekst>\n    Installér manuelt: https://nodejs.org", sev: "fejl", means: "Node.js kunne ikke slås op eller hentes fra nodejs.org (netværk, proxy eller firewall). Fejlteksten kommer fra PowerShell.", todo: "Installér Node.js LTS manuelt fra nodejs.org, og kør derefter installationsfilen igen." },
-      { msg: "[!] Springer Node.js over  --  installér senere fra https://nodejs.org", sev: "advarsel", means: "Du valgte 2, trykkede Enter eller svarede andet end 1 og 3. Pluginet installeres, men AI-apps viser \"Fejlede\" i TRIN 9, og TRIN 8 mislykkes.", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
-      { msg: "[+] Node.js <version> (medfølgende runtime -- ingen systeminstallation nødvendig)", sev: "info", means: "Node.js findes ikke på pc'en, men en gammel node.exe fra en ældre version ligger stadig i Addins-mappen.", todo: "Intet, men installér gerne Node.js LTS." },
+      { msg: "[!] Springer Node.js over  --  installér senere fra https://nodejs.org", sev: "advarsel", means: "Du valgte 2, trykkede Enter eller svarede andet end 1 og 3. AI-apps kan ikke sættes op uden en fungerende Node-runtime. Se slutstatus i TRIN 10.", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
+      { msg: "[+] Node.js <version> (medfølgende runtime -- ingen systeminstallation nødvendig)", sev: "info", means: "Installeren bruger den Node.js, der følger med ISSANA-pakken.", todo: "Intet. Der er ikke behov for en ekstra Node.js-installation." },
     ],
   },
   {
@@ -245,7 +237,7 @@ const messageGroups: MsgGroup[] = [
   {
     id: "fejl-trin79",
     title: "TRIN 7 og 9 – AI-apps",
-    intro: "En AI-app, der fejler, stopper ikke installationen. Den står kun med gult i TRIN 9. Årsagen står ofte på engelsk.",
+    intro: "En AI-app, der fejler, stopper ikke installationen. Læs dens særskilte status og fejltekst i TRIN 10. Årsagen står ofte på engelsk.",
     items: [
       { msg: "<Klient>: Ikke installeret -- sprunget over", sev: "info", means: "Appen blev ikke fundet. Claude Code kræver kommandoen claude, Codex kræver kommandoen codex eller Codex-appen, og Claude Desktop kræver Claude-appen.", todo: "Normalt intet. Har du appen, så installér eller genstart den, og kør installationsfilen igen." },
       { msg: "[!] Codex -- Unrelated service_tier '<værdi>' was left unchanged; Codex may require manual correction.", sev: "advarsel", means: "Codex' config.toml har en service_tier-værdi, som ikke er fast eller flex.", todo: r`Ret eller fjern service_tier i %USERPROFILE%\.codex\config.toml – eller ignorér beskeden, hvis Codex virker.` },
@@ -268,7 +260,7 @@ const messageGroups: MsgGroup[] = [
     title: "TRIN 8 – Kontrol af forbindelsen",
     items: [
       { msg: "[!] Revit er ikke klar. Åbn Revit og dit projekt, og luk eventuelle dialogbokse; prøver igen...", sev: "advarsel", means: "Normalt, mens Revit starter. Linjen gentages ca. hvert 5. sekund, til Revit og projektet er klar.", todo: "Åbn Revit og en .rvt-fil, og luk dialoger – fx \"Security - Unsigned Add-In\": vælg Always Load." },
-      { msg: "[-] Live Revit verification timed out: <sidste fejl, typisk 'Get project info failed: Connect to Revit client failed'>", sev: "fejl", means: "Revit og projektet var ikke klar inden for 180 sekunder, pluginet blev ikke indlæst, forbindelsen er slået fra, eller en dialog blokerede.", todo: "Filerne ER installeret. Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". En ny automatisk kontrol kræver, at du lukker Revit og kører installationsfilen igen (vælg R)." },
+      { msg: "[-] Live Revit verification timed out: <sidste fejl, typisk 'Get project info failed: Connect to Revit client failed'>", sev: "fejl", means: "Revit og projektet var ikke klar inden for 180 sekunder, pluginet blev ikke indlæst, forbindelsen er slået fra, eller en dialog blokerede.", todo: "Filerne ER installeret. Åbn Revit og et projekt, og tjek ISSANA MCP → MCP-panel: status skal være \"MCP Online\". En ny automatisk kontrol kræver, at du lukker Revit og kører installationsfilen igen." },
       { msg: "[-] Live Revit connection NOT verified: <sidste fejl>", sev: "fejl", means: "Det samme som ved timeout: tidsgrænsen blev nået.", todo: "Gør som ved timeout ovenfor." },
       { msg: "[-] Kan ikke kontrollere uden Node.js.", sev: "fejl", means: "Node.js blev ikke fundet (TRIN 4 blev sprunget over, eller Node.js er ikke i PATH endnu).", todo: "Installér Node.js LTS, og kør installationsfilen igen." },
       { msg: "[-] MCP server exited (<kode>). <diagnose>", sev: "fejl", means: "MCP-serveren stoppede ved start, fx på grund af et Node.js-problem eller en manglende fil.", todo: "Tag et skærmbillede, tjek at Node.js er version 18 eller nyere, og kontakt ISSANA." },
@@ -340,7 +332,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: `AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' skal vise ${pluginVersion}. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.`,
+    expected: `AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' ved en ny installation skal vise ${pluginVersion}. Ved MCP-reparation bevares en eksisterende programversion. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.`,
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },
@@ -551,6 +543,7 @@ const paths = {
   node: r`C:\Program Files\nodejs\node.exe`,
   claudeDesktop: r`%APPDATA%\Claude\claude_desktop_config.json`,
   claudeStore: r`%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\ `.trimEnd(),
+  claudeData: r`%LOCALAPPDATA%\Claude-Data\<pakkefamilie>\claude_desktop_config.json`,
   claudeCode: r`%USERPROFILE%\.claude.json`,
   codex: r`%USERPROFILE%\.codex\config.toml`,
 };
@@ -600,7 +593,7 @@ tool_timeout_sec = 300`;
             <p class="ip-order__text">Luk Revit og AI-appen. Download derefter ISSANA MCP-installeren, og kør den.</p>
             <div class="ip-order__actions">
               <a class="button button--primary ip-download" href={installerUrl} download={savedFile}>
-                <span>Download testversion {pluginVersion}</span>
+                <span>Download installationsrettelse {installerVersion}</span>
                 <small>{savedFile}</small>
               </a>
             </div>
@@ -614,21 +607,22 @@ tool_timeout_sec = 300`;
           </a>
         </div>
         <p class="ip-hero__meta">
-          <strong>Version {pluginVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · 143 MB · Revit 2026/2027
+          <strong>Installation {installerVersion}</strong> · <time datetime={releaseDateIso}>{releaseDate}</time> · Windows · {Math.ceil(releaseStatus.bytes / 1000000)} MB · Revit 2026/2027
         </p>
         <p class="ip-hero__credit">Udviklet af <a class="ip-hero__link" href={issanaSite} rel="noopener"><strong>{issana}</strong></a> · Byg og Miljø Rådgiver ApS</p>
       </div>
 
       <aside class="ip-version" aria-label="Versionsoplysninger">
         <p class="ip-version__label">Nyeste offentlige testversion</p>
-        <p class="ip-version__number">{pluginVersion}</p>
+        <p class="ip-version__number">{installerVersion}</p>
+        <p class="ip-version__date">Installationsrettelse · programgrundlag {pluginVersion}. Eksisterende ISSANA-programfiler bevares.</p>
         <p class="ip-version__date"><time datetime={releaseDateIso}>{releaseDate}</time></p>
         {releaseSuffix && <p class="ip-version__date">Udgivet som testversion, derfor «{releaseSuffix}» i filnavnet.</p>}
         <p class="ip-version__title">Sådan ser du versionen</p>
         <ul>
-          <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{pluginVersion}.0</strong> (Produktversion begynder med {pluginVersion})</li>
-          <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {pluginVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
-          <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong></li>
+          <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{pluginVersion}.0</strong> (Produktversion begynder med {installerVersion})</li>
+          <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {releaseStatus.publicVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
+          <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong> ved nyinstallation; eksisterende version bevares ved reparation</li>
         </ul>
       </aside>
     </header>
@@ -870,7 +864,7 @@ tool_timeout_sec = 300`;
         <ul>
           {latestVersionFeatures.map((feature) => <li>{feature}</li>)}
         </ul>
-        <p class="ip-next__note">Har du en ældre version? Kør bare den nye installationsfil (vælg R). AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
+        <p class="ip-next__note">Har du en ældre version? Kør bare den nye installationsfil. AI Skitse og Design Family kan bruge din forbundne AI (vælg <em>MCP-klient</em> under Indstillinger) og kræver så ingen ekstra nøgle.</p>
       </div>
     </aside>
 
@@ -944,13 +938,13 @@ tool_timeout_sec = 300`;
           <strong>Download og kør ISSANA MCP-installeren</strong>
           <p>Dobbeltklik på filen, når den er hentet, og følg konsolvinduet. Se <a class="text-link" href="#installer">Installér</a>.</p>
           <div class="ip-path__actions">
-            <a class="button button--primary" href={installerUrl} download={savedFile}>Download testversion {pluginVersion}</a>
+            <a class="button button--primary" href={installerUrl} download={savedFile}>Download installationsrettelse {installerVersion}</a>
           </div>
         </li>
         <li>
           <strong>Start AI-appen og Revit, og kontrollér</strong>
           <p>
-            Når konsolvinduet i TRIN 8 beder om det, åbner du Revit og en projektfil og derefter din AI-app. Se{" "}
+            Efter installationen åbner du Revit og en projektfil og derefter din AI-app. Se{" "}
             <a class="text-link" href="#kontroller">Kontrollér at det virker</a>.
           </p>
         </li>
@@ -980,17 +974,14 @@ tool_timeout_sec = 300`;
           <p>Du skal være på internettet.</p>
         </li>
         <li>
-          <strong>Node.js 18 eller nyere</strong>
-          <p>
-            Mangler den, spørger installeren i TRIN 4, og så vælger du <kbd>1</kbd>. Du behøver ikke være administrator for at installere
-            pluginet – men valg 1 (Node.js) kræver administratorrettigheder.
-          </p>
+          <strong>Node.js følger med</strong>
+          <p>Den komplette pakke indeholder Node.js. Du skal normalt hverken installere det separat eller være administrator for at installere ISSANA til din egen Windows-bruger.</p>
         </li>
       </ul>
       <p class="ip-note">
-        <strong>Opgraderer du fra en ældre version?</strong> Kør den nye fil, og vælg <kbd>R</kbd> (Erstat). Dine indstillinger og din
-        NBS-nøgle bevares. Hedder din MCP-server stadig <code>revit-mcp-nbs</code>, omdøber installeren den til <code>issana-revit</code>.
-        Genstart Claude og Codex bagefter.
+        <strong>Har du allerede ISSANA?</strong> Denne installationsrettelse bevarer de eksisterende programfiler og reparerer MCP-opsætningen.
+        Findes ISSANA allerede til et Revit-år, bevares også fælles filer og andre Revit-år. Kun en pc uden fundet ISSANA får programgrundlaget 3.0.9 installeret. Den opgraderer ikke programmet til 3.10.
+        Gem arbejdet i AI-apps først; de kan blive genstartet. Egne indstillinger og andre MCP-forbindelser bevares.
       </p>
     </section>
 
@@ -1004,7 +995,7 @@ tool_timeout_sec = 300`;
       <ol class="ip-steps">
         <li>
           <strong>Hent filen</strong>
-          <p>Klik på <em>Download testversion {pluginVersion}</em> øverst. Filen hedder <code>{savedFile}</code>.</p>
+          <p>Klik på <em>Download installationsrettelse {installerVersion}</em> øverst. Filen hedder <code>{savedFile}</code>.</p>
         </li>
         <li>
           <strong>Start filen – og kom forbi Windows-advarslen</strong>
@@ -1016,7 +1007,7 @@ tool_timeout_sec = 300`;
         <li>
           <strong>Installationsvinduet åbner</strong>
           <p>
-            Et lille vindue med ISSANA-logoet viser <q>ISSANA MCP — Studentinstallation · version {pluginVersion}</q>. Det
+            Et lille vindue med ISSANA-logoet viser <q>ISSANA MCP — Studentinstallation · version {releaseStatus.publicVersion}</q>. Det
             skriver <q>Forbereder installationen …</q>, <q>Kontrollerer installationspakken …</q> og til sidst{" "}
             <q>Installationen fortsætter i konsolvinduet.</q> Så forsvinder vinduet, og et sort konsolvindue åbner.
           </p>
@@ -1026,33 +1017,21 @@ tool_timeout_sec = 300`;
           <p>Ved <code>Vælg / Choose [D/e]:</code> trykker du <kbd>D</kbd> og <kbd>Enter</kbd>. (Enter alene giver også dansk.)</p>
         </li>
         <li>
-          <strong>Svar på spørgsmål – kun hvis de kommer</strong>
-          <ul class="ip-answers">
-            <li>
-              <code>Der blev fundet en eksisterende installation.</code> → tryk <kbd>Enter</kbd> (= <kbd>R</kbd>, Erstat) for at
-              opdatere.
-            </li>
-            <li>
-              <code>Node.js 18+ er nødvendig for at køre MCP-serveren.</code> → tryk <kbd>1</kbd> og <kbd>Enter</kbd>. Godkend
-              Windows' administratorspørgsmål, og gennemfør Node.js-guiden med standardvalg. Installeren fortsætter selv – tryk{" "}
-              <em>ikke</em> Enter, selvom der står det.
-            </li>
-          </ul>
+          <strong>Læs status for din installation</strong>
+          <p>Har du allerede ISSANA, fortsætter filen med MCP-opsætningen uden at erstatte dine programfiler. Node.js følger med.
+          Læs eventuelle advarsler for Claude Desktop, Claude Code og Codex hver for sig. En deaktiveret forbindelse bliver ikke slået til uden din beslutning.</p>
         </li>
         <li>
-          <strong>TRIN 8: Åbn Revit, mens vinduet venter</strong>
-          <p>
-            Når der står <q>Åbn Revit og dit projekt nu …</q>, lader du konsolvinduet stå åbent. Start Revit, åbn en projektfil{" "}
-            (<code>.rvt</code>), og luk eventuelle dialoger. Spørger Revit <q>Security - Unsigned Add-In</q>, klikker du{" "}
-            <strong>Always Load</strong>. Åbn derefter Claude eller Codex. Installeren venter op til 180 sekunder, og linjen{" "}
-            <q>[!] Revit er ikke klar …</q> er normal, mens Revit starter.
-          </p>
+          <strong>Åbn Revit og kontrollér forbindelsen fra AI-appen</strong>
+          <p>Den normale installation kontrollerer filerne og opsætningen. Åbn derefter Revit og en projektfil, indlæs ISSANA MCP,
+          og bed din AI-app kalde <code>get_project_info</code> uden at ændre modellen. Svaret skal komme fra den åbne model.
+          En ekstra konsolkontrol findes med <code>scripts/install.ps1 -Verify</code> i den udpakkede ZIP; den venter op til 180 sekunder.</p>
         </li>
         <li>
           <strong>Færdig – tryk en tast</strong>
           <p>
-            Ser du <q>Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient.</q>, er alt i orden. Læs status for dine
-            AI-apps under TRIN 9, tag evt. et skærmbillede, og tryk en tast ved <q>Tryk en tast for at lukke</q>.
+            Læs status for hver AI-app under TRIN 10, og håndtér eventuelle advarsler. Tag evt. et skærmbillede,
+            og tryk en tast ved <q>Tryk en tast for at lukke</q>. Kontrollér derefter forbindelsen fra AI-appen til Revit.
             Så lukker konsolvinduet, og installationen er slut.
           </p>
         </li>
@@ -1071,7 +1050,7 @@ tool_timeout_sec = 300`;
         }</code></pre>
         <figcaption>
           Eksempel fra en pc med Revit 2027, Claude Desktop og Codex. Stier og versioner af PowerShell, Windows og Node.js afhænger af
-          din pc. Linjerne fra forbindelseskontrollen i TRIN 8 vises uden farve. Vinduets titel får først versionsnummeret, når
+          din pc. TRIN 8 køres kun ved ekstra kontrol med -Verify; kontrollér ellers forbindelsen fra AI-appen efter installationen. Vinduets titel får først versionsnummeret, når
           installeren går i gang.
         </figcaption>
       </figure>
@@ -1110,7 +1089,7 @@ tool_timeout_sec = 300`;
             </li>
             <li>
               <strong>Indstillinger</strong> → <strong>Forbindelse</strong> → <strong>Plugin-version</strong> viser{" "}
-              <strong>{pluginVersion}</strong>.
+              <strong>{pluginVersion}</strong> ved en ny installation. Ved MCP-reparation bevares den eksisterende programversion.
             </li>
             <li>
               Valgfrit: Slå <strong>Kontrolleret tilstand</strong> til under Indstillinger → Forbindelse. Så venter hver ændring, AI'en vil
@@ -1122,9 +1101,9 @@ tool_timeout_sec = 300`;
           <h3 class="ip-sub">I installeren</h3>
           <ul class="ip-checks">
             <li>
-              Konsolvinduet skrev <code>[+] Installation og forbindelse til Revit er bekræftet. Åbn din AI-klient.</code>
+              TRIN 10 viser <code>sat op</code> ud for din AI-app uden en uafklaret advarsel.
             </li>
-            <li>TRIN 9 viser <code>OK</code> ud for din AI-app.</li>
+            <li>Det beviser konfigurationen. Forbindelsen til Revit prøves fra AI-appen nedenfor.</li>
           </ul>
         </div>
       </div>
@@ -1285,7 +1264,7 @@ tool_timeout_sec = 300`;
         }
       </div>
       <p class="ip-note">
-        <strong>Stadig fast?</strong> Tag et skærmbillede af hele konsolvinduet, og oplys versionen ({pluginVersion}), når du beder om
+        <strong>Stadig fast?</strong> Tag et skærmbillede af hele konsolvinduet, og oplys installationsversionen ({installerVersion}), når du beder om
         hjælp.
       </p>
     </section>
@@ -1295,15 +1274,15 @@ tool_timeout_sec = 300`;
       <summary><h2>Manuel opsætning (kun hvis installeren ikke kunne)</h2></summary>
       <div class="ip-manual__body">
         <p>
-          Normalt skal du ikke røre konfigurationsfilerne: installeren sætter alle fundne AI-apps op og tager backup af eksisterende
-          filer. Kør hellere installationsfilen igen (vælg <kbd>R</kbd>), og kontrollér med <code>claude mcp get issana-revit</code> eller{" "}
+          Gem dine egne indstillinger og brug Plan B ved tvivl. Normalt skal du ikke røre konfigurationsfilerne: installeren sætter alle fundne AI-apps op og tager backup af eksisterende
+          filer. Kør hellere installationsfilen igen, og kontrollér med <code>claude mcp get issana-revit</code> eller{" "}
           <code>codex mcp list</code>.
         </p>
         <dl class="ip-facts">
           <div><dt>Servernavn</dt><dd><code>issana-revit</code></dd></div>
           <div><dt>command</dt><dd>Den fulde sti til node.exe, fx <code>{paths.node}</code></dd></div>
           <div><dt>args</dt><dd><code>{serverPathExample}</code> (brug <code>2026</code> i stien til Revit 2026)</dd></div>
-          <div><dt>Claude Desktop</dt><dd><code>{paths.claudeDesktop}</code> under <code>mcpServers</code> (Store-udgaven: <code>{paths.claudeStore}</code>)</dd></div>
+          <div><dt>Claude Desktop</dt><dd><code>{paths.claudeDesktop}</code> under <code>mcpServers</code> (nyere udgaver: <code>{paths.claudeData}</code>; ældre Store-udgaver: <code>{paths.claudeStore}</code>). Den aktive placering findes automatisk; en ældre kopi kan være ubrugt.</dd></div>
           <div><dt>Claude Code</dt><dd><code>{paths.claudeCode}</code> under <code>mcpServers</code></dd></div>
           <div><dt>Codex</dt><dd><code>{paths.codex}</code> som tabellen <code>[mcp_servers.issana-revit]</code></dd></div>
         </dl>
@@ -1319,7 +1298,7 @@ tool_timeout_sec = 300`;
 
     <footer class="ip-foot">
       <p>
-        Version {pluginVersion} · <time datetime={releaseDateIso}>{releaseDate}</time> · udviklet af {issana}
+        Installation {installerVersion} · program {pluginVersion} · <time datetime={releaseDateIso}>{releaseDate}</time> · udviklet af {issana}
       </p>
       <a class="ip-foot__link" href={architectureUrl}>Teknisk overblik (arkitekturdiagram)</a>
     </footer>
@@ -1717,7 +1696,8 @@ tool_timeout_sec = 300`;
     margin: 0;
     color: var(--white);
     font-family: Bahnschrift, Aptos, "Segoe UI", sans-serif;
-    font-size: clamp(3rem, 7vw, 4.4rem);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    overflow-wrap: anywhere;
     font-weight: 800;
     line-height: 1;
   }
