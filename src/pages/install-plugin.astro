@@ -197,7 +197,7 @@ const messageGroups: MsgGroup[] = [
     id: "fejl-trin3",
     title: "TRIN 3 – Eksisterende installation",
     items: [
-      { msg: "Eksisterende ISSANA-programfiler bevares", sev: "info", means: "Installationsrettelsen reparerer klientopsætningen uden at nedgradere en eksisterende ISSANA-version.", todo: "Lad den fortsætte til opsætning og forbindelseskontrol." },
+      { msg: "Eksisterende ISSANA-programfiler bevares", sev: "info", means: "Komplette programmer med samme eller nyere version bevares. Manglende eller ufuldstændige installationer vurderes separat pr. Revit-år.", todo: "Læs status for hvert Revit-år og hver AI-app. Kontrollér bagefter ISSANA-fanen i det Revit-år, du bruger." },
       { msg: "Ingen eksisterende installation fundet", sev: "info", means: "Programgrundlaget 3.0.9 installeres til de fundne understøttede Revit-versioner.", todo: "Følg vinduet, og kontrollér bagefter forbindelsen fra AI-appen til en åben Revit-model." },
     ],
   },
@@ -332,7 +332,7 @@ const exercises: Exercise[] = [
     title: "Er der forbindelse til Revit?",
     goal: "Bekræft, at AI-assistenten kan se den åbne Revit-model, og få et første overblik over modellens etager og faser. Notér samtidig, hvilken plugin-version du kører.",
     prompt: "Kør get_connection_status og get_project_info. Fortæl mig kort: Hvilken Revit-model er aktiv (titel og filsti), og er den skrivebeskyttet? Hvilke etager (levels) med koter og hvilke faser har den? Er modellen koblet til et NBS-projekt? Ændr ingenting i modellen.",
-    expected: `AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' ved en ny installation skal vise ${pluginVersion}. Ved MCP-reparation bevares en eksisterende programversion. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.`,
+    expected: `AI'en svarer med modellens titel og filsti, en liste over etager med koter og modellens faser. NBS-delen viser enten det koblede projekt eller at der endnu ikke er nogen NBS-forbindelse. Begge dele er normale på dette trin. Tjek selv versionen i Revit under ISSANA MCP → Indstillinger → fanen Forbindelse, hvor feltet 'Plugin-version' ved en ny installation skal vise ${pluginVersion}. Ved reparation bevares komplette nyere programversioner. Hvis du i stedet får en forbindelsesfejl, så kontrollér at en model er åben, og at kontakten 'Forbindelse' øverst i MCP-panelet er slået til.`,
     changesModel: false,
     safety: "Øvelsen læser kun. get_connection_status viser aldrig API-nøgler, og du skal heller aldrig selv indsætte din NBS-nøgle i chatten.",
   },
@@ -615,14 +615,14 @@ tool_timeout_sec = 300`;
       <aside class="ip-version" aria-label="Versionsoplysninger">
         <p class="ip-version__label">Nyeste offentlige testversion</p>
         <p class="ip-version__number">{installerVersion}</p>
-        <p class="ip-version__date">Installationsrettelse · programgrundlag {pluginVersion}. Eksisterende ISSANA-programfiler bevares.</p>
+        <p class="ip-version__date">Installationsrettelse · programgrundlag {pluginVersion}. Hvert Revit-år kontrolleres separat.</p>
         <p class="ip-version__date"><time datetime={releaseDateIso}>{releaseDate}</time></p>
         {releaseSuffix && <p class="ip-version__date">Udgivet som testversion, derfor «{releaseSuffix}» i filnavnet.</p>}
         <p class="ip-version__title">Sådan ser du versionen</p>
         <ul>
-          <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{pluginVersion}.0</strong> (Produktversion begynder med {installerVersion})</li>
-          <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {releaseStatus.publicVersion}</q>, og konsollen viser <q>v{pluginVersion}</q></li>
-          <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong> ved nyinstallation; eksisterende version bevares ved reparation</li>
+          <li><span>Før:</span> Højreklik på filen → Egenskaber → Detaljer → Filversion <strong>{installerVersion}.0</strong> (Produktversion begynder med {installerVersion})</li>
+          <li><span>Under:</span> Installationsvinduet viser <q>Studentinstallation · version {releaseStatus.publicVersion}</q>, og konsollen viser installerens og programmets version hver for sig</li>
+          <li><span>Efter:</span> Revit → ISSANA MCP → Indstillinger → Forbindelse → Plugin-version <strong>{pluginVersion}</strong> ved nyinstallation; komplette nyere versioner bevares</li>
         </ul>
       </aside>
     </header>
@@ -932,7 +932,7 @@ tool_timeout_sec = 300`;
         </li>
         <li>
           <strong>Luk Revit og AI-appen</strong>
-          <p>Gem dit arbejde, og luk begge programmer. En ny programinstallation kræver lukket Revit; MCP-reparation af en eksisterende installation erstatter ikke Revit-programfiler.</p>
+          <p>Gem dit arbejde, og luk begge programmer. Revit skal være lukket, når programfiler installeres eller repareres. Installationen kontrollerer hvert Revit-år separat.</p>
         </li>
         <li>
           <strong>Download og kør ISSANA MCP-installeren</strong>
@@ -967,7 +967,7 @@ tool_timeout_sec = 300`;
       <ul class="ip-prereq">
         <li>
           <strong>Revit 2026 eller 2027</strong>
-          <p>På en pc med Windows 10 eller 11. Pakken indeholder kun de to Revit-versioner.</p>
+          <p>På en pc med Windows 10 eller 11. Pakken indeholder begge Revit-versioner og kan installere til dem samtidigt. Revit 2026.5 bruger 2026-mappen. Den konkrete indlæsning i Revit 2026.5 afventer stadig en prøve på en pc med denne version.</p>
         </li>
         <li>
           <strong>Internet</strong>
@@ -979,8 +979,8 @@ tool_timeout_sec = 300`;
         </li>
       </ul>
       <p class="ip-note">
-        <strong>Har du allerede ISSANA?</strong> Denne installationsrettelse bevarer de eksisterende programfiler og reparerer MCP-opsætningen.
-        Findes ISSANA allerede til et Revit-år, bevares også fælles filer og andre Revit-år. Kun en pc uden fundet ISSANA får programgrundlaget 3.0.9 installeret. Den opgraderer ikke programmet til 3.10.
+        <strong>Har du allerede ISSANA?</strong> Installationsudgave 3.10 kontrollerer hvert Revit-år for sig og reparerer MCP-opsætningen.
+        Manglende installationer til Revit 2026 og 2027 installeres, og ufuldstændige installationer med samme eller ældre programgrundlag repareres. Komplette nyere programversioner og eksisterende fælles biblioteksfiler bevares. Programgrundlaget i denne installationsudgave er fortsat 3.0.9.
         Gem arbejdet i AI-apps først; de kan blive genstartet. Egne indstillinger og andre MCP-forbindelser bevares.
       </p>
     </section>
@@ -1089,7 +1089,7 @@ tool_timeout_sec = 300`;
             </li>
             <li>
               <strong>Indstillinger</strong> → <strong>Forbindelse</strong> → <strong>Plugin-version</strong> viser{" "}
-              <strong>{pluginVersion}</strong> ved en ny installation. Ved MCP-reparation bevares den eksisterende programversion.
+              <strong>{pluginVersion}</strong> ved en ny installation. Ved reparation bevares komplette nyere programversioner.
             </li>
             <li>
               Valgfrit: Slå <strong>Kontrolleret tilstand</strong> til under Indstillinger → Forbindelse. Så venter hver ændring, AI'en vil

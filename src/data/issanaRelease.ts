@@ -3,15 +3,15 @@ export const releaseStatus = {
   checked: "16. november 2026",
   checkedIso: "2026-11-16",
   downloadChecked: "16. november 2026",
-  publicVersion: "3.0.9-setup.1-test",
+  publicVersion: "3.10.0-test",
   programVersion: "3.0.9",
   publicReleaseDate: "16. november 2026",
   publicReleaseDateIso: "2026-11-16",
   plannedVersion: "3.10",
-  bytes: 145308044,
-  sha256: "f0011e1ded90de238fa253c43e6830ab7b33243681d682c3f1165586cb2114c9",
-  download: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-mcp-v3.0.9-setup.1-test/ISSANA-MCP-Installer-3.0.9-setup.1-test.exe",
-  release: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/issana-mcp-v3.0.9-setup.1-test",
+  bytes: 145312126,
+  sha256: "a0ba63aae01d2ccc64a12c88c1f4437efda6c5d836b61f198b4056eee3407470",
+  download: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-mcp-v3.10.0-test/ISSANA-MCP-Installer-3.10.0-test.exe",
+  release: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/issana-mcp-v3.10.0-test",
 };
 
 /** Udfyld først download og filkontrol, når den særskilte opdatering er udgivet. */
@@ -44,7 +44,7 @@ export const remainingWork = [
   { title: "Færdiggør de manglende fagforløb", done: "LCA er første guidede forløb; flere fag har allerede beregningsfunktioner.", next: "Lav udregningsrapport for Energi samt guidede forløb for lyd, energi og statik. Afklar og implementér egentlig sol-/skyggeanalyse og overophedningsberegning; en 3D-skyggevisning er ikke dokumentation for disse beregninger." },
   { title: "Prøv hele kæden på projektkopier", done: "Modelbanken og automatiske kontroller giver et udgangspunkt.", next: "Prøv de tre projekter i Revit: data → analyse → ændring → ny analyse → kodning → ny pris. Frys input og referenceværdier, og kontrollér resultaterne uafhængigt." },
   { title: "Se studerende løse opgaverne", done: "Et enklere scriptbibliotek er bygget og kontrolleret i to vinduesstørrelser.", next: "Lad studerende definere rum, rette konstruktioner og gennemføre analyser uden hjælp. Registrér gennemførsel, fejl, behov for hjælp og tid. Automatiske UI-tests erstatter ikke denne prøve." },
-  { title: "Kontrollér installation og udgiv", done: "En ny komplet installationsrettelse, 3.0.9-setup.1-test, kan hentes. Den finder nyere Claude-Data-mapper, bevarer egne MCP-indstillinger og beskytter eksisterende programfiler mod nedgradering.", next: `Prøv den endelige EXE på en ren Windows-bruger med Revit og de relevante AI-apps. Kontrollér geninstallation, eksisterende konfiguration og beregningsmotorens .NET 10-krav på en pc med kun Revit 2026. Gennemgå afhængighederne, og udgiv version ${releaseStatus.plannedVersion}, når rettelser, review og de samlede tests er færdige.` },
+  { title: "Kontrollér installation og udgiv", done: "Installationsudgave 3.10 kan hentes. Den retter blokering mellem Revit-år, reparerer ufuldstændige installationer og bevarer nyere programfiler samt egne MCP-indstillinger. Programgrundlaget er 3.0.9.", next: `Prøv den endelige EXE på en ren Windows-bruger med Revit og de relevante AI-apps. Kontrollér geninstallation, eksisterende konfiguration og beregningsmotorens .NET 10-krav på en pc med kun Revit 2026. Gennemgå afhængighederne, og udgiv den samlede programopdatering, når rettelser, review og de samlede tests er færdige.` },
 ];
 
 export const constructionUpdate = {
@@ -62,6 +62,6 @@ export const constructionUpdate = {
     { area: "Tidsplan og 3D-video", state: "Lokal projektprøve", done: "Samme JSON driver aktiviteter og 3D. Den nye film bruger den faktiske bygning og installationer med særskilte visninger og forklaringer.", next: "Tider, bemanding og rækkefølge er illustrative. MS Project XML skal også afprøves i MS Project. Offentlig videohosting er ikke oprettet." },
     { area: "Videoeksport", state: "Rettet lokalt · mangler Revit-prøve", done: "Grænsen på én samlet 175 MB-billedpakke er erstattet af dele på ca. 32 MB med checkpoints. 900 billeder er prøvet gennem pakkefunktionen uden tab; 1080p bevares. Videoprojektet kan også gemmes som JSON.", next: "Gem/fortsæt-forløbet skal prøves i Revit. Direkte MP4 med ét klik er endnu ikke tilsluttet i 3D-vinduet." },
     { area: "Pris og CO₂", state: "Tilvalg i datamodellen", done: "Kildehenvisninger og aktiviteter kan indgå i projektpakken.", next: "Den aktuelle SEH-prøve har ingen godkendte Sigma-priser eller CO₂-tal. Afstem mængder og dubletter mellem fagmodeller før summering." },
-    { area: "Samlet udgivelse", state: "3.10 er ikke udgivet", done: "Den nye 3.0.9-setup.1-test retter installationen. Programgrundlaget er fortsat 3.0.9; den særskilte vindopdatering findes også. Ny byggeplan og rettelser findes lokalt.", next: "Saml og review den endelige kode, byg en ny EXE, og prøv installation, opgradering og MCP-opsætning på en ren Windows-bruger." },
+    { area: "Samlet udgivelse", state: "Nye fagfunktioner afventer", done: "Den nye 3.10.0-test retter installationen. Programgrundlaget er fortsat 3.0.9; den særskilte vindopdatering findes også. Ny byggeplan og rettelser findes lokalt.", next: "Saml og review den endelige kode, byg en ny EXE, og prøv installation, opgradering og MCP-opsætning på en ren Windows-bruger." },
   ],
 };
