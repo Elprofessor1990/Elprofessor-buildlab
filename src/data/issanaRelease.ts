@@ -3,7 +3,7 @@ export const releaseStatus = {
   checked: "16. november 2026",
   checkedIso: "2026-11-16",
   downloadChecked: "16. november 2026",
-  publicVersion: "3.10.0 · rettet installer 1",
+  publicVersion: "3.10.0 · setup 1",
   programVersion: "3.10.0",
   publicReleaseDate: "16. november 2026",
   publicReleaseDateIso: "2026-11-16",
