@@ -1,17 +1,17 @@
 /** Dateret status. Kandidatfunktioner må ikke fremstå som indhold i den offentlige download. */
 export const releaseStatus = {
-  checked: "16. november 2026",
-  checkedIso: "2026-11-16",
-  downloadChecked: "16. november 2026",
-  publicVersion: "3.10.0 · setup 1",
-  programVersion: "3.10.0",
-  publicReleaseDate: "16. november 2026",
-  publicReleaseDateIso: "2026-11-16",
+  checked: "19. november 2026",
+  checkedIso: "2026-11-19",
+  downloadChecked: "19. november 2026",
+  publicVersion: "3.10.1",
+  programVersion: "3.10.1",
+  publicReleaseDate: "19. november 2026",
+  publicReleaseDateIso: "2026-11-19",
   plannedVersion: "3.10",
-  bytes: 293121412,
-  sha256: "c3868ff3d5b82dce03bb47dc48b141836d53b01e1586bbfb7795550569386c80",
-  download: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-mcp-v3.10.0-full-setup.1-test/ISSANA-MCP-3.10.0-full-setup.1-test.exe",
-  release: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/issana-mcp-v3.10.0-full-setup.1-test",
+  bytes: 555005300,
+  sha256: "1ec1fd5f7e0d483e181ff38e120c20ec8b660a78ce8a9d2e7d4eea3036457ae1",
+  download: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/download/issana-mcp-v3.10.1/ISSANA-MCP-Installer-3.10.1.exe",
+  release: "https://github.com/Elprofessor1990/Elprofessor-buildlab/releases/tag/issana-mcp-v3.10.1",
 };
 
 /** Udfyld først download og filkontrol, når den særskilte opdatering er udgivet. */
